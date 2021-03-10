@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.streetname.label(class="form-control-label") }}
+                    {{ form.streetname(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.bedrooms.label(class="form-control-label") }}
+                    {{ form.bedrooms(class="form-control form-control-lg") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
