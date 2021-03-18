@@ -1,5 +1,5 @@
-# HDB Resale Recommender
 ## SECTION 1 : PROJECT TITLE
+### HDB Resale Recommender
 
 ## SECTION 3 : POSTER
 
