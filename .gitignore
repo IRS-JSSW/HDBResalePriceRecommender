@@ -3,3 +3,4 @@
 geckodriver.log
 pg.html
 .ipynb_checkpoints/PropertyGuruRetriever-checkpoint.ipynb
+site.db

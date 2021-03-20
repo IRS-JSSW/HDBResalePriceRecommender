@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group d-flex justify-content-start">
+                {{ form.confirm_update.label(class="form-control-label mr-2") }}
+                {{ form.confirm_update(class="form-control-md form-control-md mr-2") }}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.update(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}

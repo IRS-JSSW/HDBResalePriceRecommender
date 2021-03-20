@@ -15,24 +15,25 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
     
     {% if title %}
-        <title>App - {{ title }}</title>
+        <title>{{ title }}</title>
     {% else %}
-        <title>App - Home Page</title>
+        <title>Home Page</title>
     {% endif %}
 </head>
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
             <div class="container">
-            <a class="navbar-brand mr-4" href="/"><i class="fas fa-home"></i> HDB App</a>
+            <a class="navbar-brand mr-4" href="{{ url_for('home') }}"><i class="fas fa-home"></i> HDB App</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="/">Home</a>
-                <a class="nav-item nav-link" href="/search">Search Resale HDB</a>
-                <a class="nav-item nav-link" href="/about">About</a>
+                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <!-- <a class="nav-item nav-link" href="/search">Search Resale HDB</a> -->
+                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+                <a class="nav-item nav-link" href="{{ url_for('update_resaledata') }}">Update</a>
                 </div>
             </div>
             </div>
@@ -42,6 +43,15 @@
         <main role="main" class="container">
             <div class="row">
               <div class="col-md-8">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }}">
+                        {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
                 {% block content %}{% endblock %}
               </div>
               <div class="col-md-4">
@@ -52,6 +62,9 @@
                       <li class="list-group-item list-group-item-light">Item 1</li>
                     </ul>
                   </p>
+                  <a href="https://www.hdb.gov.sg/business/estate-agents-and-salespersons/selling-a-flat/procedures" target="_blank">
+                    <img class ="img-fluid" src="/static/images/resale-procedures.jpg">
+                  </a>
                 </div>
               </div>
             </div>
