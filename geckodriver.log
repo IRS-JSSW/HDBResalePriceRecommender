@@ -1,0 +1,855 @@
+1616158657272	geckodriver	INFO	Listening on 127.0.0.1:60953
+1616158660368	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileLca81t"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616158662995	Marionette	INFO	Listening on port 60962
+1616158663050	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/q-Ezh273PvC68AkqxY9CU3NkuwIwgTF06gKyS1kdSdY.js line 1 > eval line 252 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/q-Ezh273PvC68AkqxY9CU3NkuwIwgTF06gKyS1kdSdY.js line 1 > eval line 6712 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+1616584360659	geckodriver	INFO	Listening on 127.0.0.1:51610
+1616584363725	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileU23Fv9"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616584367837	Marionette	INFO	Listening on port 51619
+1616584367980	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 1389 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 7007 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 20448, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1616594832376	Marionette	INFO	Stopped listening on port 51619
+, new profile?" (new Error("", "(unknown module)"))
+1616584396146	Marionette	INFO	Listening on port 51770
+1616584396275	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5690 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 7747 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A001F,name=PContent::Msg_RegisterChromeItem) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x230050,name=PBrowser::Msg_FlushTabState) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x230098,name=PBrowser::Msg_Destroy) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContenA content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 10724, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+[Parent 10724, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1616594837042	Marionette	INFO	Stopped listening on port 52002
+Message) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x230050,name=PBrowser::Msg_FlushTabState) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x230098,name=PBrowser::Msg_Destroy) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+JavaScript error: resource:///modules/sessionstore/SessionStore.jsm, line 2294: TypeError: subject.QueryInterface is not a function
+JavaScript error: resource:///modules/sessionstore/SessionStore.jsm, line 2294: TypeError: subject.QueryInterface is not a function
+JavaScript error: resource:///modules/sessionstore/SessionStore.jsm, line 2294: TypeError: subject.QueryInterface is not a function
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616585212825	Marionette	INFO	Listening on port 53576
+1616585212896	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 1780 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 6268 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A004E,name=PContent::Msg_NotifyProcessPriorityChanged) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0046,name=PContent::Msg_RemoteType) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0079,name=PContent::Msg_RegisterBrowsingContextGroup) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A015D,name=PContent::Msg_SetupFocusedAndActive) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0148,name=PContent::Msg_CommitBrowsingContextTransaction) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0003,name=PContent::Msg_ConstructBrowser) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0148,name=PContent::Msg_CommitBrowsingContextTransaction) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xBA000E,name=PWindowGlobal::Msg_SetContainerFeaturePolicy) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x2300A6,name=PBrowser::Msg_UpdateNativeWindowHandle) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0148,name=PContent::Msg_CommitBrowsingContextTransa
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+JavaScript error: chrome://global/content/elements/browser-custom-element.js, line 1633: Error: permitUnload is already running for this tab.
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x230050,name=PBrowser::Msg_FlushTabState) Channel error: cannot send/recv
+
+or: (msgtype=0x230097,name=PBrowser::Msg_LoadRemoteScript) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x230050,name=PBrowser::Msg_FlushTabState) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x230098,name=PBrowser::Msg_Destroy) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A004E,name=PContent::Msg_NotifyProcessPriorityChanged) Channel error: cannot send/recv
+
+ crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0088,name=PContent::Msg_DispatchBeforeUnloadToSubtree) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xAD0001,name=PVsync::Msg_Notify) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xAD0001,name=PVsync::Msg_Notify) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xAD0001,name=PVsync::Msg_Notify) Channel error: cannot send/recv
+
+l line 90 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 6544 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0149,name=PContent::Msg_AsyncMessage) Channel error: cannot send/recv
+
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x3A0088,name=PContent::Msg_DispatchBeforeUnloadToSubtree) Channel error: cannot send/recv
+
+g: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 2900 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 6217 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 7625 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xAD0001,name=PVsync::Msg_Notify) Channel error: cannot send/recv
+
+1616594683269	geckodriver	INFO	Listening on 127.0.0.1:60150
+1616594686322	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileqALX7Q"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616594691745	Marionette	INFO	Listening on port 60159
+1616594692025	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616594700939	Marionette	INFO	Stopped listening on port 60159
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x230033,name=PBrowser::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1030: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\yeewl\AppData\Local\Temp\rust_mozprofileqALX7Q\protections.sqlite
+1616595838758	geckodriver	INFO	Listening on 127.0.0.1:61331
+1616595841841	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofilea2fH0u"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616595845683	Marionette	INFO	Listening on port 61342
+1616595846061	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616595851483	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1616595893562	Marionette	INFO	Stopped listening on port 61342
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616596141837	geckodriver	INFO	Listening on 127.0.0.1:61705
+1616596144896	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofiledBQwx1"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616596147613	Marionette	INFO	Listening on port 61714
+1616596148104	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616596197519	Marionette	INFO	Stopped listening on port 61714
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616596331401	geckodriver	INFO	Listening on 127.0.0.1:61926
+1616596334499	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileBOTllx"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616596337100	Marionette	INFO	Listening on port 61935
+1616596337200	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616596343213	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1616596360156	Marionette	INFO	Stopped listening on port 61935
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616596598757	geckodriver	INFO	Listening on 127.0.0.1:62289
+1616596601831	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileqeeYP4"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616596604765	Marionette	INFO	Listening on port 62298
+1616596605007	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616596749989	Marionette	INFO	Stopped listening on port 62298
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616596754337	geckodriver	INFO	Listening on 127.0.0.1:62583
+1616596757403	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofile6mA111"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616596759975	Marionette	INFO	Listening on port 62592
+1616596760088	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616596765511	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1616596819778	Marionette	INFO	Stopped listening on port 62592
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616596949280	geckodriver	INFO	Listening on 127.0.0.1:62886
+1616596952376	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileeJDJjW"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616596955069	Marionette	INFO	Listening on port 62895
+1616596955570	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616597287635	Marionette	INFO	Stopped listening on port 62895
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileQ8JBso"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616597258225	Marionette	INFO	Listening on port 63211
+1616597258515	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616597262522	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1616597284861	Marionette	INFO	Stopped listening on port 63211
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616597392800	geckodriver	INFO	Listening on 127.0.0.1:63510
+1616597395900	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileTtOETj"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616597398489	Marionette	INFO	Listening on port 63519
+1616597398592	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616597464045	Marionette	INFO	Stopped listening on port 63519
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileNBLveo"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616597443852	Marionette	INFO	Listening on port 63669
+1616597444124	Marionette	WARN	TLS certificate errors will be ignored for this session
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+1616597464279	Marionette	INFO	Stopped listening on port 63669
+1616597479167	geckodriver	INFO	Listening on 127.0.0.1:63811
+1616597482272	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofile4QXOnS"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616597484975	Marionette	INFO	Listening on port 63823
+1616597485453	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616597513315	Marionette	INFO	Stopped listening on port 63823
+[Parent 19208, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616597527540	geckodriver	INFO	Listening on 127.0.0.1:63955
+1616597530660	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileABSa5w"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616597533034	Marionette	INFO	Listening on port 63965
+1616597533323	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 2776, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1616597584036	Marionette	INFO	Stopped listening on port 63965
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616597631114	geckodriver	INFO	Listening on 127.0.0.1:64155
+1616597634207	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofilei4aGP1"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616597636785	Marionette	INFO	Listening on port 64164
+1616597636892	Marionette	WARN	TLS certificate errors will be ignored for this session
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+1616597652527	Marionette	INFO	Stopped listening on port 64164
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616597744976	geckodriver	INFO	Listening on 127.0.0.1:64398
+1616597748086	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileB3ijnN"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616597750469	Marionette	INFO	Listening on port 64407
+1616597750776	Marionette	WARN	TLS certificate errors will be ignored for this session
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+1616598087163	Marionette	INFO	Stopped listening on port 64407
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+invalid readyState of 'interactive'.
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+1616598089100	Marionette	INFO	Stopped listening on port 64649
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616598191228	geckodriver	INFO	Listening on 127.0.0.1:64935
+1616598194323	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileUPvLnR"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616598196805	Marionette	INFO	Listening on port 64944
+1616598197010	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616598202748	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1616598278892	Marionette	INFO	Stopped listening on port 64944
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616598560751	geckodriver	INFO	Listening on 127.0.0.1:65237
+1616598563811	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileAxjyq8"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616598566323	Marionette	INFO	Listening on port 65246
+1616598566513	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616598572843	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+[Parent 16656, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1616598734552	Marionette	INFO	Stopped listening on port 65246
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+eG1to5T"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616598617421	Marionette	INFO	Listening on port 65453
+1616598617697	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616598625524	Marionette	INFO	Stopped listening on port 65453
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1030: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\yeewl\AppData\Local\Temp\rust_mozprofileG1to5T\protections.sqlite
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616599353225	geckodriver	INFO	Listening on 127.0.0.1:50320
+1616599356263	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofile7ljuhF"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616599360988	Marionette	INFO	Listening on port 50329
+1616599361476	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616599371583	Marionette	INFO	Stopped listening on port 50329
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616599599543	geckodriver	INFO	Listening on 127.0.0.1:50660
+1616599602572	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileIOQVQ3"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616599605884	Marionette	INFO	Listening on port 50669
+1616599606252	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616599611631	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+JavaScript error: , line 0: uncaught exception: undefined
+1616599627815	Marionette	INFO	Stopped listening on port 50669
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616599885653	geckodriver	INFO	Listening on 127.0.0.1:51094
+1616599888773	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileR2KpcP"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616599891637	Marionette	INFO	Listening on port 51103
+1616599891956	Marionette	WARN	TLS certificate errors will be ignored for this session
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+1616600094323	Marionette	INFO	Stopped listening on port 51103
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+FO	Stopped listening on port 51548
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600094895	Marionette	INFO	Listening on port 51762
+1616600095260	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616600104758	Marionette	INFO	Stopped listening on port 51762
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616600105970	geckodriver	INFO	Listening on 127.0.0.1:51901
+1616600109047	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileRNBcTl"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600111585	Marionette	INFO	Listening on port 51910
+1616600111713	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616600123065	Marionette	INFO	Stopped listening on port 51910
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616600124258	geckodriver	INFO	Listening on 127.0.0.1:52048
+1616600127321	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileGmTF5g"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600129918	Marionette	INFO	Listening on port 52057
+1616600129979	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616600140918	Marionette	INFO	Stopped listening on port 52057
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616600142157	geckodriver	INFO	Listening on 127.0.0.1:52181
+1616600145233	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileNlNXAS"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600147712	Marionette	INFO	Listening on port 52190
+1616600147924	Marionette	WARN	TLS certificate errors will be ignored for this session
+1616600158941	Marionette	INFO	Stopped listening on port 52190
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1616600262687	geckodriver	INFO	Listening on 127.0.0.1:52378
+1616600265716	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileqsX3gR"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600267693	Marionette	INFO	Listening on port 52387
+1616600267778	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 7545 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 361 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600277478	Marionette	INFO	Stopped listening on port 52387
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xB000E,name=PBackgroundIDBDatabase::Msg_CloseAfterInvalidationComplete) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xB000E,name=PBackgroundIDBDatabase::Msg_CloseAfterInvalidationComplete) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0xB000E,name=PBackgroundIDBDatabase::Msg_CloseAfterInvalidationComplete) Channel error: cannot send/recv
+
+1616600278662	geckodriver	INFO	Listening on 127.0.0.1:52513
+1616600281730	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileTTs8QZ"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600283752	Marionette	INFO	Listening on port 52522
+1616600283800	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 4934 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 2761 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600292450	Marionette	INFO	Stopped listening on port 52522
+1616600293711	geckodriver	INFO	Listening on 127.0.0.1:52667
+1616600296789	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofile0vsjAV"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600298845	Marionette	INFO	Listening on port 52677
+1616600298972	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 4016 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 4952 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600308071	Marionette	INFO	Stopped listening on port 52677
+1616600309290	geckodriver	INFO	Listening on 127.0.0.1:52803
+1616600312361	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileCwdAE1"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600314502	Marionette	INFO	Listening on port 52814
+1616600315019	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5228 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 963 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600323643	Marionette	INFO	Stopped listening on port 52814
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000D,name=PHttpChannel::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+[Child 4868, IPC I/O Child] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:545
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x6B0027,name=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x230033,name=PBrowser::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+1616600324950	geckodriver	INFO	Listening on 127.0.0.1:52962
+1616600328004	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileeqhZn4"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600330168	Marionette	INFO	Listening on port 52971
+1616600330685	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 6897 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 3906 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600340269	Marionette	INFO	Stopped listening on port 52971
+1616600341503	geckodriver	INFO	Listening on 127.0.0.1:53136
+1616600344558	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofilef6ejzh"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600346576	Marionette	INFO	Listening on port 53145
+1616600346627	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5657 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 3263 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600355620	Marionette	INFO	Stopped listening on port 53145
+1616600356879	geckodriver	INFO	Listening on 127.0.0.1:53271
+1616600359924	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileeOoKmM"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600361987	Marionette	INFO	Listening on port 53280
+1616600362106	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 369 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 4517 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600370915	Marionette	INFO	Stopped listening on port 53280
+1616600372121	geckodriver	INFO	Listening on 127.0.0.1:53405
+1616600375216	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofiledqfUZ9"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600377247	Marionette	INFO	Listening on port 53416
+1616600377292	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 6634 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 1670 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600386010	Marionette	INFO	Stopped listening on port 53416
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000D,name=PHttpChannel::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x6B0027,name=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x230033,name=PBrowser::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+1616600387289	geckodriver	INFO	Listening on 127.0.0.1:53567
+1616600390381	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileW0tGGm"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600392488	Marionette	INFO	Listening on port 53576
+1616600392559	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5278 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5430 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600401297	Marionette	INFO	Stopped listening on port 53576
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x230033,name=PBrowser::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+1616600440152	geckodriver	INFO	Listening on 127.0.0.1:53745
+1616600443213	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileVQJw15"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600445184	Marionette	INFO	Listening on port 53754
+1616600445271	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 420 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 586 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600454808	Marionette	INFO	Stopped listening on port 53754
+1616600455921	geckodriver	INFO	Listening on 127.0.0.1:53870
+1616600459007	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileajxzgL"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600461059	Marionette	INFO	Listening on port 53879
+1616600461186	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 2312 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 1893 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600469899	Marionette	INFO	Stopped listening on port 53879
+1616600471102	geckodriver	INFO	Listening on 127.0.0.1:54005
+1616600474210	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofilep8vK5m"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600476238	Marionette	INFO	Listening on port 54014
+1616600476375	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 3541 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 3627 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600485308	Marionette	INFO	Stopped listening on port 54014
+1616600486557	geckodriver	INFO	Listening on 127.0.0.1:54139
+1616600489629	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofilegjAkbk"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600491598	Marionette	INFO	Listening on port 54149
+1616600491683	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5577 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5230 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600500307	Marionette	INFO	Stopped listening on port 54149
+1616600501503	geckodriver	INFO	Listening on 127.0.0.1:54282
+1616600504611	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileDZ1ViU"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600506567	Marionette	INFO	Listening on port 54291
+1616600506660	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 609 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 6020 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600515777	Marionette	INFO	Stopped listening on port 54291
+1616600517003	geckodriver	INFO	Listening on 127.0.0.1:54415
+1616600520096	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofiletaBebt"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600522057	Marionette	INFO	Listening on port 54425
+1616600522183	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 265 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 1763 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600531092	Marionette	INFO	Stopped listening on port 54425
+1616600532355	geckodriver	INFO	Listening on 127.0.0.1:54581
+1616600535426	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofilezfAxRL"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600537425	Marionette	INFO	Listening on port 54590
+1616600537470	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 7380 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 3302 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600546377	Marionette	INFO	Stopped listening on port 54590
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x6B0027,name=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x230033,name=PBrowser::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+1616600547739	geckodriver	INFO	Listening on 127.0.0.1:54735
+1616600550799	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofileIsi8EN"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600552780	Marionette	INFO	Listening on port 54745
+1616600552859	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 7375 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5465 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600561650	Marionette	INFO	Stopped listening on port 54745
+1616600562904	geckodriver	INFO	Listening on 127.0.0.1:54899
+1616600565994	mozrunner::runner	INFO	Running command: "C:\\Users\\yeewl\\AppData\\Local\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\yeewl\\AppData\\Local\\Temp\\rust_mozprofile1aiy05"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1616600567980	Marionette	INFO	Listening on port 54910
+1616600568053	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 5053 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/qcWZRcRw4fq915xPB9DSJSeGn7Tspit4rZWzDhmsliY.js line 1 > eval line 4902 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1616600576748	Marionette	INFO	Stopped listening on port 54910
