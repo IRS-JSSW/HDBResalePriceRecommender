@@ -4,13 +4,14 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 import os
 import time
+import random
 
 def StartSeleniumWindows(url):
     options = Options()
     options.headless = True
     assert options.headless
-    #options.binary_location = r"C:\Users\yeewl\AppData\Local\Mozilla Firefox\firefox.exe"
-    options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
+    options.binary_location = r"C:\Users\yeewl\AppData\Local\Mozilla Firefox\firefox.exe"
+    #options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
     driver = webdriver.Firefox(executable_path=".\geckodriver.exe",options=options)
     driver.get(url)
     return driver
@@ -31,15 +32,24 @@ elem = driver.find_elements_by_class_name("pagination")
 #print(elem[0].text)
 lastpage = int(elem[0].text.splitlines()[-2]) # usually «\n1\n2\n...\n441\n», hence get 2nd last element
 print(lastpage)
+driver.quit()
 
 results = []
-residx = 1
+residx = 0
 
 tic = time.perf_counter()
 for i in range(1,lastpage+1):
     pageURL = "https://www.propertyguru.com.sg/property-for-sale/{0}?property_type_code%5B0%5D=1R&property_type_code%5B1%5D=2A&property_type_code%5B2%5D=2I&property_type_code%5B3%5D=2S&property_type_code%5B4%5D=3A&property_type_code%5B5%5D=3NG&property_type_code%5B6%5D=3Am&property_type_code%5B7%5D=3NGm&property_type_code%5B8%5D=3I&property_type_code%5B9%5D=3Im&property_type_code%5B10%5D=3S&property_type_code%5B11%5D=3STD&property_type_code%5B12%5D=4A&property_type_code%5B13%5D=4NG&property_type_code%5B14%5D=4S&property_type_code%5B15%5D=4I&property_type_code%5B16%5D=4STD&property_type_code%5B17%5D=5A&property_type_code%5B18%5D=5I&property_type_code%5B19%5D=5S&property_type_code%5B20%5D=6J&property_type_code%5B21%5D=EA&property_type_code%5B22%5D=EM&property_type_code%5B23%5D=MG&property_type_code%5B24%5D=TE&property_type=H".format(str(i))
-    print(pageURL)
-    driver = StartSeleniumWindows(pageURL)
+    #print(pageURL)
+    timesleep = random.randrange(10,35)
+    print("Sleep time: {0}".format(timesleep))
+    time.sleep(timesleep)
+    try:
+        driver = StartSeleniumWindows(pageURL)
+    except:
+        print("Error")    
+        driver.quit()
+        continue;
     time.sleep(2)
     listings = driver.find_elements_by_class_name("listing-location")
     prices = driver.find_elements_by_css_selector("span.price")
@@ -47,6 +57,6 @@ for i in range(1,lastpage+1):
         residx = residx + 1
         print("Listing {0}: {1} at {2}".format(str(residx), l.text, p.text))
         results.append([l.text, p.text])
-    time.sleep(2)
+    time.sleep(1)
     driver.quit()
     print(f"time {(time.perf_counter() - tic)/60} minutes")
