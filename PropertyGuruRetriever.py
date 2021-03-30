@@ -9,11 +9,15 @@ from fake_useragent import UserAgent
 
 def StartSeleniumWindows(url):
     options = Options()
-    #options.headless = True
+    ua = UserAgent()
+    userAgent = ua.random
+    print(userAgent)
+    options.add_argument(f'user-agent={userAgent}')
+    options.headless = True
     #assert options.headless
-    options.binary_location = r"C:\Users\yeewl\AppData\Local\Mozilla Firefox\firefox.exe"
-    #options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
-    driver = webdriver.Firefox(executable_path=".\geckodriver.exe",options=options)
+    #options.binary_location = r"C:\Users\yeewl\AppData\Local\Mozilla Firefox\firefox.exe"
+    options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
+    driver = webdriver.Firefox(executable_path=r".\geckodriver.exe",options=options)
     driver.get(url)
     return driver
 
@@ -47,13 +51,13 @@ for i in range(1,lastpage+1):
     pageURL = "https://www.propertyguru.com.sg/property-for-sale/{0}?property_type_code%5B0%5D=1R&property_type_code%5B1%5D=2A&property_type_code%5B2%5D=2I&property_type_code%5B3%5D=2S&property_type_code%5B4%5D=3A&property_type_code%5B5%5D=3NG&property_type_code%5B6%5D=3Am&property_type_code%5B7%5D=3NGm&property_type_code%5B8%5D=3I&property_type_code%5B9%5D=3Im&property_type_code%5B10%5D=3S&property_type_code%5B11%5D=3STD&property_type_code%5B12%5D=4A&property_type_code%5B13%5D=4NG&property_type_code%5B14%5D=4S&property_type_code%5B15%5D=4I&property_type_code%5B16%5D=4STD&property_type_code%5B17%5D=5A&property_type_code%5B18%5D=5I&property_type_code%5B19%5D=5S&property_type_code%5B20%5D=6J&property_type_code%5B21%5D=EA&property_type_code%5B22%5D=EM&property_type_code%5B23%5D=MG&property_type_code%5B24%5D=TE&property_type=H".format(str(i))
     #print(pageURL)
     print("Page {0}".format(i))
-    timesleep = random.randrange(10,35)
+    timesleep = random.randrange(5,15)
     print("Sleep time: {0}".format(timesleep))
     time.sleep(timesleep)
     try:
         driver = StartSeleniumWindows(pageURL)
-    except:
-        print("Error")    
+    except Exception as e:
+        print("Error {0}".format(e))    
         driver.quit()
         continue
     time.sleep(2)
@@ -62,7 +66,7 @@ for i in range(1,lastpage+1):
     if len(listings)==0:
         print("Sleep to avoid captcha")
         driver.quit()
-        time.sleep(600)
+        time.sleep(100)
         continue
     for i, (l, p) in enumerate(zip(listings, prices)):
         residx = residx + 1
