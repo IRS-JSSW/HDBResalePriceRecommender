@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateResaleHDBForm
 from HDBResaleWeb.models import resaleDataGov
-from HDBResaleWeb.functions import UpdateResaleData
+from HDBResaleWeb.functions import updateresaledata
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -10,6 +10,9 @@ from HDBResaleWeb.functions import UpdateResaleData
 def home():
     form = SearchResaleHDBForm()
     if form.validate_on_submit():
+        # Function to crawl information from PropertyGuru URL
+        # Function to predict estimated price (Prediction model)
+        # Function to get closest match (Recommender)
         # flash(f'Preparing recommendations for {form.streetname.data}...', 'info')
         return redirect(url_for('result'))
     return render_template('home.html', form=form)
@@ -26,7 +29,9 @@ def result():
 def update_resaledata():
     form = UpdateResaleHDBForm()
     if (request.method == 'POST') and (form.confirm_update.data == 'Yes'):
-        UpdateResaleData()
+        #Update database with latest data from datagov
+        updateresaledata()
+        #Train Model
         flash(f'Updated latest HDB Resale data from data.gov into database.', 'success')
         return redirect(url_for('home'))
     if (request.method == 'POST') and (form.confirm_update.data == 'No'):
