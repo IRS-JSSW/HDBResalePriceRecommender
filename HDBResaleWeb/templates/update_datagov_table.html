@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group d-flex justify-content-start">
+                {{ form.confirm_update1.label(class="form-control-label mr-2") }}
+                {{ form.confirm_update1(class="form-control-md form-control-md mr-2") }}
+            </div>
+            <p class="text-info">Note: Updating the data gov database will take around 5 to 10 mins.</p>
+        </fieldset>
+        <div class="form-group">
+            {{ form.update1(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}

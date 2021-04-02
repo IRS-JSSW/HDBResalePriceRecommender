@@ -16,6 +16,10 @@ class SearchResaleHDBForm(FlaskForm):
     # completion = SelectField('Year of completion', choices=dropdown_list_completion, default=dropdown_list_completion[-1])
     submit = SubmitField('Search')
 
-class UpdateResaleHDBForm(FlaskForm):
-    confirm_update = SelectField('Update Data?', choices=['Yes', 'No'], default=1)
-    update = SubmitField('Update')
+class UpdateDataGovForm(FlaskForm):
+    confirm_update1 = SelectField('Update Data Gov Table?', choices=['Yes', 'No'], default=1)
+    update1 = SubmitField('Update')
+
+class UpdatePropGuruForm(FlaskForm):
+    confirm_update2 = SelectField('Update Propertyguru Table?', choices=['Yes', 'No'], default=1)
+    update2 = SubmitField('Update')

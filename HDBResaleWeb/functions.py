@@ -1,25 +1,25 @@
 import requests, json
 import pandas as pd
 from HDBResaleWeb import db
-from HDBResaleWeb.models import resaleDataGov
+from HDBResaleWeb.models import DataGovTable, PropGuruTable
 from sqlalchemy import desc
 
-def updateresaledata():
+def update_datagov_table():
     url = 'https://data.gov.sg/api/action/datastore_search?resource_id=42ff9cfe-abe5-4b54-beda-c88f9bb438ee&limit=100'
     results = requests.get(url)
     data = json.loads(results.content)
 
     df = pd.DataFrame(data['result']['records'])
-    total = data['result']['total']
+    # total = data['result']['total']
 
-    last_record = resaleDataGov.query.order_by(resaleDataGov.id.desc()).first()
+    last_record = DataGovTable.query.order_by(DataGovTable.id.desc()).first()
     print(last_record)
     # latest_month = pd.to_datetime(last_record.month)
     update_month = pd.to_datetime("2017-12")
 
     for i in range(0, len(df)):
         if pd.to_datetime(df.iloc[i]['month']) <= update_month:
-            update = resaleDataGov(
+            update = DataGovTable(
             #Raw features from datagov
                 month = pd.to_datetime(df.iloc[i]['month']),
                 town = df.iloc[i]['town'],
@@ -42,3 +42,8 @@ def updateresaledata():
             )
             db.session.add(update)
             db.session.commit()
+
+def update_propguru_table():
+    # url = 'https://www.propertyguru.com.sg/property-for-sale?property_type=H&order=desc'
+    # results = requests.get(url)
+    print("Building this function...")

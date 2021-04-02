@@ -1,8 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
-from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateResaleHDBForm
-from HDBResaleWeb.models import resaleDataGov
-from HDBResaleWeb.functions import updateresaledata
+from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
+from HDBResaleWeb.models import DataGovTable, PropGuruTable
+from HDBResaleWeb.functions import update_datagov_table, update_propguru_table
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -25,15 +25,27 @@ def about():
 def result():
     return render_template('result.html', title='Result Page')
 
-@app.route('/update/resaledata', methods=['GET', 'POST'])
-def update_resaledata():
-    form = UpdateResaleHDBForm()
-    if (request.method == 'POST') and (form.confirm_update.data == 'Yes'):
+@app.route('/update/datagov', methods=['GET', 'POST'])
+def update_datagov():
+    form = UpdateDataGovForm()
+    if (request.method == 'POST') and (form.confirm_update1.data == 'Yes'):
         #Update database with latest data from datagov
-        updateresaledata()
+        update_datagov_table()
         #Train Model
         flash(f'Updated latest HDB Resale data from data.gov into database.', 'success')
         return redirect(url_for('home'))
-    if (request.method == 'POST') and (form.confirm_update.data == 'No'):
+    if (request.method == 'POST') and (form.confirm_update1.data == 'No'):
         return redirect(url_for('home'))
-    return render_template('update_resaledata.html', title='Update HDB Resale Data', form=form)
+    return render_template('update_datagov_table.html', title='Update HDB Resale Data Gov Table', form=form)
+
+@app.route('/update/propguru', methods=['GET', 'POST'])
+def update_propguru():
+    form = UpdatePropGuruForm()
+    if (request.method == 'POST') and (form.confirm_update2.data == 'Yes'):
+        #Update database with latest data from datagov
+        update_propguru_table()
+        flash(f'Updated latest Propertyguru data into database.', 'success')
+        return redirect(url_for('home'))
+    if (request.method == 'POST') and (form.confirm_update2.data == 'No'):
+        return redirect(url_for('home'))
+    return render_template('update_propguru_table.html', title='Update HDB Resale Propertyguru Table', form=form)
