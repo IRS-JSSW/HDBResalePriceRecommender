@@ -40,7 +40,7 @@ def initialQuery(flattype, addquery=""):
 
 
 def scrapeType():
-    column_names = ["listingID", "listingURL", "imgURL", "ListingName", "FloorArea", "Price"]
+    column_names = ["listingID", "listingURL", "imgURL", "ListingName", "FlatType", "FloorArea", "Price"]
     results = pd.DataFrame(columns = column_names)
 
     residx = 0
@@ -111,7 +111,7 @@ def scrapeType():
                         print(imgURL)
 
                         # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "FloorArea": f.text, "Price": p.text}
+                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "FlatType": listFlattype[listIdx], "FloorArea": f.text, "Price": p.text}
                         results = results.append(newrow, ignore_index = True)
 
                     time.sleep(1)
@@ -168,7 +168,7 @@ def scrapeType():
                 print(imgURL)
 
                 # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "FloorArea": f.text, "Price": p.text}
+                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "FlatType": listFlattype[listIdx], "FloorArea": f.text, "Price": p.text}
                 results = results.append(newrow, ignore_index = True)
                 
             time.sleep(1)
