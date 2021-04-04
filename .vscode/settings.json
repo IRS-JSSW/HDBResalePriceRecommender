@@ -1,3 +1,4 @@
 {
-    "git.fetchOnPull": true
+    "git.fetchOnPull": true,
+    "python.pythonPath": "C:\\Users\\yeewl\\.conda\\envs\\py36\\python.exe"
 }
