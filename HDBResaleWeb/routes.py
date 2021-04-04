@@ -1,8 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
-from HDBResaleWeb.models import DataGovTable, PropGuruTable
-from HDBResaleWeb.functions import update_datagov_table, update_propguru_table
+from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable
+from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -49,3 +49,11 @@ def update_propguru():
     if (request.method == 'POST') and (form.confirm_update2.data == 'No'):
         return redirect(url_for('home'))
     return render_template('update_propguru_table.html', title='Update HDB Resale Propertyguru Table', form=form)
+
+@app.route('/update/amenities')
+def update_amenities():
+    insert_railtransit_data()
+    # insert_shoppingmalls_data()
+    # insert_hawkercentre_data()
+    # insert_supermarket_data()
+    return redirect(url_for('home'))
