@@ -2,7 +2,9 @@
 # coding: utf-8
 from selenium import webdriver 
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import os
+import platform
 import time
 import random
 import pandas as pd
@@ -10,10 +12,8 @@ import pandas as pd
 def StartSeleniumWindows(url):
     options = Options()
     options.headless = True
-    #assert options.headless
-    options.binary_location = r"C:\Users\yeewl\AppData\Local\Mozilla Firefox\firefox.exe"
-    #options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
-    driver = webdriver.Firefox(executable_path=r".\geckodriver.exe",options=options)
+    options.binary = FirefoxBinary(r'.\Tools\Firefox\App\Firefox\firefox.exe')
+    driver = webdriver.Firefox(executable_path=r".\Tools\geckodriver.exe",options=options)
     driver.get(url)
     return driver
 
@@ -30,7 +30,10 @@ def StartSeleniumUbuntu(url):
 def initialQuery(flattype, addquery=""):
     pageURL = "https://www.propertyguru.com.sg/property-for-sale?market=residential&property_type_code%5B%5D={0}&property_type=H{1}".format(flattype, addquery)
     #print(pageURL)
-    driver = StartSeleniumWindows(pageURL)
+    if (platform.system() == "Windows"):
+        driver = StartSeleniumWindows(pageURL)
+    else:
+        driver = StartSeleniumUbuntu(pageURL)
     elem = driver.find_elements_by_class_name("pagination")
     #print(elem[0].text)
     lastpage = int(elem[0].text.splitlines()[-2]) # usually «\n1\n2\n...\n441\n», hence get 2nd last element
@@ -74,7 +77,10 @@ def scrapeType():
                     print("Sleep time: {0}".format(timesleep))
                     time.sleep(timesleep)
                     try:
-                        driver = StartSeleniumWindows(pageURL)
+                        if (platform.system() == "Windows"):
+                            driver = StartSeleniumWindows(pageURL)
+                        else:
+                            driver = StartSeleniumUbuntu(pageURL)
                     except Exception as e:
                         pageNum = pageNum-1
                         print("Error {0}".format(e))    
@@ -130,7 +136,10 @@ def scrapeType():
             print("Sleep time: {0}".format(timesleep))
             time.sleep(timesleep)
             try:
-                driver = StartSeleniumWindows(pageURL)
+                if (platform.system() == "Windows"):
+                    driver = StartSeleniumWindows(pageURL)
+                else:
+                    driver = StartSeleniumUbuntu(pageURL)
             except Exception as e:
                 pageNum = pageNum-1
                 print("Error {0}".format(e))    
@@ -175,8 +184,12 @@ def scrapeType():
             driver.quit()
             print(f"time {(time.perf_counter() - tic)/60} minutes")
         print("***************************************")
-        results.to_csv(r".\Output.WebScrapingPG.csv", index=False, columns=column_names)
+        results.to_csv(r".\dataset\Output.WebScrapingPG.csv", index=False, columns=column_names)
     
     print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
 
-scrapeType()
+def main():
+    scrapeType()
+
+if __name__ == "__main__":
+    main()
