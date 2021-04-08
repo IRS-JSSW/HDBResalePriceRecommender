@@ -1,16 +1,16 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
-from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable
-from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data
+from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
+from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data
 
-
+######################################################################################################
+#Homepage URL
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     form = SearchResaleHDBForm()
     if form.validate_on_submit():
-        # Function to crawl information from PropertyGuru URL
         # Function to predict estimated price (Prediction model)
         # Function to get closest match (Recommender)
         # flash(f'Preparing recommendations for {form.streetname.data}...', 'info')
@@ -25,6 +25,8 @@ def about():
 def result():
     return render_template('result.html', title='Result Page')
 
+######################################################################################################
+#Update data gov table
 @app.route('/update/datagov', methods=['GET', 'POST'])
 def update_datagov():
     form = UpdateDataGovForm()
@@ -38,11 +40,12 @@ def update_datagov():
         return redirect(url_for('home'))
     return render_template('update_datagov_table.html', title='Update HDB Resale Data Gov Table', form=form)
 
+#Update property guru table
 @app.route('/update/propguru', methods=['GET', 'POST'])
 def update_propguru():
     form = UpdatePropGuruForm()
     if (request.method == 'POST') and (form.confirm_update2.data == 'Yes'):
-        #Update database with latest data from datagov
+        #Update database with latest data from propguru
         update_propguru_table()
         flash(f'Updated latest Propertyguru data into database.', 'success')
         return redirect(url_for('home'))
@@ -50,10 +53,11 @@ def update_propguru():
         return redirect(url_for('home'))
     return render_template('update_propguru_table.html', title='Update HDB Resale Propertyguru Table', form=form)
 
+#Update amenities tables
 @app.route('/update/amenities')
 def update_amenities():
     insert_railtransit_data()
-    # insert_shoppingmalls_data()
-    # insert_hawkercentre_data()
-    # insert_supermarket_data()
+    insert_shoppingmalls_data()
+    insert_hawkercentre_data()
+    insert_supermarket_data()
     return redirect(url_for('home'))
