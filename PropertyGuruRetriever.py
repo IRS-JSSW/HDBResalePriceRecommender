@@ -20,7 +20,8 @@ def StartSeleniumWindows(url):
     return driver
 
 def StartSeleniumUbuntu(url):
-    path = os.path.join(os.path.expanduser('~'), 'irs', 'HDBResalePriceRecommender', 'geckodriver-v0.29.0', 'geckodriver')
+    #path = os.path.join(os.path.expanduser('~'), 'irs', 'HDBResalePriceRecommender', 'geckodriver-v0.29.0', 'geckodriver')
+    path = r"./Tools/geckodriver"
     options = Options()
     options.headless = True
     assert options.headless

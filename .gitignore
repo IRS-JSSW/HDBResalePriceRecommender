@@ -1,5 +1,6 @@
 HDBResaleWeb/__pycache__/__init__.cpython-38.pyc
-.vscode/settings.json
+.vscode/*
 geckodriver.log
 HDBResaleWeb/resaleproject.db
-.vscode/launch.json
+ghostdriver.log
+.gitignore

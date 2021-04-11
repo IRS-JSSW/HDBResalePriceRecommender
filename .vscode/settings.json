@@ -1,3 +1,4 @@
 {
-    "git.fetchOnPull": true
+    "git.fetchOnPull": true,
+    "python.pythonPath": "/home/wl/irs/bin/python"
 }
