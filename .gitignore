@@ -4,3 +4,4 @@ geckodriver.log
 HDBResaleWeb/resaleproject.db
 ghostdriver.log
 .gitignore
+.vscode/settings.json

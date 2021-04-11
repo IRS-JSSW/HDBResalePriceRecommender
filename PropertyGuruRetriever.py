@@ -89,9 +89,9 @@ def scrapeType():
                         print("Error {0}".format(e))    
                         driver.quit()
                         continue
-                    time.sleep(2)
+                    time.sleep(1)
 
-                    # Items Required: Listing Location, Floor Area, Listing URL, Price, ImageURL
+                    # Items Required: Listing Location, Floor Area, Built Year, Remaining Lease, Listing URL, Price, ImageURL
                     listings = driver.find_elements_by_class_name("listing-location")
                     flrarea = driver.find_elements_by_xpath("//li[contains(@class, 'listing-floorarea') and contains(@class, 'pull-left') and contains(text(), 'sqft')]")
                     builtyear = driver.find_elements_by_xpath("//ul[contains(@class, 'clear-both') and contains(@class, 'listing-property-type')]/li[3]")
@@ -134,7 +134,6 @@ def scrapeType():
                         newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
                         results = results.append(newrow, ignore_index = True)
 
-                    time.sleep(1)
                     driver.quit()
                     print(f"time {(time.perf_counter() - tic)} seconds")
                 print("***************************************")
@@ -159,9 +158,9 @@ def scrapeType():
                 print("Error {0}".format(e))    
                 driver.quit()
                 continue
-            time.sleep(2)
+            time.sleep(1)
 
-            # Items Required: Listing Location, Floor Area, Remaining Lease, Listing URL, Price, ImageURL
+            # Items Required: Listing Location, Floor Area, Built Year, Remaining Lease, Listing URL, Price, ImageURL
             listings = driver.find_elements_by_class_name("listing-location")
             flrarea = driver.find_elements_by_xpath("//li[contains(@class, 'listing-floorarea') and contains(@class, 'pull-left') and contains(text(), 'sqft')]")
             builtyear = driver.find_elements_by_xpath("//ul[contains(@class, 'clear-both') and contains(@class, 'listing-property-type')]/li[3]")
@@ -204,7 +203,6 @@ def scrapeType():
                 newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
                 results = results.append(newrow, ignore_index = True)
                 
-            time.sleep(1)
             driver.quit()
             print(f"time {(time.perf_counter() - tic)} seconds")
         print("***************************************")
@@ -212,8 +210,81 @@ def scrapeType():
     
     print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
 
+def scrapeSearchListing(searchurl):
+    """This function scrape the information required for user's search
+
+    Args:
+        searchurl (string): Query URL (PropertyGuru)
+    
+
+    Returns:
+        listingDetails (dict): ListingID, ImageURL, Street Address, Postal Code, Built Year, Remaining Lease, FlatType, Floor Area, Price
+    """
+    column_names = ["listingID", "imgURL", "StreetAdd", "PostCode","BuiltYear", "RemainingLease", "FlatType", "FloorArea", "Price"]  
+    results = pd.DataFrame(columns = column_names)
+    
+    ticStart = time.perf_counter()
+
+    try:
+        if (platform.system() == "Windows"):
+            driver = StartSeleniumWindows(searchurl)
+        else:
+            driver = StartSeleniumUbuntu(searchurl)
+    except Exception as e:
+        print("Error {0}".format(e))    
+        driver.quit()
+    time.sleep(1)
+
+    # Items Required: ListingID, ImageURL, Street Address, Postal Code, Built Year, Remaining Lease, FlatType, Floor Area, Price
+    listingT = driver.find_element_by_class_name("listing-title")
+    staddrT = driver.find_element_by_xpath("//span[contains(@itemprop, 'streetAddress')]")
+    postalcodeT = driver.find_element_by_xpath("//span[contains(@itemprop, 'postalCode')]")
+    priceT = driver.find_element_by_xpath("//span[contains(@itemprop, 'price') and contains(@class, 'price')]")    
+    flrareaT = driver.find_element_by_xpath("//div[contains(@itemprop, 'floorSize')]/span[1]")
+    builtyearT = driver.find_element_by_xpath("//div[contains(@class, 'completion-year')]/div[2]")
+    flatTypeT = driver.find_element_by_xpath("//div[contains(@class, 'property-attr') and contains(@class, 'property-type')]/div[2]")
+    imgT = driver.find_element_by_xpath("//div[contains(@class, 'carousel-inner') and contains(@class, 'infinite')]/div[1]/span[1]/img[1]")
+
+    imgURL = imgT.get_attribute("data-original")
+    print(imgURL)
+    
+    # Various cleanup functions
+    # get listingID from searchURL
+    listingID = re.findall('^.*-([0-9]+)$',searchurl)[0]
+
+    # floor area to sqm
+    _floorarea = int(re.findall('[0-9]+',flrareaT.text)[0])
+    if _floorarea <= 200:
+        floorareaSqm = _floorarea
+    else:
+        floorareaSqm = _floorarea / 10.7639
+    
+    # clean up format for price, remove comma
+    price = int(priceT.text.replace(",",""))
+    
+    # calculate remaining lease = 99 - (current year - builtyear)
+    byear = int(re.findall('[0-9]+',builtyearT.text)[0])
+    remainlease = 99 - (datetime.date.today().year - byear)
+    
+    # extract Flat Type
+    flatType =  re.findall("^[\w]+ ",flatTypeT.text)[0].strip()
+
+
+    # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
+    newrow = {"listingID": listingID, "imgURL": imgURL, "StreetAdd": staddrT.text, "PostCode": int(postalcodeT.text), "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": flatType, "FloorArea": floorareaSqm, "Price": price}
+    results = results.append(newrow, ignore_index = True)
+
+    driver.quit()
+    print(f"time {(time.perf_counter() - ticStart)} seconds")
+
+    listingDetails = results.to_dict()
+
+    return listingDetails
+
+
 def main():
-    scrapeType()
+    #scrapeType()
+    scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
 
 if __name__ == "__main__":
     main()
