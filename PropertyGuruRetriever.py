@@ -6,6 +6,8 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import os
 import platform
 import time
+import re
+import datetime
 import random
 import pandas as pd
 
@@ -43,7 +45,7 @@ def initialQuery(flattype, addquery=""):
 
 
 def scrapeType():
-    column_names = ["listingID", "listingURL", "imgURL", "ListingName", "FlatType", "FloorArea", "Price"]
+    column_names = ["listingID", "listingURL", "imgURL", "ListingName", "BuiltYear", "RemainingLease", "FlatType", "FloorArea", "Price"]
     results = pd.DataFrame(columns = column_names)
 
     residx = 0
@@ -91,6 +93,7 @@ def scrapeType():
                     # Items Required: Listing Location, Floor Area, Listing URL, Price, ImageURL
                     listings = driver.find_elements_by_class_name("listing-location")
                     flrarea = driver.find_elements_by_xpath("//li[contains(@class, 'listing-floorarea') and contains(@class, 'pull-left') and contains(text(), 'sqft')]")
+                    builtyear = driver.find_elements_by_xpath("//ul[contains(@class, 'clear-both') and contains(@class, 'listing-property-type')]/li[3]")
                     prices = driver.find_elements_by_css_selector("span.price")
                     
                     imgs = driver.find_elements_by_xpath("//div[contains(@class, 'col-xs-12') and contains(@class, 'col-sm-5') and contains(@class, 'image-container')]/div[1]/div[1]/a/ul/li[1]/img[1]")
@@ -98,17 +101,27 @@ def scrapeType():
                     # within sms_button
                     smsbutton = driver.find_elements_by_class_name("sms-button")
 
-                    if len(listings)==0:
-                        pageNum = pageNum-1
-                        print("Sleep to avoid captcha")
-                        driver.quit()
-                        time.sleep(100)
-                        continue
-                    for i, (l, f, p, s, img) in enumerate(zip(listings, flrarea, prices, smsbutton, imgs)):
+                    for i, (l, f, y, p, s, img) in enumerate(zip(listings, flrarea, builtyear, prices, smsbutton, imgs)):
                         residx = residx + 1
 
-                        print("Listing {0}: {1}, {2} at {3}".format(str(residx), l.text, f.text, p.text))
-                        
+                        # floor area
+                        # if floor area is smaller than 200sqft, it doesn't make sense for HDB (likely agent put wrongly as sqft). Hence, convert to sqm
+                        # sqft to sqm: div by 10.7639
+                        _floorarea = int(re.findall('[0-9]+',f.text)[0])
+                        if _floorarea <= 200:
+                            floorareaSqm = _floorarea
+                        else:
+                            floorareaSqm = _floorarea / 10.7639
+
+                        print("Listing {0}: {1}, {2}, {3} at {4}".format(str(residx), l.text, y.text, floorareaSqm, p.text))
+
+                        # calculate remaining lease = 99 - (current year - builtyear)
+                        byear = int(re.findall('[0-9]+',y.text)[0])
+                        remainlease = 99 - (datetime.date.today().year - byear)
+
+                        # clean up format for price, remove comma
+                        price = int(p.text.replace(",",""))
+
                         listingID = s.get_attribute("data-listing-id")
                         print(listingID)
                         listingURL = s.get_attribute("href").replace("#contact-agent", "")
@@ -117,12 +130,12 @@ def scrapeType():
                         print(imgURL)
 
                         # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "FlatType": listFlattype[listIdx], "FloorArea": f.text, "Price": p.text}
+                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
                         results = results.append(newrow, ignore_index = True)
 
                     time.sleep(1)
                     driver.quit()
-                    print(f"time {(time.perf_counter() - tic)/60} minutes")
+                    print(f"time {(time.perf_counter() - tic)} seconds")
                 print("***************************************")
                 results.to_csv(r".\Output.WebScrapingPG.csv", index=False, columns=column_names)
             continue
@@ -147,9 +160,10 @@ def scrapeType():
                 continue
             time.sleep(2)
 
-            # Items Required: Listing Location, Floor Area, Listing URL, Price, ImageURL
+            # Items Required: Listing Location, Floor Area, Remaining Lease, Listing URL, Price, ImageURL
             listings = driver.find_elements_by_class_name("listing-location")
             flrarea = driver.find_elements_by_xpath("//li[contains(@class, 'listing-floorarea') and contains(@class, 'pull-left') and contains(text(), 'sqft')]")
+            builtyear = driver.find_elements_by_xpath("//ul[contains(@class, 'clear-both') and contains(@class, 'listing-property-type')]/li[3]")
             prices = driver.find_elements_by_css_selector("span.price")
             
             imgs = driver.find_elements_by_xpath("//div[contains(@class, 'col-xs-12') and contains(@class, 'col-sm-5') and contains(@class, 'image-container')]/div[1]/div[1]/a/ul/li[1]/img[1]")
@@ -157,18 +171,27 @@ def scrapeType():
             # within sms_button
             smsbutton = driver.find_elements_by_class_name("sms-button")
 
-            if len(listings)==0:
-                pageNum = pageNum-1
-                print("Sleep to avoid captcha")
-                driver.quit()
-                time.sleep(100)
-                continue
-
-            for i, (l, f, p, s, img) in enumerate(zip(listings, flrarea, prices, smsbutton, imgs)):
+            for i, (l, f, y, p, s, img) in enumerate(zip(listings, flrarea, builtyear, prices, smsbutton, imgs)):
                 residx = residx + 1
 
-                print("Listing {0}: {1}, {2} at {3}".format(str(residx), l.text, f.text, p.text))
+                # floor area
+                # if floor area is smaller than 200sqft, it doesn't make sense for HDB (likely agent put wrongly as sqft). Hence, convert to sqm
+                # sqft to sqm: div by 10.7639
+                _floorarea = int(re.findall('[0-9]+',f.text)[0])
+                if _floorarea <= 200:
+                    floorareaSqm = _floorarea
+                else:
+                    floorareaSqm = _floorarea / 10.7639
+
+                print("Listing {0}: {1}, {2}, {3} at {4}".format(str(residx), l.text, y.text, floorareaSqm, p.text))
+
+                # calculate remaining lease = 99 - (current year - builtyear)
+                byear = int(re.findall('[0-9]+',y.text)[0])
+                remainlease = 99 - (datetime.date.today().year - byear)
                 
+                # clean up format for price, remove comma
+                price = int(p.text.replace(",",""))
+
                 listingID = s.get_attribute("data-listing-id")
                 print(listingID)
                 listingURL = s.get_attribute("href").replace("#contact-agent", "")
@@ -177,14 +200,14 @@ def scrapeType():
                 print(imgURL)
 
                 # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "FlatType": listFlattype[listIdx], "FloorArea": f.text, "Price": p.text}
+                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
                 results = results.append(newrow, ignore_index = True)
                 
             time.sleep(1)
             driver.quit()
-            print(f"time {(time.perf_counter() - tic)/60} minutes")
+            print(f"time {(time.perf_counter() - tic)} seconds")
         print("***************************************")
-        results.to_csv(r".\dataset\Output.WebScrapingPG.csv", index=False, columns=column_names)
+        results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
     
     print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
 
