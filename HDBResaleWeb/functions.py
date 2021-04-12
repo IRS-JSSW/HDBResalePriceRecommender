@@ -2,67 +2,105 @@ import requests, json
 import pandas as pd
 from HDBResaleWeb import db
 from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
-from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_cbd_distance, get_nearest_hawkercentre, get_nearest_supermarket
+from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
 from sqlalchemy import desc
 
 #Mapping postal sector to postal district
-def postal_district(postal_sector):
+def map_postal_district(postal_sector):
     if postal_sector in ['01', '02', '03', '04', '05', '06']:
         return '01'
-    elif postal_sector in ['07', '08']:
+    if postal_sector in ['07', '08']:
         return '02'
-    elif postal_sector in ['14', '15', '16']:
+    if postal_sector in ['14', '15', '16']:
         return '03'
-    elif postal_sector in ['09', '10']:
+    if postal_sector in ['09', '10']:
         return '04'
-    elif postal_sector in ['11', '12', '13']:
+    if postal_sector in ['11', '12', '13']:
         return '05'
-    elif postal_sector in ['17']:
+    if postal_sector in ['17']:
         return '06'
-    elif postal_sector in ['18', '19']:
+    if postal_sector in ['18', '19']:
         return '07'
-    elif postal_sector in ['20', '21']:
+    if postal_sector in ['20', '21']:
         return '08'
-    elif postal_sector in ['22', '23']:
+    if postal_sector in ['22', '23']:
         return '09'
-    elif postal_sector in ['24', '25', '26', '27']:
+    if postal_sector in ['24', '25', '26', '27']:
         return '10'
-    elif postal_sector in ['28', '29', '30']:
+    if postal_sector in ['28', '29', '30']:
         return '11'
-    elif postal_sector in ['31', '32', '33']:
+    if postal_sector in ['31', '32', '33']:
         return '12'
-    elif postal_sector in ['34', '35', '36', '37']:
+    if postal_sector in ['34', '35', '36', '37']:
         return '13'
-    elif postal_sector in ['38', '39', '40', '41']:
+    if postal_sector in ['38', '39', '40', '41']:
         return '14'
-    elif postal_sector in ['42', '43', '44', '45']:
+    if postal_sector in ['42', '43', '44', '45']:
         return '15'
-    elif postal_sector in ['46', '47', '48']:
+    if postal_sector in ['46', '47', '48']:
         return '16'
-    elif postal_sector in ['49', '50', '81']:
+    if postal_sector in ['49', '50', '81']:
         return '17'
-    elif postal_sector in ['51', '52']:
+    if postal_sector in ['51', '52']:
         return '18'
-    elif postal_sector in ['53', '54', '55', '82']:
+    if postal_sector in ['53', '54', '55', '82']:
         return '19'
-    elif postal_sector in ['56', '57']:
+    if postal_sector in ['56', '57']:
         return '20'
-    elif postal_sector in ['58', '59']:
+    if postal_sector in ['58', '59']:
         return '21'
-    elif postal_sector in ['60', '61', '62', '63', '64']:
+    if postal_sector in ['60', '61', '62', '63', '64']:
         return '22'
-    elif postal_sector in ['65', '66', '67', '68']:
+    if postal_sector in ['65', '66', '67', '68']:
         return '23'
-    elif postal_sector in ['69', '70', '71']:
+    if postal_sector in ['69', '70', '71']:
         return '24'
-    elif postal_sector in ['72', '73']:
+    if postal_sector in ['72', '73']:
         return '25'
-    elif postal_sector in ['77', '78']:
+    if postal_sector in ['77', '78']:
         return '26'
-    elif postal_sector in ['75', '76']:
+    if postal_sector in ['75', '76']:
         return '27'
-    elif postal_sector in ['79', '79']:
+    if postal_sector in ['79', '80']:
         return '28'
+
+#Map storey range to Low/Middle/High
+def map_storey_range(storey_range):
+    #Storey 6 and below will be low floor
+    if storey_range in ['01 TO 03','01 TO 05','04 TO 06']:
+        return 'Low'
+    #Storey 7 to 10 will be middle floor
+    if storey_range in ['07 TO 09','06 TO 10']:
+        return 'Middle'
+    #Storey 10 and above will be high floor
+    if storey_range in ['10 TO 12','11 TO 15','13 TO 15','16 TO 18','16 TO 20',
+                        '19 TO 21','21 TO 25','22 TO 24','25 TO 27','28 TO 30',
+                        '26 TO 30','31 TO 33','31 TO 35','34 TO 36','36 TO 40',
+                        '37 TO 39','40 TO 42','43 TO 45','46 TO 48','49 TO 51']:
+        return 'High'
+
+def map_flat_type(flat_type, flat_model):
+    if (flat_model == 'Adjoined flat'):
+        return "Jumbo"
+    if (flat_model == 'Terrace'):
+        return "Terrace"
+    else:
+        return flat_type
+
+def cpi_index():
+    filepath = 'HDBResaleWeb/dataset/housing-and-development-board-resale-price-index-1q2009-100-quarterly.csv'
+    df = pd.read_csv(filepath)
+    df_cpi = pd.DataFrame(columns=['cpi_quarter','cpi_index'])
+
+    for i in range(0,len(df)):
+        if (df.iloc[i]['quarter'][:4] >= '2000'):
+            insert_row = {
+                "cpi_quarter": df.iloc[i]['quarter'],
+                "cpi_index": df.iloc[i]['index']
+            }
+            df_cpi = df_cpi.append(insert_row, ignore_index=True)
+
+    return df_cpi
 
 ######################################################################################################
 #Retrieve rail transit data from database
@@ -98,7 +136,7 @@ def hawkercentre():
     df_hawkercentre = pd.DataFrame(columns=['name_of_centre','coordinates'])
     for query_result in query_hawkercentre:
         insert_row = {
-            "Shopping_Malls": query_result.name_of_centre,
+            "name_of_centre": query_result.name_of_centre,
             "coordinates": (query_result.latitude, query_result.longitude)
         }
         df_hawkercentre = df_hawkercentre.append(insert_row, ignore_index=True)
@@ -111,7 +149,7 @@ def supermarket():
     df_supermarket = pd.DataFrame(columns=['licensee_name','coordinates'])
     for query_result in query_supermarket:
         insert_row = {
-            "Shopping_Malls": query_result.licensee_name,
+            "licensee_name": query_result.licensee_name,
             "coordinates": (query_result.latitude, query_result.longitude)
         }
         df_supermarket = df_supermarket.append(insert_row, ignore_index=True)
@@ -182,65 +220,100 @@ def insert_supermarket_data():
         db.session.add(update)
         db.session.commit()
 
+#Copy propguru data from csv to database
+def insert_propguru_data():
+    filepath = 'HDBResaleWeb/dataset/propguru.csv'
+    df = pd.read_csv(filepath)
+    for i in range(0, len(df)):
+        update = PropGuruTable(
+            licensee_name = df.iloc[i]['licensee_name'],
+            postal_code = int(df.iloc[i]['postal_code']),
+            latitude = df.iloc[i]['latitude'],
+            longitude = df.iloc[i]['longitude'],
+            full_address = df.iloc[i]['full_address']
+        )
+        db.session.add(update)
+        db.session.commit()
+
 ######################################################################################################
 #Function to update HDB resale data from data gov
 def update_datagov_table():
-    url_2017 = 'https://data.gov.sg/api/action/datastore_search?resource_id=42ff9cfe-abe5-4b54-beda-c88f9bb438ee&limit=100'
-    url_2015 = 'https://data.gov.sg/api/action/datastore_search?resource_id=1b702208-44bf-4829-b620-4615ee19b57c&limit=10'
+    url_2017 = 'https://data.gov.sg/api/action/datastore_search?resource_id=42ff9cfe-abe5-4b54-beda-c88f9bb438ee&limit=500000'
+    # url_2015 = 'https://data.gov.sg/api/action/datastore_search?resource_id=1b702208-44bf-4829-b620-4615ee19b57c&limit=500000'
     #Data before 2015 does not have the 'remaining_lease' column and data
-    # url_2012 = 'https://data.gov.sg/api/action/datastore_search?resource_id=83b2fc37-ce8c-4df4-968b-370fd818138b&limit=5'
-    # url_2000 = 'https://data.gov.sg/api/action/datastore_search?resource_id=8c00bf08-9124-479e-aeca-7cc411d884c4&limit=5'
-    data = json.loads(requests.get(url_2015).content)
+    # url_2012 = 'https://data.gov.sg/api/action/datastore_search?resource_id=83b2fc37-ce8c-4df4-968b-370fd818138b&limit=500000'
+    # url_2000 = 'https://data.gov.sg/api/action/datastore_search?resource_id=8c00bf08-9124-479e-aeca-7cc411d884c4&limit=400000'
+    data = json.loads(requests.get(url_2017).content)
 
     df = pd.DataFrame(data['result']['records'])
-    # total = data['result']['total']
     
-    # query_datagov = DataGovTable.query.order_by(DataGovTable.id.desc()).all()
-    # df_datagov = pd.DataFrame(columns=['month','result','block','street_name'])
-    # for query_result in query_datagov:
-    #     df_datagov = df_datagov.append([query_result.month, query_result.town, query_result.block, query_result.street_name])
-    # latest_month = pd.to_datetime(last_record.month)
-    update_month = pd.to_datetime("2017-12")
+    update_month = pd.to_datetime("2021-04")
+
+    df2 = df[df['month'] == "2017-01"]
+    df2 = df2.reset_index()
 
     df_railtransit = railtransit()
     df_shoppingmalls = shoppingmalls()
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
+    df_cpi_index = cpi_index()
 
-    for i in range(0, len(df)):
-        if pd.to_datetime(df.iloc[i]['month']) <= update_month:
-            full_address = df.iloc[i]['block'] + ' ' + df.iloc[i]['street_name']
+    for i in range(0, len(df2)):
+        if pd.to_datetime(df2.iloc[i]['month']) <= update_month:
+            record_date = df2.iloc[i]['month']
+            record_month = pd.to_datetime(record_date)
+            record_quarter = record_date[:4] + "-Q" + str(record_month.quarter)
+            resale_price = df2.iloc[i]['resale_price']
+            flat_type = map_flat_type(df2.iloc[i]['flat_type'], df2.iloc[i]['flat_model'])
+            storey_range = map_storey_range(df2.iloc[i]['storey_range'])
+            remaining_lease = 99 - int(df2.iloc[i]['month'][:4]) + int(df2.iloc[i]['lease_commence_date'])
+            cpi_adjusted_resale_price = float(resale_price) / float(df_cpi_index[df_cpi_index['cpi_quarter']==record_quarter]['cpi_index']) * 100
+            full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
             onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
-            mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
-            mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
-            cbd_distance = get_cbd_distance(onemap_latitude, onemap_longitude)
-            hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
-            market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
+            #If latitude and longitude is found
+            if (onemap_latitude != 0):
+                mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+                mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+                orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+                hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+                market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
+            #If latitude and longitude is not found, fill with null values
+            if (onemap_latitude == 0):
+                mrt_nearest = "null"
+                mrt_distance = 0
+                mall_nearest = "null"
+                mall_distance = 0
+                orchard_distance = 0
+                hawker_distance = 0
+                market_distance = 0
+            #Create array to add new record from datagov into database
             update = DataGovTable(
             #Raw features from datagov
-                month = pd.to_datetime(df.iloc[i]['month']),
-                town = df.iloc[i]['town'],
-                flat_type = df.iloc[i]['flat_type'],
-                block = df.iloc[i]['block'],
-                street_name = df.iloc[i]['street_name'],
-                storey_range = df.iloc[i]['storey_range'],
-                floor_area_sqm = df.iloc[i]['floor_area_sqm'],
-                flat_model = df.iloc[i]['flat_model'],
-                lease_commence_date = df.iloc[i]['lease_commence_date'],
-                remaining_lease = df.iloc[i]['remaining_lease'][:2],
-                resale_price = df.iloc[i]['resale_price'],
+                month = record_month,
+                # town = df2.iloc[i]['town'],
+                flat_type = flat_type,
+                # block = df2.iloc[i]['block'],
+                # street_name = df2.iloc[i]['street_name'],
+                storey_range = storey_range,
+                floor_area_sqm = df2.iloc[i]['floor_area_sqm'],
+                # lease_commence_date = df2.iloc[i]['lease_commence_date'],
+                remaining_lease = remaining_lease,
+                resale_price = resale_price,
             #Additional features added          
+                cpi_adjusted_resale_price = cpi_adjusted_resale_price,
                 latitude = onemap_latitude,
                 longitude = onemap_longitude,
-                postal_district = postal_district(onemap_postal_sector),
+                postal_district = map_postal_district(onemap_postal_sector),
                 mrt_nearest = mrt_nearest,
                 mrt_distance = mrt_distance,
                 mall_nearest = mall_nearest,
                 mall_distance = mall_distance,
-                cbd_distance = cbd_distance,
+                orchard_distance = orchard_distance,
                 hawker_distance = hawker_distance,
                 market_distance = market_distance
             )
+
+            #Add and commit the record to database
             db.session.add(update)
             db.session.commit()
 
@@ -253,14 +326,36 @@ def update_propguru_table():
 
 ######################################################################################################
 ###1. Preprocess datagov dataset for building price prediction model###
-
-#Import data from database
-
-#Choose appropriate features
+def train_regression_model():
+#Query database and import relevant features into dataframe
+    query_datagov = DataGovTable.query.all()
+    df_datagov = pd.DataFrame(columns=["month","flat_type","storey_range","floor_area_sqm","remaining_lease",
+                                        "resale_price","latitude","longitude","postal_district","mrt_distance",
+                                        "mall_distance","orchard_distance","hawker_distance","market_distance"])
+    for query_result in query_datagov:
+        get_result = {
+            "month": query_result.month,
+            "flat_type": query_result.flat_type,
+            "storey_range": query_result.storey_range,
+            "floor_area_sqm": query_result.floor_area_sqm,
+            "remaining_lease": query_result.remaining_lease,
+            "resale_price": query_result.resale_price,
+            "latitude": query_result.latitude,
+            "longitude": query_result.longitude,
+            "postal_district": query_result.postal_district,
+            "mrt_distance": query_result.mrt_distance,
+            "mall_distance": query_result.mall_distance,
+            "orchard_distance": query_result.orchard_distance,
+            "hawker_distance": query_result.hawker_distance,
+            "market_distance": query_result.market_distance
+        }
+        df_datagov = df_datagov.append(get_result, ignore_index=True)
 
 #Choose target
 
+
 #Onehot Encoding
+
 
 ###2. Build Regression Model###
 
@@ -292,3 +387,5 @@ def update_propguru_table():
 
 ######################################################################################################
 ###Loading Regression Model###
+# def load_regression_model():
+# abc

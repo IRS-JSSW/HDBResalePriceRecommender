@@ -61,3 +61,7 @@ def update_amenities():
     insert_hawkercentre_data()
     insert_supermarket_data()
     return redirect(url_for('home'))
+
+#Train regression model
+# @app.route('/update/train')
+# def train_model():
