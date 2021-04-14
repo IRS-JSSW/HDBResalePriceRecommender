@@ -277,7 +277,7 @@ def scrapeSearchListing(searchurl):
     driver.quit()
     print(f"time {(time.perf_counter() - ticStart)} seconds")
 
-    listingDetails = results.to_dict()
+    listingDetails = results.to_dict('records')
 
     return listingDetails
 
