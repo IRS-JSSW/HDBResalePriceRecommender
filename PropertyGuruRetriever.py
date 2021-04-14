@@ -220,9 +220,6 @@ def scrapeSearchListing(searchurl):
     Returns:
         listingDetails (dict): ListingID, ImageURL, Street Address, Postal Code, Built Year, Remaining Lease, FlatType, Floor Area, Price
     """
-    column_names = ["listingID", "imgURL", "StreetAdd", "PostCode","BuiltYear", "RemainingLease", "FlatType", "FloorArea", "Price"]  
-    results = pd.DataFrame(columns = column_names)
-    
     ticStart = time.perf_counter()
 
     try:
@@ -271,13 +268,11 @@ def scrapeSearchListing(searchurl):
 
 
     # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-    newrow = {"listingID": listingID, "imgURL": imgURL, "StreetAdd": staddrT.text, "PostCode": int(postalcodeT.text), "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": flatType, "FloorArea": floorareaSqm, "Price": price}
-    results = results.append(newrow, ignore_index = True)
-
+    listingDetails = {"listingID": listingID, "imgURL": imgURL, "StreetAdd": staddrT.text, "PostCode": int(postalcodeT.text), "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": flatType, "FloorArea": floorareaSqm, "Price": price}
+    
     driver.quit()
     print(f"time {(time.perf_counter() - ticStart)} seconds")
 
-    listingDetails = results.to_dict('records')
 
     return listingDetails
 
