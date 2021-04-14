@@ -254,7 +254,7 @@ def scrapeSearchListing(searchurl):
     if _floorarea <= 200:
         floorareaSqm = _floorarea
     else:
-        floorareaSqm = _floorarea / 10.7639
+        floorareaSqm = round(_floorarea / 10.7639, 2)
     
     # clean up format for price, remove comma
     price = int(priceT.text.replace(",",""))

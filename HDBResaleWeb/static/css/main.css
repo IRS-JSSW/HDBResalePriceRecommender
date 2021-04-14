@@ -36,6 +36,12 @@ h6 {
 	border-radius: 3px;
 	margin-bottom: 20px;
 }
+
+.card-img-top {
+	width: 100%;
+	object-fit: cover;
+}
+
 /* 
 .article-title {
 	color: #444444;

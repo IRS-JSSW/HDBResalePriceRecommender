@@ -2,28 +2,23 @@
 {% block content %}
 <div class="content-section">
     <div class="card-deck">
-        <div class="card">
-          <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card mb-3">
+          <img class="card-img-top" src="{{ search_df.get('imgURL') }}">
           <div class="card-body">
-            <h5 class="card-title">Item 1</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <!-- <img src="..." class="card-img-top" alt="..."> -->
-          <div class="card-body">
-            <h5 class="card-title">Item 2</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <!-- <img src="..." class="card-img-top" alt="..."> -->
-          <div class="card-body">
-            <h5 class="card-title">Item 3</h5>
-            <p class="card-text">Description</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            <h5><a href="{{ search_url }}" class="card-title font-weight-bold"  target="_blank">{{ search_df.get('StreetAdd') }}</a></h5>
+            <ul class="list-unstyled">
+            <li>Flat type: {{ search_df.get('FlatType') }}</li>
+            <li>Floor Area: {{ search_df.get('FloorArea') }} sqm</li>
+            <li>Year built: {{ search_df.get('BuiltYear') }}</li>
+            <li>Listed Price: {{ search_df.get('Price') }}</li>
+            <li>Predicted Price:
+              <ul>
+                <li>Low - {{ predict_price.get('low') }}</li>
+                <li>Middle - {{ predict_price.get('middle') }}</li>
+                <li>High - {{ predict_price.get('high') }}</li>
+              </ul>
+            </li>
+            </ul>
           </div>
         </div>
       </div>

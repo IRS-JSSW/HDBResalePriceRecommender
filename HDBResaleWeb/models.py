@@ -31,9 +31,8 @@ class DataGovTable(db.Model):
     market_distance = db.Column(db.Float, nullable=False)
 
     # def __repr__(self):
-    #     return ('{self.month}','{self.town}','{self.flat_type}','{self.street_name}','{self.storey_range}',
-    #     '{self.floor_area_sqm}', '{self.flat_model}','{self.lease_commence_date}','{self.remaining_lease}',
-    #     '{self.resale_price}')
+    #     return ('{self.month}','{self.flat_type}','{self.storey_range}','{self.floor_area_sqm}','{self.remaining_lease}',
+    #             '{self.resale_price}')
 
 #Property guru columns
 class PropGuruTable(db.Model):

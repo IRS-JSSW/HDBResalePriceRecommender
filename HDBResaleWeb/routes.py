@@ -2,7 +2,8 @@ from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
 from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
-from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data
+from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model
+from HDBResaleWeb.PropertyGuruRetriever import scrapeSearchListing
 
 ######################################################################################################
 #Homepage URL
@@ -11,10 +12,15 @@ from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, 
 def home():
     form = SearchResaleHDBForm()
     if form.validate_on_submit():
+        #Function to scrape search
+        search_url = form.streetname.data
+        # search_url = 'https://www.propertyguru.com.sg/listing/hdb-for-sale-520a-tampines-central-8-23459129'
+        search_df = scrapeSearchListing(search_url)
         # Function to predict estimated price (Prediction model)
+        predict_price = {'low':500000,'middle':600000,'high':700000}
         # Function to get closest match (Recommender)
         # flash(f'Preparing recommendations for {form.streetname.data}...', 'info')
-        return redirect(url_for('result'))
+        return render_template('result.html', search_df=search_df, search_url=search_url,predict_price=predict_price)
     return render_template('home.html', form=form)
 
 @app.route('/about')
@@ -63,5 +69,7 @@ def update_amenities():
     return redirect(url_for('home'))
 
 #Train regression model
-# @app.route('/update/train')
-# def train_model():
+@app.route('/update/trainmodel')
+def train_model():
+    train_regression_model()
+    return redirect(url_for('home'))
