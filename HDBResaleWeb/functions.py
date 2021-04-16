@@ -364,11 +364,14 @@ def train_regression_model():
                     "cpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_distance",
                     "mall_distance","orchard_distance","hawker_distance","market_distance"]]
 
-#Choose target
+    ###Remove outliers from dataset###
+    df_datagov = df_datagov[(df_datagov['floor_area_sqm'] <= 215) & (df_datagov['mrt_distance'] <= 2.5)]
+
+    #Choose target
     X = df_datagov.drop(columns=['cpi_adjusted_resale_price'], axis=1)
     y = df_datagov['cpi_adjusted_resale_price']
 
-#Onehot Encoding
+    ####Onehot Encoding####
     #Encode month e.g month 1 is 2015-01-01, month 71 is 2020-12-01
     X['month'] = pd.Categorical(X['month']).codes
     #Encode storey range
