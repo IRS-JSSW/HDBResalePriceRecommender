@@ -1,8 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
-from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
-from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model
+from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model
 from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing
 
 ######################################################################################################
