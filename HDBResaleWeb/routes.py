@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
-from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model
+from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model, load_regression_model
 from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing
 
 ######################################################################################################
@@ -16,10 +16,11 @@ def home():
         # search_url = 'https://www.propertyguru.com.sg/listing/hdb-for-sale-520a-tampines-central-8-23459129'
         search_df = scrapeSearchListing(search_url)
         # Function to predict estimated price (Prediction model)
-        predict_price = {'low':500000,'middle':600000,'high':700000}
+        predicted_low, predicted_middle, predicted_high = load_regression_model(search_df)
+        predicted_price = {"low":predicted_low, "middle":predicted_middle, "high":predicted_high}
         # Function to get closest match (Recommender)
         # flash(f'Preparing recommendations for {form.streetname.data}...', 'info')
-        return render_template('result.html', search_df=search_df, search_url=search_url,predict_price=predict_price)
+        return render_template('result.html', search_df=search_df, search_url=search_url,predicted_price=predicted_price)
     return render_template('home.html', form=form)
 
 @app.route('/about')
