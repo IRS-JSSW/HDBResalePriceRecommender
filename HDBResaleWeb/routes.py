@@ -1,8 +1,13 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
+<<<<<<< Updated upstream
 from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
 from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data
+=======
+from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model, load_regression_model
+from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing, addfeaturesPG
+>>>>>>> Stashed changes
 
 ######################################################################################################
 #Homepage URL
@@ -46,7 +51,7 @@ def update_propguru():
     form = UpdatePropGuruForm()
     if (request.method == 'POST') and (form.confirm_update2.data == 'Yes'):
         #Update database with latest data from propguru
-        update_propguru_table()
+        addfeaturesPG()
         flash(f'Updated latest Propertyguru data into database.', 'success')
         return redirect(url_for('home'))
     if (request.method == 'POST') and (form.confirm_update2.data == 'No'):
