@@ -3,7 +3,7 @@ from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
 from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
 from HDBResaleWeb.functions import update_datagov_table, update_propguru_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model
-from HDBResaleWeb.PropertyGuruRetriever import scrapeSearchListing
+from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing
 
 ######################################################################################################
 #Homepage URL
@@ -72,4 +72,10 @@ def update_amenities():
 @app.route('/update/trainmodel')
 def train_model():
     train_regression_model()
+    return redirect(url_for('home'))
+
+#Test route for daily scraping
+@app.route('/pg1')
+def pg_scrape1():
+    scrapeType()
     return redirect(url_for('home'))

@@ -10,6 +10,10 @@ import re
 import datetime
 import random
 import pandas as pd
+from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
+from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+from sqlalchemy import create_engine, desc
+
 
 def StartSeleniumWindows(url):
     options = Options()
@@ -44,6 +48,36 @@ def initialQuery(flattype, addquery=""):
 
     return lastpage
 
+def addfeaturesPG(full_address):
+    #Retrieve amenities data and CPI index
+    df_railtransit = railtransit()
+    df_shoppingmalls = shoppingmalls()
+    df_hawkercentre = hawkercentre()
+    df_supermarket = supermarket()
+
+    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+
+    #If latitude and longitude is found
+    if (onemap_latitude != 0):
+        mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+        mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+        orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+        hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+        market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
+        postal_district = map_postal_district(onemap_postal_sector)
+    #If latitude and longitude is not found, fill with null values
+    if (onemap_latitude == 0):
+        mrt_nearest = "null"
+        mrt_distance = 0
+        mall_nearest = "null"
+        mall_distance = 0
+        orchard_distance = 0
+        hawker_distance = 0
+        market_distance = 0
+        postal_district = 0
+
+    #Connect to database
+    engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
 def scrapeType():
     column_names = ["listingID", "listingURL", "imgURL", "ListingName", "BuiltYear", "RemainingLease", "FlatType", "FloorArea", "Price"]
