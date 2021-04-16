@@ -11,6 +11,12 @@ import datetime
 import random
 import pandas as pd
 
+#import db
+from models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
+from addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+from sqlalchemy import create_engine, desc
+
+
 def StartSeleniumWindows(url):
     options = Options()
     options.headless = True
@@ -44,6 +50,32 @@ def initialQuery(flattype, addquery=""):
 
     return lastpage
 
+def summarizeFlatType(flattypePG):
+    """This function converts flat type in PG to flat type in DataGov. Include what is shown on search filter and individual listing
+
+    Args:
+        flattypePG (string): flat type used in PG
+    
+    Returns:
+        key (string): flat type used in DG
+
+    """    
+    dictFlatTypes = {"1":["1R", "1-Room / Studio"], \
+                    "2":["2A", "2I", "2S"], \
+                    "3":["3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "3NG (New Generation)", "3A (Modified)", "3NG (Modified)", "3I (Improved)", "3I (Modified)", "3S (Simplified)", "3STD (Standard)"], \
+                    "4":["4A", "4NG", "4S", "4I", "4STD", "4NG (New Generation)", "4S (Simplified)", "4I (Improved)", "4STD (Standard)"], \
+                    "5":["5A", "5I", "5S"], \
+                    "JUMBO":["6J", "Jumbo"], \
+                    "EXECUTIVE":["EA", "EM", "EA (Exec Apartment)", "EM (Exec Maisonette)"], \
+                    "MULTI-GENERATION":["MG", "MG (Multi-Generation)"], \
+                    "TERRACE":["TE", "Terrace"]}
+
+    for key, value in dictFlatTypes.items():
+         if flattypePG in value:
+             return key
+    
+    # Key does not exist
+    return ""
 
 def scrapeType():
     column_names = ["listingID", "listingURL", "imgURL", "ListingName", "BuiltYear", "RemainingLease", "FlatType", "FloorArea", "Price"]
@@ -131,13 +163,13 @@ def scrapeType():
                         print(imgURL)
 
                         # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
+                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": summarizeFlatType(listFlattype[listIdx]), "FloorArea": floorareaSqm, "Price": price}
                         results = results.append(newrow, ignore_index = True)
 
                     driver.quit()
                     print(f"time {(time.perf_counter() - tic)} seconds")
                 print("***************************************")
-                results.to_csv(r".\Output.WebScrapingPG.csv", index=False, columns=column_names)
+                results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
             continue
 
         while pageNum < lastpage:
@@ -200,7 +232,7 @@ def scrapeType():
                 print(imgURL)
 
                 # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
+                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": summarizeFlatType(listFlattype[listIdx]), "FloorArea": floorareaSqm, "Price": price}
                 results = results.append(newrow, ignore_index = True)
                 
             driver.quit()
@@ -216,7 +248,6 @@ def scrapeSearchListing(searchurl):
     Args:
         searchurl (string): Query URL (PropertyGuru)
     
-
     Returns:
         listingDetails (dict): ListingID, ImageURL, Street Address, Postal Code, Built Year, Remaining Lease, FlatType, Floor Area, Price
     """
@@ -266,9 +297,10 @@ def scrapeSearchListing(searchurl):
     byear = int(re.findall('[0-9]+',builtyearT.text)[0])
     remainlease = 99 - (datetime.date.today().year - byear)
     
-    # extract Flat Type
-    flatType =  re.findall("^[\w]+ ",flatTypeT.text)[0].strip()
-
+    # extract Flat Type according to DG type
+    # e.g. "3NG (Modified) HDB For Sale" => 3
+    flatType = summarizeFlatType(flatTypeT.text.split(" HDB")[0].strip())
+    #flatType =  re.findall("^[\w]+ ",flatTypeT.text)[0].strip()
 
     # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
     newrow = {"listingID": listingID, "imgURL": imgURL, "StreetAdd": staddrT.text, "PostCode": int(postalcodeT.text), "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": flatType, "FloorArea": floorareaSqm, "Price": price}
@@ -281,10 +313,21 @@ def scrapeSearchListing(searchurl):
 
     return listingDetails
 
+# To be copied to functions.py
+def update_propguru_table():
+    print("update_propguru_table: Building this function...")
+    print(os.getcwd())
+    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+    print(pgDF.head())
+
+    
+    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
 
 def main():
+    update_propguru_table()
     #scrapeType()
-    scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
+    #summarizeFlatType("2A")
+    #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
 
 if __name__ == "__main__":
     main()
