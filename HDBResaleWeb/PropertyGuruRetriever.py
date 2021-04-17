@@ -54,14 +54,76 @@ def initialQuery(flattype, addquery=""):
 
     return lastpage
 
-def addfeaturesPG(full_address):
+def addfeaturesPG():
+    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+
+    df_insert = pd.DataFrame(columns=["id","flat_type","street_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
+                ,"latitude","longitude","postal_district","mrt_nearest","mrt_distance",
+                "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
+
     #Retrieve amenities data and CPI index
     df_railtransit = railtransit()
     df_shoppingmalls = shoppingmalls()
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
 
-    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+    listingName= pgDF.loc[0, 'ListingName']
+    print(listingName)
+    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(listingName)
+    print(onemap_postal_sector, onemap_latitude, onemap_longitude)
+
+    #Loop through the records to update
+    for i in range(0, len(df2)):
+        #Map the flat type
+        flat_type = map_flat_type(df2.iloc[i]['flat_type'], df2.iloc[i]['flat_model'])
+        #Map the storey range
+        storey_range = map_storey_range(df2.iloc[i]['storey_range'])
+        #Calculate remaining lease
+        remaining_lease = 99 - int(df2.iloc[i]['month'][:4]) + int(df2.iloc[i]['lease_commence_date'])
+        #Calculate resale_price adjusted for HDB resale CPI
+        resale_price = df2.iloc[i]['resale_price']
+        record_date = df2.iloc[i]['month']
+        record_month = pd.to_datetime(record_date)
+        record_quarter = record_date[:4] + "-Q" + str(record_month.quarter)
+        cpi_adjusted_resale_price = float(resale_price) / float(df_cpi_index[df_cpi_index['cpi_quarter']==record_quarter]['cpi_index']) * 100
+        #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
+        full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
+        onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+        #If latitude and longitude is found
+        if (onemap_latitude != 0):
+            mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+            mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+            orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+            hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+            market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
+        #If latitude and longitude is not found, fill with null values
+        if (onemap_latitude == 0):
+            mrt_nearest = "null"
+            mrt_distance = 0
+            mall_nearest = "null"
+            mall_distance = 0
+            orchard_distance = 0
+            hawker_distance = 0
+            market_distance = 0
+        df_insert = df_insert.append({
+            "month": record_month.date(),
+            "flat_type": flat_type,
+            "storey_range": storey_range,
+            "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
+            "remaining_lease": int(remaining_lease),
+            "resale_price": int(resale_price),
+            "cpi_adjusted_resale_price": cpi_adjusted_resale_price,
+            "latitude": float(onemap_latitude),
+            "longitude": float(onemap_longitude),
+            "postal_district": int(map_postal_district(onemap_postal_sector)),
+            "mrt_nearest": mrt_nearest,
+            "mrt_distance": mrt_distance,
+            "mall_nearest": mall_nearest,
+            "mall_distance": mall_distance,
+            "orchard_distance": orchard_distance,
+            "hawker_distance": hawker_distance,
+            "market_distance": market_distance
+        }, ignore_index=True)
 
     #If latitude and longitude is found
     if (onemap_latitude != 0):
@@ -83,7 +145,7 @@ def addfeaturesPG(full_address):
         postal_district = 0
 
     #Connect to database
-    engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+    #engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
 def summarizeFlatType(flattypePG):
     """This function converts flat type in PG to flat type in DataGov. Include what is shown on search filter and individual listing
