@@ -10,7 +10,6 @@ import re
 import datetime
 import random
 import pandas as pd
-<<<<<<< Updated upstream:PropertyGuruRetriever.py
 
 #import db
 from models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
@@ -18,12 +17,6 @@ from addfeatureslib import geographic_position, get_nearest_railtransit, get_nea
 from sqlalchemy import create_engine, desc
 
 
-=======
-from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
-from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
-from sqlalchemy import create_engine, desc
-
->>>>>>> Stashed changes:HDBResaleWeb/PropertyGuruRetriever.py
 def StartSeleniumWindows(url):
     options = Options()
     options.headless = True
@@ -57,8 +50,6 @@ def initialQuery(flattype, addquery=""):
 
     return lastpage
 
-<<<<<<< Updated upstream:PropertyGuruRetriever.py
-=======
 def addfeaturesPG():
     pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
 
@@ -155,7 +146,6 @@ def addfeaturesPG():
     #Connect to database
     #engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
->>>>>>> Stashed changes:HDBResaleWeb/PropertyGuruRetriever.py
 def summarizeFlatType(flattypePG):
     """This function converts flat type in PG to flat type in DataGov. Include what is shown on search filter and individual listing
 
