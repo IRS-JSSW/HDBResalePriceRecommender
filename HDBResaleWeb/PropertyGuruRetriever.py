@@ -12,10 +12,10 @@ import random
 import pandas as pd
 
 #import db
-from models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
-from addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
-from sqlalchemy import create_engine, desc
-
+#from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
+#from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
+#from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+#from sqlalchemy import create_engine, desc
 
 def StartSeleniumWindows(url):
     options = Options()
@@ -53,8 +53,11 @@ def initialQuery(flattype, addquery=""):
 def addfeaturesPG():
     pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
 
-    df_insert = pd.DataFrame(columns=["id","flat_type","street_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
-                ,"latitude","longitude","postal_district","mrt_nearest","mrt_distance",
+    # remove duplicate listing
+    pgDF.drop_duplicates(subset=['listingID'], inplace=True, keep='last')
+
+    df_insert = pd.DataFrame(columns=["id","flat_type","listing_url", "img_url", "listing_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
+                "latitude","longitude","postal_district","mrt_nearest","mrt_distance",
                 "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
 
     #Retrieve amenities data and CPI index
@@ -63,16 +66,18 @@ def addfeaturesPG():
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
 
-    listingName= pgDF.loc[0, 'ListingName']
-    print(listingName)
-    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(listingName)
-    print(onemap_postal_sector, onemap_latitude, onemap_longitude)
-
     #Loop through the records to update
     for i in range(0, len(pgDF)):
         #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
         full_address = pgDF.iloc[i]['ListingName']
-        onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+        print("{0}: {1}".format(pgDF.iloc[i]['listingID'],pgDF.iloc[i]['ListingName']))
+        try:
+            onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+            #print(onemap_postal_sector, onemap_latitude, onemap_longitude)
+        except Exception as e:
+            print(str(e))
+            print("ERROR: {0}".format(pgDF.iloc[i]['listingID']))
+            continue
         #If latitude and longitude is found
         if (onemap_latitude != 0):
             mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
@@ -82,6 +87,8 @@ def addfeaturesPG():
             market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
         #If latitude and longitude is not found, fill with null values
         if (onemap_latitude == 0):
+            print("UNABLE TO GET ONEMAP")
+            print(pgDF.iloc[i]['listingID'])
             mrt_nearest = "null"
             mrt_distance = 0
             mall_nearest = "null"
@@ -89,13 +96,18 @@ def addfeaturesPG():
             orchard_distance = 0
             hawker_distance = 0
             market_distance = 0
+
+        #pending: need check onemap_postal_sector not null
         df_insert = df_insert.append({
-            "flat_type": flat_type,
-            "storey_range": storey_range,
-            "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
-            "remaining_lease": int(remaining_lease),
-            "resale_price": int(resale_price),
-            "cpi_adjusted_resale_price": cpi_adjusted_resale_price,
+            "id": pgDF.iloc[i]['listingID'],
+            "flat_type": pgDF.iloc[i]['FlatType'],
+            "listing_url": pgDF.iloc[i]['listingURL'],
+            "img_url": pgDF.iloc[i]['imgURL'],
+            "listing_name": pgDF.iloc[i]['ListingName'],
+            "floor_area_sqm": float(pgDF.iloc[i]['FloorArea']),
+            "lease_commence_date": int(pgDF.iloc[i]['BuiltYear']),
+            "remaining_lease": int(pgDF.iloc[i]['RemainingLease']),
+            "resale_price": int(pgDF.iloc[i]['Price']),
             "latitude": float(onemap_latitude),
             "longitude": float(onemap_longitude),
             "postal_district": int(map_postal_district(onemap_postal_sector)),
@@ -107,29 +119,8 @@ def addfeaturesPG():
             "hawker_distance": hawker_distance,
             "market_distance": market_distance
         }, ignore_index=True)
-
-
-
-
-    #If latitude and longitude is found
-    if (onemap_latitude != 0):
-        mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
-        mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
-        orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
-        hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
-        market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
-        postal_district = map_postal_district(onemap_postal_sector)
-    #If latitude and longitude is not found, fill with null values
-    if (onemap_latitude == 0):
-        mrt_nearest = "null"
-        mrt_distance = 0
-        mall_nearest = "null"
-        mall_distance = 0
-        orchard_distance = 0
-        hawker_distance = 0
-        market_distance = 0
-        postal_district = 0
-
+    
+    df_insert.to_csv('\dataset\onemaptemp.csv', index=False)
     #Connect to database
     #engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
@@ -321,6 +312,9 @@ def scrapeType():
             driver.quit()
             print(f"time {(time.perf_counter() - tic)} seconds")
         print("***************************************")
+        
+        # remove duplicate listing
+        results.drop_duplicates(subset=['listingID'], inplace=True, keep='last')
         results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
     
     print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
@@ -407,9 +401,9 @@ def update_propguru_table():
     onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
 
 def main():
-    addfeaturesPG()
+    #addfeaturesPG()
     #update_propguru_table()
-    #scrapeType()
+    scrapeType()
     #summarizeFlatType("2A")
     #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
 

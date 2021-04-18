@@ -4,6 +4,7 @@ from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePro
 from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model, load_regression_model
 from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing, addfeaturesPG
 
+
 ######################################################################################################
 #Homepage URL
 @app.route('/', methods=['GET', 'POST'])
@@ -11,10 +12,16 @@ from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing, 
 def home():
     form = SearchResaleHDBForm()
     if form.validate_on_submit():
+        #Function to scrape search
+        search_url = form.streetname.data
+        # search_url = 'https://www.propertyguru.com.sg/listing/hdb-for-sale-520a-tampines-central-8-23459129'
+        search_df = scrapeSearchListing(search_url)
         # Function to predict estimated price (Prediction model)
+        predicted_low, predicted_middle, predicted_high = load_regression_model(search_df)
+        predicted_price = {"low":predicted_low, "middle":predicted_middle, "high":predicted_high}
         # Function to get closest match (Recommender)
         # flash(f'Preparing recommendations for {form.streetname.data}...', 'info')
-        return redirect(url_for('result'))
+        return render_template('result.html', search_df=search_df, search_url=search_url,predicted_price=predicted_price)
     return render_template('home.html', form=form)
 
 @app.route('/about')
@@ -60,4 +67,16 @@ def update_amenities():
     insert_shoppingmalls_data()
     insert_hawkercentre_data()
     insert_supermarket_data()
+    return redirect(url_for('home'))
+
+#Train regression model
+@app.route('/update/trainmodel')
+def train_model():
+    train_regression_model()
+    return redirect(url_for('home'))
+
+#Test route for daily scraping
+@app.route('/pg1')
+def pg_scrape1():
+    scrapeType()
     return redirect(url_for('home'))
