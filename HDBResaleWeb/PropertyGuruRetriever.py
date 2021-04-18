@@ -69,21 +69,9 @@ def addfeaturesPG():
     print(onemap_postal_sector, onemap_latitude, onemap_longitude)
 
     #Loop through the records to update
-    for i in range(0, len(df2)):
-        #Map the flat type
-        flat_type = map_flat_type(df2.iloc[i]['flat_type'], df2.iloc[i]['flat_model'])
-        #Map the storey range
-        storey_range = map_storey_range(df2.iloc[i]['storey_range'])
-        #Calculate remaining lease
-        remaining_lease = 99 - int(df2.iloc[i]['month'][:4]) + int(df2.iloc[i]['lease_commence_date'])
-        #Calculate resale_price adjusted for HDB resale CPI
-        resale_price = df2.iloc[i]['resale_price']
-        record_date = df2.iloc[i]['month']
-        record_month = pd.to_datetime(record_date)
-        record_quarter = record_date[:4] + "-Q" + str(record_month.quarter)
-        cpi_adjusted_resale_price = float(resale_price) / float(df_cpi_index[df_cpi_index['cpi_quarter']==record_quarter]['cpi_index']) * 100
+    for i in range(0, len(pgDF)):
         #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
-        full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
+        full_address = pgDF.iloc[i]['ListingName']
         onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
         #If latitude and longitude is found
         if (onemap_latitude != 0):
@@ -102,7 +90,6 @@ def addfeaturesPG():
             hawker_distance = 0
             market_distance = 0
         df_insert = df_insert.append({
-            "month": record_month.date(),
             "flat_type": flat_type,
             "storey_range": storey_range,
             "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
@@ -156,11 +143,11 @@ def summarizeFlatType(flattypePG):
         key (string): flat type used in DG
 
     """    
-    dictFlatTypes = {"1":["1R", "1-Room / Studio"], \
-                    "2":["2A", "2I", "2S"], \
-                    "3":["3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "3NG (New Generation)", "3A (Modified)", "3NG (Modified)", "3I (Improved)", "3I (Modified)", "3S (Simplified)", "3STD (Standard)"], \
-                    "4":["4A", "4NG", "4S", "4I", "4STD", "4NG (New Generation)", "4S (Simplified)", "4I (Improved)", "4STD (Standard)"], \
-                    "5":["5A", "5I", "5S"], \
+    dictFlatTypes = {"1 ROOM":["1R", "1-Room / Studio"], \
+                    "2 ROOM":["2A", "2I", "2S"], \
+                    "3 ROOM":["3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "3NG (New Generation)", "3A (Modified)", "3NG (Modified)", "3I (Improved)", "3I (Modified)", "3S (Simplified)", "3STD (Standard)"], \
+                    "4 ROOM":["4A", "4NG", "4S", "4I", "4STD", "4NG (New Generation)", "4S (Simplified)", "4I (Improved)", "4STD (Standard)"], \
+                    "5 ROOM":["5A", "5I", "5S"], \
                     "JUMBO":["6J", "Jumbo"], \
                     "EXECUTIVE":["EA", "EM", "EA (Exec Apartment)", "EM (Exec Maisonette)"], \
                     "MULTI-GENERATION":["MG", "MG (Multi-Generation)"], \
@@ -420,7 +407,8 @@ def update_propguru_table():
     onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
 
 def main():
-    update_propguru_table()
+    addfeaturesPG()
+    #update_propguru_table()
     #scrapeType()
     #summarizeFlatType("2A")
     #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
