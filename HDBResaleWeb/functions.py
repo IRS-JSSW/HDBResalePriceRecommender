@@ -69,18 +69,14 @@ def map_postal_district(postal_sector):
 
 #Map storey range to Low/Middle/High
 def map_storey_range(storey_range):
-    #Storey 6 and below will be low floor
-    if storey_range in ['01 TO 03','01 TO 05','04 TO 06']:
-        return 'Low'
-    #Storey 7 to 10 will be middle floor
-    if storey_range in ['07 TO 09','06 TO 10']:
-        return 'Middle'
-    #Storey 10 and above will be high floor
-    if storey_range in ['10 TO 12','11 TO 15','13 TO 15','16 TO 18','16 TO 20',
+    #Storey 13 and above, return "13 and above"
+    if storey_range in ['13 TO 15','16 TO 18','16 TO 20',
                         '19 TO 21','21 TO 25','22 TO 24','25 TO 27','28 TO 30',
                         '26 TO 30','31 TO 33','31 TO 35','34 TO 36','36 TO 40',
                         '37 TO 39','40 TO 42','43 TO 45','46 TO 48','49 TO 51']:
-        return 'High'
+        return '13 and above'
+    else: 
+        return storey_range
 
 def map_flat_type(flat_type, flat_model):
     if (flat_model == 'Adjoined flat'):
@@ -129,7 +125,7 @@ def railtransit():
     df = pd.read_sql_query(query, engine)
     
     df_railtransit = df[['station_name','latitude','longitude']]
-    df_railtransit['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_railtransit.insert(len(df_railtransit.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
     df_railtransit = df_railtransit[['station_name','coordinates']]
 
     # print(df_railtransit.head(10))
@@ -147,7 +143,7 @@ def shoppingmalls():
     df = pd.read_sql_query(query, engine)
     
     df_shoppingmalls = df[['Shopping_Malls','latitude','longitude']]
-    df_shoppingmalls['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_shoppingmalls.insert(len(df_shoppingmalls.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
     df_shoppingmalls = df_shoppingmalls[['Shopping_Malls','coordinates']]
 
     return df_shoppingmalls
@@ -164,7 +160,7 @@ def hawkercentre():
     df = pd.read_sql_query(query, engine)
     
     df_hawkercentre = df[['name_of_centre','latitude','longitude']]
-    df_hawkercentre['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_hawkercentre.insert(len(df_hawkercentre.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
     df_hawkercentre = df_hawkercentre[['name_of_centre','coordinates']]
 
     return df_hawkercentre
@@ -181,7 +177,7 @@ def supermarket():
     df = pd.read_sql_query(query, engine)
     
     df_supermarket = df[['licensee_name','latitude','longitude']]
-    df_supermarket['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_supermarket.insert(len(df_supermarket.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
     df_supermarket = df_supermarket[['licensee_name','coordinates']]
 
     return df_supermarket
@@ -239,9 +235,6 @@ def insert_supermarket_data():
 def update_datagov_table():
     url_2017 = 'https://data.gov.sg/api/action/datastore_search?resource_id=42ff9cfe-abe5-4b54-beda-c88f9bb438ee&limit=500000'
     # url_2015 = 'https://data.gov.sg/api/action/datastore_search?resource_id=1b702208-44bf-4829-b620-4615ee19b57c&limit=500000'
-    #Data before 2015 does not have the 'remaining_lease' column and data
-    # url_2012 = 'https://data.gov.sg/api/action/datastore_search?resource_id=83b2fc37-ce8c-4df4-968b-370fd818138b&limit=500000'
-    # url_2000 = 'https://data.gov.sg/api/action/datastore_search?resource_id=8c00bf08-9124-479e-aeca-7cc411d884c4&limit=400000'
     data = json.loads(requests.get(url_2017).content)
 
     df = pd.DataFrame(data['result']['records'])
@@ -272,15 +265,16 @@ def update_datagov_table():
     #Get the year and month of the last record in data gov table from database
     query_lastrecord = "SELECT * FROM data_gov_table ORDER BY id DESC LIMIT 1"
     df_datagov_query = pd.read_sql_query(query_lastrecord, engine)
-    query_lastrecord_month = pd.to_datetime(df_datagov_query['month'])[0]
+    query_lastrecord_month = pd.to_datetime(df_datagov_query['month'])[0] if len(df_datagov_query) != 0 else pd.to_datetime("2014-12")
     # print(query_lastrecord_month)
 
     #Get the list of year and month that is not updated in the database
     update_month = []
+    limit_month = pd.to_datetime("2017-05")
     for month in df_month:
-        if (month > query_lastrecord_month) and (month <= latest_cpi_quarter):
+        if (month > query_lastrecord_month) and (month <= latest_cpi_quarter) and (month < limit_month):
             update_month.append(month)
-    # print(update_month)
+    print(update_month)
 
     df2 = df[(df['yearmonth'].isin(update_month))]
     df2 = df2.reset_index()
@@ -331,7 +325,7 @@ def update_datagov_table():
                 "storey_range": storey_range,
                 "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
                 "remaining_lease": int(remaining_lease),
-                "resale_price": int(resale_price),
+                "resale_price": float(resale_price),
                 "cpi_adjusted_resale_price": cpi_adjusted_resale_price,
                 "latitude": float(onemap_latitude),
                 "longitude": float(onemap_longitude),
@@ -370,12 +364,12 @@ def train_regression_model():
     df_datagov2 = df_datagov2.reset_index()
 
     #Choose target
-    X = df_datagov2.drop(columns=['index','month','cpi_adjusted_resale_price','flat_type'], axis=1)
+    X = df_datagov2.drop(columns=['index','cpi_adjusted_resale_price','flat_type'], axis=1)
     y = np.log1p(df_datagov2['cpi_adjusted_resale_price'])
 
     ####2. Onehot Encoding####
     #Encode month e.g month 1 is 2015-01-01, month 71 is 2020-12-01
-    # X['month'] = pd.Categorical(X['month']).codes
+    X['month'] = pd.Categorical(X['month']).codes
     #Encode storey range
     X['storey_range'] = pd.Categorical(X['storey_range']).codes
 
@@ -437,14 +431,31 @@ def load_regression_model(search_df):
     filename = "hdb_resale_model.joblib"
     loaded_model = joblib.load(filename)
 
+    #Count number of months since 2015-01-01
+    start = pd.to_datetime('2015-01-01')
+    current = pd.to_datetime('today')
+    months = (current.year - start.year) * 12 + (current.month - start.month)
+    print(months)
+
     #Predict price for low, middle and high floors
-    df_predict_low = [[0,93.0,95,1.38516970673291,103.758529145929,0.49320253257423124,0.5931140962300926,12.138092518866394,5.170694583090077,0.18796050429796513,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]]
-    df_predict_middle = [[1,93.0,95,1.38516970673291,103.758529145929,0.49320253257423124,0.5931140962300926,12.138092518866394,5.170694583090077,0.18796050429796513,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]]
-    df_predict_high = [[2,93.0,95,1.38516970673291,103.758529145929,0.49320253257423124,0.5931140962300926,12.138092518866394,5.170694583090077,0.18796050429796513,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]]
+    df_predict_low = [[75,0,67.0,59,1.31207968902337,103.760802118745,0.5955574900450702,0.4623104220664519,8.013058559461447,0.11629349454113441,0.18709338677006054,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+    df_predict_middle = [[75,1,67.0,59,1.31207968902337,103.760802118745,0.5955574900450702,0.4623104220664519,8.013058559461447,0.11629349454113441,0.18709338677006054,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+    df_predict_high = [[75,2,67.0,59,1.31207968902337,103.760802118745,0.5955574900450702,0.4623104220664519,8.013058559461447,0.11629349454113441,0.18709338677006054,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
 
 
     #Return predicted price for low, middle and high floors
-    predict_low = np.exp(loaded_model.predict(df_predict_low))[0].round()
+    predict_low = np.exp(loaded_model.predict(df_predict_low))[0]
     predict_middle = np.exp(loaded_model.predict(df_predict_middle))[0].round()
     predict_high = np.exp(loaded_model.predict(df_predict_high))[0].round()
-    return predict_low, predict_middle, predict_high
+
+    #Adjust predicted price for HDB CPI index based on weighted average of past 3 quarters CPI
+    df_cpi_index = cpi_index()
+    # average_cpi_3months = round(sum(list(map(float, df_cpi_index['cpi_index'][-3:]))) / 3, 2)
+    latest_cpi_3months = (float(df_cpi_index.iloc[-1]['cpi_index'])*0.7) + (float(df_cpi_index.iloc[-2]['cpi_index'])*0.2) + (float(df_cpi_index.iloc[-3]['cpi_index'])*0.1)
+    print(latest_cpi_3months)
+
+    predict_low_cpi = (predict_low * latest_cpi_3months / 100).round(0)
+    predict_middle_cpi = (predict_middle * latest_cpi_3months / 100).round(0)
+    predict_high_cpi = (predict_high * latest_cpi_3months / 100).round(0)
+
+    return predict_low_cpi, predict_middle_cpi, predict_high_cpi

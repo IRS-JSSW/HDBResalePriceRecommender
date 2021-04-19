@@ -5,8 +5,8 @@ import datetime
 
 class CustomValidators(Form):
     def __call__(self,form,field):
-        if (field.data).startswith("https://www.propertyguru.com.sg/") != True:
-            raise ValidationError("Please use a valid PropertyGuru URL.")
+        if (field.data).startswith("https://www.propertyguru.com.sg/listing/hdb-for-sale") != True:
+            raise ValidationError("Please use a valid PropertyGuru HDB listing URL.")
 
 class SearchResaleHDBForm(FlaskForm):
     streetname = StringField('Propertyguru URL (Paste Propertyguru URL in the box below)', validators=[DataRequired(), URL(require_tld=True), CustomValidators()])
