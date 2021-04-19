@@ -32,7 +32,8 @@
 4. Project Solution (To detail domain modelling & system design.)
     - 4.1 Project Implementation (To detail system development & testing approach.)
     - 4.2 Project Performance & Validation (To prove project objectives are met.)
-5. Project Conclusions: Findings & Recommendation
+5. Project Conclusions
+    - Findings & Recommendation
 6. Appendix 
     - 6.1 Project Proposal
     - 6.2 Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
