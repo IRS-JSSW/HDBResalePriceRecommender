@@ -11,11 +11,10 @@ import datetime
 import random
 import pandas as pd
 
-#import db
-#from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
-#from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
-#from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
-#from sqlalchemy import create_engine, desc
+from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
+from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
+from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+from sqlalchemy import create_engine, desc
 
 def StartSeleniumWindows(url):
     options = Options()
@@ -35,6 +34,20 @@ def StartSeleniumUbuntu(url):
     driver.get(url)
     return driver 
 
+def getListingName(listingURL):
+    """This function infers the listing name from the listing URL
+    Scenario to clean property name that:
+    - Does not start with digit (block number)
+
+    Args:
+        listingURL ([string]): listingURL
+
+    Returns:
+        [string]: Listing Name
+    """
+    temp = re.search(r"hdb-for-sale\D*-(\S+)-\d+", listingURL).group(1)
+    return temp.replace("-", " ")
+
 # initial query to get total results page; addquery (optional) for more than 99 pages
 def initialQuery(flattype, addquery=""):
     pageURL = "https://www.propertyguru.com.sg/property-for-sale?market=residential&property_type_code%5B%5D={0}&property_type=H{1}".format(flattype, addquery)
@@ -51,10 +64,17 @@ def initialQuery(flattype, addquery=""):
     return lastpage
 
 def addfeaturesPG():
-    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+    """Add Columns to PG Data
+    all rows listing names must not be empty
 
-    # remove duplicate listing
-    pgDF.drop_duplicates(subset=['listingID'], inplace=True, keep='last')
+    Args:
+        
+
+    Returns:
+        
+
+    """
+    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
 
     df_insert = pd.DataFrame(columns=["id","flat_type","listing_url", "img_url", "listing_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
                 "latitude","longitude","postal_district","mrt_nearest","mrt_distance",
@@ -66,13 +86,23 @@ def addfeaturesPG():
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
 
+    print(pgDF.info())
     #Loop through the records to update
     for i in range(0, len(pgDF)):
         #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
         full_address = pgDF.iloc[i]['ListingName']
-        print("{0}: {1}".format(pgDF.iloc[i]['listingID'],pgDF.iloc[i]['ListingName']))
+        #print("{0}: {1}".format(pgDF.iloc[i]['listingID'],pgDF.iloc[i]['ListingName']))
         try:
             onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+            print("{0}: {1}".format(onemap_postal_sector,pgDF.iloc[i]['ListingName']))
+            #If postal sector is not found, it could be listing name is wrong. try to infer from listingURL
+            if (onemap_postal_sector == ""):
+                full_address = getListingName(pgDF.loc[i,'listingURL'])
+                onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+                if(onemap_postal_sector != ""):
+                    pgDF.loc[i, 'ListingName'] = full_address
+                else:
+                    continue
             #print(onemap_postal_sector, onemap_latitude, onemap_longitude)
         except Exception as e:
             print(str(e))
@@ -85,7 +115,9 @@ def addfeaturesPG():
             orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
             hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
             market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
-        #If latitude and longitude is not found, fill with null values
+            postal_district = int(map_postal_district(onemap_postal_sector))
+    
+        #If latitude is not found, fill with null values
         if (onemap_latitude == 0):
             print("UNABLE TO GET ONEMAP")
             print(pgDF.iloc[i]['listingID'])
@@ -96,6 +128,8 @@ def addfeaturesPG():
             orchard_distance = 0
             hawker_distance = 0
             market_distance = 0
+            postal_district = 0
+
 
         #pending: need check onemap_postal_sector not null
         df_insert = df_insert.append({
@@ -110,7 +144,7 @@ def addfeaturesPG():
             "resale_price": int(pgDF.iloc[i]['Price']),
             "latitude": float(onemap_latitude),
             "longitude": float(onemap_longitude),
-            "postal_district": int(map_postal_district(onemap_postal_sector)),
+            "postal_district": postal_district,
             "mrt_nearest": mrt_nearest,
             "mrt_distance": mrt_distance,
             "mall_nearest": mall_nearest,
@@ -120,7 +154,7 @@ def addfeaturesPG():
             "market_distance": market_distance
         }, ignore_index=True)
     
-    df_insert.to_csv('\dataset\onemaptemp.csv', index=False)
+    df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv', index=False)
     #Connect to database
     #engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
@@ -313,8 +347,17 @@ def scrapeType():
             print(f"time {(time.perf_counter() - tic)} seconds")
         print("***************************************")
         
+        # Clean up the dataset
         # remove duplicate listing
         results.drop_duplicates(subset=['listingID'], inplace=True, keep='last')
+        
+        # infer missing listing Name
+        results.loc[results['ListingName'].isnull(),'ListingName'] = results.loc[results['ListingName'].isnull(),'listingURL'].apply(lambda x: getListingName(str(x)))
+        # if Listing Name is pure digit, it is invalid, hence set it to Null
+        results.loc[results['ListingName'].str.isdecimal(), "ListingName"] = None
+        # infer missing listing Name
+        results.loc[results['ListingName'].isnull(),'ListingName'] = results.loc[results['ListingName'].isnull(),'listingURL'].apply(lambda x: getListingName(str(x)))
+
         results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
     
     print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
