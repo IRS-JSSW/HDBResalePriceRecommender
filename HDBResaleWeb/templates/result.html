@@ -13,9 +13,9 @@
             <li>Listed Price: {{ search_df.get('Price') }}</li>
             <li>Predicted Price:
               <ul>
-                <li>Low - {{ predict_price.get('low') }}</li>
-                <li>Middle - {{ predict_price.get('middle') }}</li>
-                <li>High - {{ predict_price.get('high') }}</li>
+                <li>Low (Level 1 to 6) - {{ predicted_price.get('low') }}</li>
+                <li>Middle (Level 7 to 10) - {{ predicted_price.get('middle') }}</li>
+                <li>High (Level 11 and above) - {{ predicted_price.get('high') }}</li>
               </ul>
             </li>
             </ul>

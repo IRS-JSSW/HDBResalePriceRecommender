@@ -1,10 +1,12 @@
-import requests, json
+import requests, json, joblib
 import pandas as pd, numpy as np
 from datetime import datetime
-# from HDBResaleWeb import db
-# from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
 from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
 from sqlalchemy import create_engine, desc
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 
 #Mapping postal sector to postal district
 def map_postal_district(postal_sector):
@@ -349,7 +351,6 @@ def update_datagov_table():
 
 
 ######################################################################################################
-###1. Preprocess datagov dataset for building price prediction model###
 def train_regression_model():
     #Connect to database
     engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
@@ -364,58 +365,86 @@ def train_regression_model():
                     "cpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_distance",
                     "mall_distance","orchard_distance","hawker_distance","market_distance"]]
 
-    ###Remove outliers from dataset###
-    df_datagov = df_datagov[(df_datagov['floor_area_sqm'] <= 215) & (df_datagov['mrt_distance'] <= 2.5)]
+    ###1. Remove outliers from dataset###
+    df_datagov2 = df_datagov[(df_datagov['floor_area_sqm'] <= 215) & (df_datagov['mrt_distance'] <= 2.5)]
+    df_datagov2 = df_datagov2.reset_index()
 
     #Choose target
-    X = df_datagov.drop(columns=['cpi_adjusted_resale_price'], axis=1)
-    y = df_datagov['cpi_adjusted_resale_price']
+    X = df_datagov2.drop(columns=['index','month','cpi_adjusted_resale_price','flat_type'], axis=1)
+    y = np.log1p(df_datagov2['cpi_adjusted_resale_price'])
 
-    ####Onehot Encoding####
+    ####2. Onehot Encoding####
     #Encode month e.g month 1 is 2015-01-01, month 71 is 2020-12-01
-    X['month'] = pd.Categorical(X['month']).codes
+    # X['month'] = pd.Categorical(X['month']).codes
     #Encode storey range
     X['storey_range'] = pd.Categorical(X['storey_range']).codes
 
     #Encode flat type and postal district
-    categorical_features = ['flat_type', 'postal_district']
+    categorical_features = ['postal_district']
     for feature in categorical_features:
         X = pd.concat([X, pd.get_dummies(X[feature], prefix=feature)], axis=1)
     X = X.drop(columns=categorical_features, axis=1)
 
-    print(X.head(10))
-    print(X.dtypes)
-    # print(y.head(10))
 
-###2. Build Regression Model###
+    ###Build Regression Model###
 
-#Split the dataset into training and test set
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1 / 5, random_state=42)
+    #3. Split the dataset into training and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1 / 5, random_state=42)
 
-#Build Regression Tree
-# dt = DecisionTreeRegressor(criterion='mse',random_state=0)
-# dt.fit(X_train, y_train)
+    #4. Select Regression Tree model, Best regression tree with parameter max_depth of 18 and min_samples_split of 24
+    model = DecisionTreeRegressor(criterion='mse', max_depth=18, min_samples_split = 24, random_state=0)
+    # model = GradientBoostingRegressor(criterion='mse', max_depth=8, min_samples_split = 24, learning_rate=0.01, random_state=0)
+    model.fit(X_train, y_train)
 
-#Optimise parameters using grid search
-# best_para = {'max_depth':0, 'min_samples':0}
-# best_test_acc = 0
-# # grid search
-# for max_depth in range(1, 20):
-#     for min_samples in range(2,50):
-#         dt = DecisionTreeRegressor(criterion='mse',max_depth=max_depth, min_samples_split = min_samples, random_state=0)
-#         dt.fit(X_train, y_train)
-#         if dt.score(X_test, y_test) > best_test_acc:
-#             best_test_acc = dt.score(X_test, y_test)
-#             best_para['max_depth'] = max_depth
-#             best_para['min_samples'] = min_samples
+    #Get top 10 features sorted in descending order
+    for importance, name in sorted(zip(model.feature_importances_, X_train.columns),reverse=True)[:10]:
+        print (name, importance)
 
-# dt = DecisionTreeRegressor(criterion='mse',max_depth=best_para['max_depth'], min_samples_split = best_para['min_samples'], random_state=0)
-# dt.fit(X_train, y_train)
-# print("Best score on training set: {:.3f}".format(dt.score(X_train, y_train)))
-# print("Best score on test set: {:.3f}".format(dt.score(X_test, y_test)))
-# print("Best regression tree with parameter max_depth of {0} and min_samples_split of {1}".format(best_para['max_depth'], best_para['min_samples']))
+    X_test.to_csv("test_data.csv", index = False)
+
+    #Get RMSE score for predicting test set
+    y_pred = np.log1p(model.predict(X_test))
+    rmse = np.exp(mean_squared_error(y_test, y_pred, squared=False)).round(4)
+
+    print("RMSE: {0}".format(rmse))
+
+    #5. Save Regression Tree model
+    filename = 'hdb_resale_model.joblib'
+    joblib.dump(model, filename)
+
+    #Optimise parameters using grid search
+    # best_para = {'max_depth':0, 'min_samples':0}
+    # best_test_acc = 0
+    # # grid search
+    # for max_depth in range(1, 20):
+    #     for min_samples in range(2,30):
+    #         dt = DecisionTreeRegressor(criterion='mse',max_depth=max_depth, min_samples_split = min_samples, random_state=0)
+    #         dt.fit(X_train, y_train)
+    #         if dt.score(X_test, y_test) > best_test_acc:
+    #             best_test_acc = dt.score(X_test, y_test)
+    #             best_para['max_depth'] = max_depth
+    #             best_para['min_samples'] = min_samples
+
+    # dt = DecisionTreeRegressor(criterion='mse',max_depth=best_para['max_depth'], min_samples_split = best_para['min_samples'], random_state=0)
+    # dt.fit(X_train, y_train)
+    # print("Best score on training set: {:.3f}".format(dt.score(X_train, y_train)))
+    # print("Best score on test set: {:.3f}".format(dt.score(X_test, y_test)))
+    # print("Best regression tree with parameter max_depth of {0} and min_samples_split of {1}".format(best_para['max_depth'], best_para['min_samples']))
 
 ######################################################################################################
 ###Loading Regression Model###
-# def load_regression_model():
-# abc
+def load_regression_model(search_df):
+    filename = "hdb_resale_model.joblib"
+    loaded_model = joblib.load(filename)
+
+    #Predict price for low, middle and high floors
+    df_predict_low = [[0,93.0,95,1.38516970673291,103.758529145929,0.49320253257423124,0.5931140962300926,12.138092518866394,5.170694583090077,0.18796050429796513,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]]
+    df_predict_middle = [[1,93.0,95,1.38516970673291,103.758529145929,0.49320253257423124,0.5931140962300926,12.138092518866394,5.170694583090077,0.18796050429796513,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]]
+    df_predict_high = [[2,93.0,95,1.38516970673291,103.758529145929,0.49320253257423124,0.5931140962300926,12.138092518866394,5.170694583090077,0.18796050429796513,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]]
+
+
+    #Return predicted price for low, middle and high floors
+    predict_low = np.exp(loaded_model.predict(df_predict_low))[0].round()
+    predict_middle = np.exp(loaded_model.predict(df_predict_middle))[0].round()
+    predict_high = np.exp(loaded_model.predict(df_predict_high))[0].round()
+    return predict_low, predict_middle, predict_high

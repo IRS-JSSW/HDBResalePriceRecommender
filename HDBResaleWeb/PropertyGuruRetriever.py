@@ -15,6 +15,12 @@ from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtra
 from sqlalchemy import create_engine, desc
 
 
+#import db
+from models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
+from addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+from sqlalchemy import create_engine, desc
+
+
 def StartSeleniumWindows(url):
     options = Options()
     options.headless = True
@@ -48,14 +54,76 @@ def initialQuery(flattype, addquery=""):
 
     return lastpage
 
-def addfeaturesPG(full_address):
+def addfeaturesPG():
+    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+
+    df_insert = pd.DataFrame(columns=["id","flat_type","street_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
+                ,"latitude","longitude","postal_district","mrt_nearest","mrt_distance",
+                "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
+
     #Retrieve amenities data and CPI index
     df_railtransit = railtransit()
     df_shoppingmalls = shoppingmalls()
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
 
-    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+    listingName= pgDF.loc[0, 'ListingName']
+    print(listingName)
+    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(listingName)
+    print(onemap_postal_sector, onemap_latitude, onemap_longitude)
+
+    #Loop through the records to update
+    for i in range(0, len(df2)):
+        #Map the flat type
+        flat_type = map_flat_type(df2.iloc[i]['flat_type'], df2.iloc[i]['flat_model'])
+        #Map the storey range
+        storey_range = map_storey_range(df2.iloc[i]['storey_range'])
+        #Calculate remaining lease
+        remaining_lease = 99 - int(df2.iloc[i]['month'][:4]) + int(df2.iloc[i]['lease_commence_date'])
+        #Calculate resale_price adjusted for HDB resale CPI
+        resale_price = df2.iloc[i]['resale_price']
+        record_date = df2.iloc[i]['month']
+        record_month = pd.to_datetime(record_date)
+        record_quarter = record_date[:4] + "-Q" + str(record_month.quarter)
+        cpi_adjusted_resale_price = float(resale_price) / float(df_cpi_index[df_cpi_index['cpi_quarter']==record_quarter]['cpi_index']) * 100
+        #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
+        full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
+        onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+        #If latitude and longitude is found
+        if (onemap_latitude != 0):
+            mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+            mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+            orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+            hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+            market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
+        #If latitude and longitude is not found, fill with null values
+        if (onemap_latitude == 0):
+            mrt_nearest = "null"
+            mrt_distance = 0
+            mall_nearest = "null"
+            mall_distance = 0
+            orchard_distance = 0
+            hawker_distance = 0
+            market_distance = 0
+        df_insert = df_insert.append({
+            "month": record_month.date(),
+            "flat_type": flat_type,
+            "storey_range": storey_range,
+            "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
+            "remaining_lease": int(remaining_lease),
+            "resale_price": int(resale_price),
+            "cpi_adjusted_resale_price": cpi_adjusted_resale_price,
+            "latitude": float(onemap_latitude),
+            "longitude": float(onemap_longitude),
+            "postal_district": int(map_postal_district(onemap_postal_sector)),
+            "mrt_nearest": mrt_nearest,
+            "mrt_distance": mrt_distance,
+            "mall_nearest": mall_nearest,
+            "mall_distance": mall_distance,
+            "orchard_distance": orchard_distance,
+            "hawker_distance": hawker_distance,
+            "market_distance": market_distance
+        }, ignore_index=True)
 
     #If latitude and longitude is found
     if (onemap_latitude != 0):
@@ -77,7 +145,34 @@ def addfeaturesPG(full_address):
         postal_district = 0
 
     #Connect to database
-    engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+    #engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+
+def summarizeFlatType(flattypePG):
+    """This function converts flat type in PG to flat type in DataGov. Include what is shown on search filter and individual listing
+
+    Args:
+        flattypePG (string): flat type used in PG
+    
+    Returns:
+        key (string): flat type used in DG
+
+    """    
+    dictFlatTypes = {"1":["1R", "1-Room / Studio"], \
+                    "2":["2A", "2I", "2S"], \
+                    "3":["3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "3NG (New Generation)", "3A (Modified)", "3NG (Modified)", "3I (Improved)", "3I (Modified)", "3S (Simplified)", "3STD (Standard)"], \
+                    "4":["4A", "4NG", "4S", "4I", "4STD", "4NG (New Generation)", "4S (Simplified)", "4I (Improved)", "4STD (Standard)"], \
+                    "5":["5A", "5I", "5S"], \
+                    "JUMBO":["6J", "Jumbo"], \
+                    "EXECUTIVE":["EA", "EM", "EA (Exec Apartment)", "EM (Exec Maisonette)"], \
+                    "MULTI-GENERATION":["MG", "MG (Multi-Generation)"], \
+                    "TERRACE":["TE", "Terrace"]}
+
+    for key, value in dictFlatTypes.items():
+         if flattypePG in value:
+             return key
+    
+    # Key does not exist
+    return ""
 
 def scrapeType():
     column_names = ["listingID", "listingURL", "imgURL", "ListingName", "BuiltYear", "RemainingLease", "FlatType", "FloorArea", "Price"]
@@ -165,13 +260,13 @@ def scrapeType():
                         print(imgURL)
 
                         # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
+                        newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": summarizeFlatType(listFlattype[listIdx]), "FloorArea": floorareaSqm, "Price": price}
                         results = results.append(newrow, ignore_index = True)
 
                     driver.quit()
                     print(f"time {(time.perf_counter() - tic)} seconds")
                 print("***************************************")
-                results.to_csv(r".\Output.WebScrapingPG.csv", index=False, columns=column_names)
+                results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
             continue
 
         while pageNum < lastpage:
@@ -234,7 +329,7 @@ def scrapeType():
                 print(imgURL)
 
                 # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
-                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": listFlattype[listIdx], "FloorArea": floorareaSqm, "Price": price}
+                newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": summarizeFlatType(listFlattype[listIdx]), "FloorArea": floorareaSqm, "Price": price}
                 results = results.append(newrow, ignore_index = True)
                 
             driver.quit()
@@ -250,7 +345,6 @@ def scrapeSearchListing(searchurl):
     Args:
         searchurl (string): Query URL (PropertyGuru)
     
-
     Returns:
         listingDetails (dict): ListingID, ImageURL, Street Address, Postal Code, Built Year, Remaining Lease, FlatType, Floor Area, Price
     """
@@ -297,9 +391,10 @@ def scrapeSearchListing(searchurl):
     byear = int(re.findall('[0-9]+',builtyearT.text)[0])
     remainlease = 99 - (datetime.date.today().year - byear)
     
-    # extract Flat Type
-    flatType =  re.findall("^[\w]+ ",flatTypeT.text)[0].strip()
-
+    # extract Flat Type according to DG type
+    # e.g. "3NG (Modified) HDB For Sale" => 3
+    flatType = summarizeFlatType(flatTypeT.text.split(" HDB")[0].strip())
+    #flatType =  re.findall("^[\w]+ ",flatTypeT.text)[0].strip()
 
     # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
     listingDetails = {"listingID": listingID, "imgURL": imgURL, "StreetAdd": staddrT.text, "PostCode": int(postalcodeT.text), "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": flatType, "FloorArea": floorareaSqm, "Price": price}
@@ -310,10 +405,21 @@ def scrapeSearchListing(searchurl):
 
     return listingDetails
 
+# To be copied to functions.py
+def update_propguru_table():
+    print("update_propguru_table: Building this function...")
+    print(os.getcwd())
+    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+    print(pgDF.head())
+
+    
+    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
 
 def main():
+    update_propguru_table()
     #scrapeType()
-    scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
+    #summarizeFlatType("2A")
+    #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
 
 if __name__ == "__main__":
     main()

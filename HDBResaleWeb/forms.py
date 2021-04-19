@@ -9,7 +9,7 @@ class CustomValidators(Form):
             raise ValidationError("Please use a valid PropertyGuru URL.")
 
 class SearchResaleHDBForm(FlaskForm):
-    streetname = StringField('Propertyguru URL', validators=[DataRequired(), URL(require_tld=True), CustomValidators()])
+    streetname = StringField('Propertyguru URL (Paste Propertyguru URL in the box below)', validators=[DataRequired(), URL(require_tld=True), CustomValidators()])
     # dropdown_list_bedrooms = ['1', '2', '3', '4', '5']
     # bedrooms = SelectField('Bedrooms', choices=dropdown_list_bedrooms, default=1)
     # dropdown_list_completion = list(range(1960, datetime.datetime.today().year))

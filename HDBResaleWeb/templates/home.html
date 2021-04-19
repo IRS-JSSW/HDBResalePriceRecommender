@@ -1,21 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="content-section">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="street-tab" data-toggle="tab" href="#street" role="tab" aria-controls="street" aria-selected="true">Street</a>
-        </li>
-        <li class="nav-item" role="presentation">
-          <a class="nav-link" id="map-tab" data-toggle="tab" href="#map" role="tab" aria-controls="map" aria-selected="false">Map</a>
-        </li>
-      </ul>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="street" role="tabpanel" aria-labelledby="street-tab">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
                     <div class="form-group">
-                        {{ form.streetname.label(class="form-control-label") }}
+                        <p>{{ form.streetname.label(class="form-control-label") }}</p>
         
                         {% if form.streetname.errors %}
                             {{ form.streetname(class="form-control form-control-lg is-invalid") }}
