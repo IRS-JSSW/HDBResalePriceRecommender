@@ -37,3 +37,10 @@ Recommended Sections for Project Report / Paper:
 - Appendix of report: 1-2 pages individual project report per project member, including: Individual reflection of project journey: (1) personal contribution to group project (2) what learnt is most useful for you (3) how you can apply the knowledge and skills in other situations or your workplaces
 - Appendix of report: List of Abbreviations (if applicable)
 - Appendix of report: References (if applicable)
+
+## SECTION 7: MISCELLANEOUS
+
+HDB_SURVEY.xlsx
+
+- Results of survey
+- Insights derived, which were subsequently used in our system
