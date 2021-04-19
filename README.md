@@ -12,7 +12,7 @@
 |Yee Wei Liang|A0045422R|Web Scraping, Data Cleaning, Feature Engineering |E0258287@u.nus.edu|
 |Jovin Toh|------------|------------|-------|
 |Jeon Sung Min|------------|------------|-------|
-|Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|e0687386@u.nus.edu|
+|Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|E0687386@u.nus.edu|
 
 ## SECTION 5 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
