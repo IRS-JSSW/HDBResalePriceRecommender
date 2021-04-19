@@ -5,7 +5,7 @@
 
 ## SECTION 3 : EXECUTIVE SUMMARY
 
-## SECTION 4 : CREDITS / PROJECT CONTRIBUTION
+## SECTION 4 : PROJECT CONTRIBUTION
 
 | Full Name | Student ID | Work Items | Email |
 |-----------|------------|------------|-------|
@@ -18,7 +18,7 @@
 
 ## SECTION 6 : USER GUIDE
 
-## SECTION 7 : PROJECT REPORT / PAPER
+## SECTION 7 : PROJECT REPORT
 
 1. Executive Summary
 2. Business Problem Background
