@@ -5,4 +5,4 @@ HDBResaleWeb/resaleproject.db
 ghostdriver.log
 .gitignore
 .vscode/settings.json
-
+__pycache__/run.cpython-36.pyc
