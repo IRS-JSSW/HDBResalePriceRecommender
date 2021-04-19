@@ -12,7 +12,7 @@
 |Yee Wei Liang|------------|------------|-------|
 |Jovin|------------|------------|-------|
 |Jeon Sung Min|------------|------------|-------|
-|Ahmed Syalabi Seet|A00229978A|Data Analysis, Data Cleaning, Model Training|e0687386@u.nus.edu|
+|Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Model Training|e0687386@u.nus.edu|
 
 ## SECTION 5 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
