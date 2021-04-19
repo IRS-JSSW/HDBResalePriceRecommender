@@ -45,7 +45,7 @@
     - 6.5 List of Abbreviations (if applicable)
     - 6.6 References (if applicable)
 
-## SECTION 7: MISCELLANEOUS
+## SECTION 8: MISCELLANEOUS
 
 HDB_SURVEY.xlsx
 
