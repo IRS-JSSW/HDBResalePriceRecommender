@@ -129,7 +129,8 @@ def railtransit():
     df = pd.read_sql_query(query, engine)
     
     df_railtransit = df[['station_name','latitude','longitude']]
-    df_railtransit['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_railtransit.insert(len(df_railtransit.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
+    #df_railtransit['coordinates'] = list(zip(df['latitude'],df['longitude'])))
     df_railtransit = df_railtransit[['station_name','coordinates']]
 
     # print(df_railtransit.head(10))
@@ -147,7 +148,7 @@ def shoppingmalls():
     df = pd.read_sql_query(query, engine)
     
     df_shoppingmalls = df[['Shopping_Malls','latitude','longitude']]
-    df_shoppingmalls['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_shoppingmalls.insert(len(df_shoppingmalls.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
     df_shoppingmalls = df_shoppingmalls[['Shopping_Malls','coordinates']]
 
     return df_shoppingmalls
@@ -164,7 +165,7 @@ def hawkercentre():
     df = pd.read_sql_query(query, engine)
     
     df_hawkercentre = df[['name_of_centre','latitude','longitude']]
-    df_hawkercentre['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_hawkercentre.insert(len(df_hawkercentre.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
     df_hawkercentre = df_hawkercentre[['name_of_centre','coordinates']]
 
     return df_hawkercentre
@@ -181,7 +182,7 @@ def supermarket():
     df = pd.read_sql_query(query, engine)
     
     df_supermarket = df[['licensee_name','latitude','longitude']]
-    df_supermarket['coordinates'] = list(zip(df['latitude'],df['longitude']))
+    df_supermarket.insert(len(df_supermarket.columns), 'coordinates', list(zip(df['latitude'],df['longitude'])))
     df_supermarket = df_supermarket[['licensee_name','coordinates']]
 
     return df_supermarket
