@@ -7,7 +7,8 @@
 
 ## SECTION 4 : CREDITS / PROJECT CONTRIBUTION
 
-| Full Name | Student ID | Work Items | Email | 
+| Full Name | Student ID | Work Items | Email |
+|-----------|------------|------------|-------|
 |Wei Liang|------------|------------|-------|
 |Jovin|------------|------------|-------|
 |Sung Min|------------|------------|-------|
