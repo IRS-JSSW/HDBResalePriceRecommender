@@ -10,7 +10,7 @@
 | Full Name | Student ID | Work Items | Email |
 |-----------|------------|------------|-------|
 |Yee Wei Liang|A0045422R|Web Scraping, Data Cleaning, Feature Engineering |E0258287@u.nus.edu|
-|Jovin Toh|------------|------------|-------|
+|Toh Kah Khek|A0229968E|Database Setup, Front end development, Back end integration|E0687376@u.nus.edu|
 |Jeon Sung Min|------------|------------|-------|
 |Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|E0687386@u.nus.edu|
 
@@ -40,7 +40,7 @@
     - 6.3 Installation and User Guide
     - 6.4 1-2 pages individual project report per project member, including: Individual reflection of project journey:
       - (1) personal contribution to group project 
-      - (2) what learnt is most useful for you 
+      - (2) what have you learnt that is most useful for you 
       - (3) how you can apply the knowledge and skills in other situations or your workplaces
     - 6.5 List of Abbreviations (if applicable)
     - 6.6 References (if applicable)
