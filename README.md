@@ -35,14 +35,14 @@
 5. Project Conclusions: Findings & Recommendation
 6. Appendix 
     - 6.1 Project Proposal
-    - 6.2 Appendix of report: Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
-    - 6.3 Appendix of report: Installation and User Guide
-    - 6.4 Appendix of report: 1-2 pages individual project report per project member, including: Individual reflection of project journey:
+    - 6.2 Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
+    - 6.3 Installation and User Guide
+    - 6.4 1-2 pages individual project report per project member, including: Individual reflection of project journey:
       - (1) personal contribution to group project 
       - (2) what learnt is most useful for you 
       - (3) how you can apply the knowledge and skills in other situations or your workplaces
-    - 6.5 Appendix of report: List of Abbreviations (if applicable)
-    - 6.6 Appendix of report: References (if applicable)
+    - 6.5 List of Abbreviations (if applicable)
+    - 6.6 References (if applicable)
 
 ## SECTION 7: MISCELLANEOUS
 
