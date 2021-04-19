@@ -34,13 +34,13 @@
   4.2 Project Performance & Validation (To prove project objectives are met.)
 5. Project Conclusions: Findings & Recommendation
 6. Appendix 
-  6.1 Project Proposal
-  6.2 Appendix of report: Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
-  6.3 Appendix of report: Installation and User Guide
-  6.4 Appendix of report: 1-2 pages individual project report per project member, including: Individual reflection of project journey:
-    (1) personal contribution to group project 
-    (2) what learnt is most useful for you 
-    (3) how you can apply the knowledge and skills in other situations or your workplaces
+    6.1 Project Proposal
+    6.2 Appendix of report: Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
+    6.3 Appendix of report: Installation and User Guide
+    6.4 Appendix of report: 1-2 pages individual project report per project member, including: Individual reflection of project journey:
+      (1) personal contribution to group project 
+      (2) what learnt is most useful for you 
+      (3) how you can apply the knowledge and skills in other situations or your workplaces
   8.5 Appendix of report: List of Abbreviations (if applicable)
   9.6 Appendix of report: References (if applicable)
 
