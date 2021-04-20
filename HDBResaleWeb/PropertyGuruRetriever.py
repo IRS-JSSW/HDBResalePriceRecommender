@@ -63,7 +63,7 @@ def initialQuery(flattype, addquery=""):
 
     return lastpage
 
-def addfeaturesPG():
+def addfeaturesPG(pgDF):
     """Add Columns to PG Data
     all rows listing names must not be empty
 
@@ -74,7 +74,7 @@ def addfeaturesPG():
         
 
     """
-    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+    #pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
 
     df_insert = pd.DataFrame(columns=["id","flat_type","listing_url", "img_url", "listing_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
                 "latitude","longitude","postal_district","mrt_nearest","mrt_distance",
@@ -154,9 +154,18 @@ def addfeaturesPG():
             "market_distance": market_distance
         }, ignore_index=True)
     
-    df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv', index=False)
-    #Connect to database
-    #engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+    # set listingID as index
+    df_insert.set_index('id')
+    df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv')
+    
+    # Connect to database
+    engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+    
+    # Remove existing data, then insert dataframe into sqlite database (without removing PK constraint)
+    with engine.connect() as con:
+        rs = con.execute('DELETE FROM prop_guru_table')
+    
+    df_insert.to_sql('prop_guru_table', con=engine, if_exists='append', index=False)
 
 def summarizeFlatType(flattypePG):
     """This function converts flat type in PG to flat type in DataGov. Include what is shown on search filter and individual listing
@@ -191,6 +200,7 @@ def scrapeType():
 
     residx = 0
 
+    #listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD"]
     listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "4A", "4NG", "4S", "4I", "4STD", "5A", "5I", "5S", "6J", "EA", "EM", "MG", "TE"]
     
     ticStart = time.perf_counter()
@@ -277,7 +287,6 @@ def scrapeType():
                     driver.quit()
                     print(f"time {(time.perf_counter() - tic)} seconds")
                 print("***************************************")
-                results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
             continue
 
         while pageNum < lastpage:
@@ -359,6 +368,9 @@ def scrapeType():
         results.loc[results['ListingName'].isnull(),'ListingName'] = results.loc[results['ListingName'].isnull(),'listingURL'].apply(lambda x: getListingName(str(x)))
 
         results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
+
+    # add additional features to data and commit to SQL
+    addfeaturesPG(results)
     
     print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
 
