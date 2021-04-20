@@ -15,11 +15,10 @@ from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtra
 from sqlalchemy import create_engine, desc
 
 
-#import db
-from models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
-from addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
+from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
+from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
 from sqlalchemy import create_engine, desc
-
 
 def StartSeleniumWindows(url):
     options = Options()
@@ -39,6 +38,20 @@ def StartSeleniumUbuntu(url):
     driver.get(url)
     return driver 
 
+def getListingName(listingURL):
+    """This function infers the listing name from the listing URL
+    Scenario to clean property name that:
+    - Does not start with digit (block number)
+
+    Args:
+        listingURL ([string]): listingURL
+
+    Returns:
+        [string]: Listing Name
+    """
+    temp = re.search(r"hdb-for-sale\D*-(\S+)-\d+", listingURL).group(1)
+    return temp.replace("-", " ")
+
 # initial query to get total results page; addquery (optional) for more than 99 pages
 def initialQuery(flattype, addquery=""):
     pageURL = "https://www.propertyguru.com.sg/property-for-sale?market=residential&property_type_code%5B%5D={0}&property_type=H{1}".format(flattype, addquery)
@@ -54,11 +67,21 @@ def initialQuery(flattype, addquery=""):
 
     return lastpage
 
-def addfeaturesPG():
-    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+def addfeaturesPG(pgDF):
+    """Add Columns to PG Data
+    all rows listing names must not be empty
 
-    df_insert = pd.DataFrame(columns=["id","flat_type","street_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
-                ,"latitude","longitude","postal_district","mrt_nearest","mrt_distance",
+    Args:
+        
+
+    Returns:
+        
+
+    """
+    #pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
+
+    df_insert = pd.DataFrame(columns=["id","flat_type","listing_url", "img_url", "listing_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
+                "latitude","longitude","postal_district","mrt_nearest","mrt_distance",
                 "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
 
     #Retrieve amenities data and CPI index
@@ -67,28 +90,28 @@ def addfeaturesPG():
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
 
-    listingName= pgDF.loc[0, 'ListingName']
-    print(listingName)
-    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(listingName)
-    print(onemap_postal_sector, onemap_latitude, onemap_longitude)
-
+    print(pgDF.info())
     #Loop through the records to update
-    for i in range(0, len(df2)):
-        #Map the flat type
-        flat_type = map_flat_type(df2.iloc[i]['flat_type'], df2.iloc[i]['flat_model'])
-        #Map the storey range
-        storey_range = map_storey_range(df2.iloc[i]['storey_range'])
-        #Calculate remaining lease
-        remaining_lease = 99 - int(df2.iloc[i]['month'][:4]) + int(df2.iloc[i]['lease_commence_date'])
-        #Calculate resale_price adjusted for HDB resale CPI
-        resale_price = df2.iloc[i]['resale_price']
-        record_date = df2.iloc[i]['month']
-        record_month = pd.to_datetime(record_date)
-        record_quarter = record_date[:4] + "-Q" + str(record_month.quarter)
-        cpi_adjusted_resale_price = float(resale_price) / float(df_cpi_index[df_cpi_index['cpi_quarter']==record_quarter]['cpi_index']) * 100
+    for i in range(0, len(pgDF)):
         #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
-        full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
-        onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+        full_address = pgDF.iloc[i]['ListingName']
+        #print("{0}: {1}".format(pgDF.iloc[i]['listingID'],pgDF.iloc[i]['ListingName']))
+        try:
+            onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+            print("{0}: {1}".format(onemap_postal_sector,pgDF.iloc[i]['ListingName']))
+            #If postal sector is not found, it could be listing name is wrong. try to infer from listingURL
+            if (onemap_postal_sector == ""):
+                full_address = getListingName(pgDF.loc[i,'listingURL'])
+                onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+                if(onemap_postal_sector != ""):
+                    pgDF.loc[i, 'ListingName'] = full_address
+                else:
+                    continue
+            #print(onemap_postal_sector, onemap_latitude, onemap_longitude)
+        except Exception as e:
+            print(str(e))
+            print("ERROR: {0}".format(pgDF.iloc[i]['listingID']))
+            continue
         #If latitude and longitude is found
         if (onemap_latitude != 0):
             mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
@@ -96,8 +119,12 @@ def addfeaturesPG():
             orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
             hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
             market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
-        #If latitude and longitude is not found, fill with null values
+            postal_district = int(map_postal_district(onemap_postal_sector))
+    
+        #If latitude is not found, fill with null values
         if (onemap_latitude == 0):
+            print("UNABLE TO GET ONEMAP")
+            print(pgDF.iloc[i]['listingID'])
             mrt_nearest = "null"
             mrt_distance = 0
             mall_nearest = "null"
@@ -105,17 +132,23 @@ def addfeaturesPG():
             orchard_distance = 0
             hawker_distance = 0
             market_distance = 0
+            postal_district = 0
+
+
+        #pending: need check onemap_postal_sector not null
         df_insert = df_insert.append({
-            "month": record_month.date(),
-            "flat_type": flat_type,
-            "storey_range": storey_range,
-            "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
-            "remaining_lease": int(remaining_lease),
-            "resale_price": int(resale_price),
-            "cpi_adjusted_resale_price": cpi_adjusted_resale_price,
+            "id": pgDF.iloc[i]['listingID'],
+            "flat_type": pgDF.iloc[i]['FlatType'],
+            "listing_url": pgDF.iloc[i]['listingURL'],
+            "img_url": pgDF.iloc[i]['imgURL'],
+            "listing_name": pgDF.iloc[i]['ListingName'],
+            "floor_area_sqm": float(pgDF.iloc[i]['FloorArea']),
+            "lease_commence_date": int(pgDF.iloc[i]['BuiltYear']),
+            "remaining_lease": int(pgDF.iloc[i]['RemainingLease']),
+            "resale_price": int(pgDF.iloc[i]['Price']),
             "latitude": float(onemap_latitude),
             "longitude": float(onemap_longitude),
-            "postal_district": int(map_postal_district(onemap_postal_sector)),
+            "postal_district": postal_district,
             "mrt_nearest": mrt_nearest,
             "mrt_distance": mrt_distance,
             "mall_nearest": mall_nearest,
@@ -124,28 +157,19 @@ def addfeaturesPG():
             "hawker_distance": hawker_distance,
             "market_distance": market_distance
         }, ignore_index=True)
-
-    #If latitude and longitude is found
-    if (onemap_latitude != 0):
-        mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
-        mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
-        orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
-        hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
-        market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
-        postal_district = map_postal_district(onemap_postal_sector)
-    #If latitude and longitude is not found, fill with null values
-    if (onemap_latitude == 0):
-        mrt_nearest = "null"
-        mrt_distance = 0
-        mall_nearest = "null"
-        mall_distance = 0
-        orchard_distance = 0
-        hawker_distance = 0
-        market_distance = 0
-        postal_district = 0
-
-    #Connect to database
-    #engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+    
+    # set listingID as index
+    df_insert.set_index('id')
+    df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv')
+    
+    # Connect to database
+    engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+    
+    # Remove existing data, then insert dataframe into sqlite database (without removing PK constraint)
+    with engine.connect() as con:
+        rs = con.execute('DELETE FROM prop_guru_table')
+    
+    df_insert.to_sql('prop_guru_table', con=engine, if_exists='append', index=False)
 
 def summarizeFlatType(flattypePG):
     """This function converts flat type in PG to flat type in DataGov. Include what is shown on search filter and individual listing
@@ -157,11 +181,11 @@ def summarizeFlatType(flattypePG):
         key (string): flat type used in DG
 
     """    
-    dictFlatTypes = {"1":["1R", "1-Room / Studio"], \
-                    "2":["2A", "2I", "2S"], \
-                    "3":["3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "3NG (New Generation)", "3A (Modified)", "3NG (Modified)", "3I (Improved)", "3I (Modified)", "3S (Simplified)", "3STD (Standard)"], \
-                    "4":["4A", "4NG", "4S", "4I", "4STD", "4NG (New Generation)", "4S (Simplified)", "4I (Improved)", "4STD (Standard)"], \
-                    "5":["5A", "5I", "5S"], \
+    dictFlatTypes = {"1 ROOM":["1R", "1-Room / Studio"], \
+                    "2 ROOM":["2A", "2I", "2S"], \
+                    "3 ROOM":["3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "3NG (New Generation)", "3A (Modified)", "3NG (Modified)", "3I (Improved)", "3I (Modified)", "3S (Simplified)", "3STD (Standard)"], \
+                    "4 ROOM":["4A", "4NG", "4S", "4I", "4STD", "4NG (New Generation)", "4S (Simplified)", "4I (Improved)", "4STD (Standard)"], \
+                    "5 ROOM":["5A", "5I", "5S"], \
                     "JUMBO":["6J", "Jumbo"], \
                     "EXECUTIVE":["EA", "EM", "EA (Exec Apartment)", "EM (Exec Maisonette)"], \
                     "MULTI-GENERATION":["MG", "MG (Multi-Generation)"], \
@@ -180,6 +204,7 @@ def scrapeType():
 
     residx = 0
 
+    #listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD"]
     listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "4A", "4NG", "4S", "4I", "4STD", "5A", "5I", "5S", "6J", "EA", "EM", "MG", "TE"]
     
     ticStart = time.perf_counter()
@@ -266,7 +291,6 @@ def scrapeType():
                     driver.quit()
                     print(f"time {(time.perf_counter() - tic)} seconds")
                 print("***************************************")
-                results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
             continue
 
         while pageNum < lastpage:
@@ -335,7 +359,22 @@ def scrapeType():
             driver.quit()
             print(f"time {(time.perf_counter() - tic)} seconds")
         print("***************************************")
+        
+        # Clean up the dataset
+        # remove duplicate listing
+        results.drop_duplicates(subset=['listingID'], inplace=True, keep='last')
+        
+        # infer missing listing Name
+        results.loc[results['ListingName'].isnull(),'ListingName'] = results.loc[results['ListingName'].isnull(),'listingURL'].apply(lambda x: getListingName(str(x)))
+        # if Listing Name is pure digit, it is invalid, hence set it to Null
+        results.loc[results['ListingName'].str.isdecimal(), "ListingName"] = None
+        # infer missing listing Name
+        results.loc[results['ListingName'].isnull(),'ListingName'] = results.loc[results['ListingName'].isnull(),'listingURL'].apply(lambda x: getListingName(str(x)))
+
         results.to_csv(r".\HDBResaleWeb\dataset\propguru.csv", index=False, columns=column_names)
+
+    # add additional features to data and commit to SQL
+    addfeaturesPG(results)
     
     print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
 
@@ -416,8 +455,9 @@ def update_propguru_table():
     onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
 
 def main():
-    update_propguru_table()
-    #scrapeType()
+    #addfeaturesPG()
+    #update_propguru_table()
+    scrapeType()
     #summarizeFlatType("2A")
     #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
 

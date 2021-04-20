@@ -53,7 +53,7 @@ def update_propguru():
     form = UpdatePropGuruForm()
     if (request.method == 'POST') and (form.confirm_update2.data == 'Yes'):
         #Update database with latest data from propguru
-        addfeaturesPG()
+        scrapeType()
         flash(f'Updated latest Propertyguru data into database.', 'success')
         return redirect(url_for('home'))
     if (request.method == 'POST') and (form.confirm_update2.data == 'No'):
