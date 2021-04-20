@@ -270,9 +270,8 @@ def update_datagov_table():
 
     #Get the list of year and month that is not updated in the database
     update_month = []
-    limit_month = pd.to_datetime("2017-05")
     for month in df_month:
-        if (month > query_lastrecord_month) and (month <= latest_cpi_quarter) and (month < limit_month):
+        if (month > query_lastrecord_month) and (month <= latest_cpi_quarter):
             update_month.append(month)
     print(update_month)
 
