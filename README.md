@@ -51,21 +51,12 @@
 
 ![image](https://user-images.githubusercontent.com/70024666/115525076-58f87d80-a2c1-11eb-96b0-356861c7f4c1.png)
 
-
-| Features | 1st Choice | 2nd Choice | 3rd Choice | 4th Choice | 5th Choice |
-|----------|:----------:|:----------:|:----------:|:----------:|:----------:|
-|Age of Flat|26|17|12|7|12|
-|Distance to City Centre(Orchard)|2|6|13|14|39|
-|Distance to Hawker Centre|4|14|27|19|10|
-|Distance to Mall|0|13|20|31|10|
-|Ease of Access to LRT/MRT Station|42|24|2|3|3|
-
 - Insights derived, which were subsequently used in our recommender system
 
-|Ranking|Features|
-|:-----:|--------|
-|1|Ease of Access to LRT/MRT Station|
-|2|Age of Flat|
-|3|Distance to Hawker Centre|
-|4|Distance to Mall|
-|5|Distance to City Centre (Orchard)|
+| Features | 1st Choice | 2nd Choice | 3rd Choice | 4th Choice | 5th Choice | Final Ranking |
+|----------|:----------:|:----------:|:----------:|:----------:|:----------:|:-------------:|
+|Age of Flat|26|17|12|7|12|2|
+|Distance to City Centre(Orchard)|2|6|13|14|39|5|
+|Distance to Hawker Centre|4|14|27|19|10|3|
+|Distance to Mall|0|13|20|31|10|4|
+|Ease of Access to LRT/MRT Station|42|24|2|3|3|1|
