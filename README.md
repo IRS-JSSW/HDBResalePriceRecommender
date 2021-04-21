@@ -47,8 +47,6 @@
 
 ## SECTION 8: MISCELLANEOUS
 
-HDB_SURVEY.xlsx
-
 - Results of survey (out of 74 responses)
 
 ![image](https://user-images.githubusercontent.com/70024666/115525076-58f87d80-a2c1-11eb-96b0-356861c7f4c1.png)
