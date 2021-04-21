@@ -36,7 +36,7 @@
     - Findings & Recommendation (WEILIANG)
 6. Appendix 
     - 6.1   Project Proposal (OPTIONAL)
-    - 6.2   Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
+    - 6.2   Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS (WEILIANG)
     - 6.3   Installation and User Guide (JOVIN)
     - 6.4   1-2 pages individual project report per project member, including: Individual reflection of project journey:
       - (1) personal contribution to group project 
