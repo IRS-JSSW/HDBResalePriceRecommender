@@ -55,7 +55,7 @@
 
 - Insights derived, which were subsequently used in our recommender system
 
-| Features | 1st Choice | 2nd Choice | 3rd Choice | 4th Choice | 5th Choice | Final Ranking |
+|Features | 1st Choice | 2nd Choice | 3rd Choice | 4th Choice | 5th Choice | Final Ranking |
 |----------|:----------:|:----------:|:----------:|:----------:|:----------:|:-------------:|
 |Ease of Access to LRT/MRT Station|42|24|2|3|3|1|
 |Age of Flat|26|17|12|7|12|2|
