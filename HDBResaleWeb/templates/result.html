@@ -25,5 +25,27 @@
           </div>
         </div>
       </div>
+      <div class="card mb-3">
+        <div class="row">
+          <div class="col-4" style="padding: 10px;">
+            <div class="col-12"><h5>Best match!</h5></div>
+            {% for content in df_best_match %}
+              <div class="col-12">{{ content }}</div>
+            {% endfor %}
+          </div>
+          <div class="col-4" style="padding: 10px;">
+            <div class="col-12"><h5>Similar size, cheaper price!</h5></div>
+            {% for content in df_cheaper_price %}
+              <div class="col-12">{{ content }}</div>
+            {% endfor %}
+          </div>
+          <div class="col-4" style="padding: 10px;">
+            <div class="col-12"><h5>Similar price, bigger house!</h5></div>
+            {% for content in df_bigger_house %}
+              <div class="col-12">{{ content }}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
 </div>
 {% endblock content %}

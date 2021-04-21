@@ -28,7 +28,11 @@ def home():
         for x in max_index: font_color[x] = 'text-danger'
         for x in min_index: font_color[x] = 'text-success'
         # Function to get closest match (Recommender)
-        return render_template('result.html', search_df=search_df, search_url=search_url,price_array=price_array,font_color=font_color)
+        df_best_match = ['Item 1','Item 2','Item 3']
+        df_cheaper_price = ['Item 1','Item 2','Item 3']
+        df_bigger_house = ['Item 1','Item 2','Item 3']
+        return render_template('result.html', search_df=search_df, search_url=search_url,price_array=price_array,
+        font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house)
     return render_template('home.html', form=form)
 
 @app.route('/about')
