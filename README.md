@@ -22,12 +22,12 @@
 
 1. Executive Summary
 2. Business Problem Background
-    - 2.1. Objective
-    - 2.2. Market Research
-    - 2.3. Success Measurements
+    - 2.1   Objective
+    - 2.2   Market Research
+    - 2.3   Success Measurements
 3. Knowledge Modelling (http://ksi.cpsc.ucalgary.ca/KAW/KAW98/schreiber/)
-    - 3.1 Knowledge Identification
-    - 3.2 Knowledge Specification
+    - 3.1   Knowledge Identification
+    - 3.2   Knowledge Specification
     - 3.3 Knowledge Refinement
 4. Project Solution (To detail domain modelling & system design.)
     - 4.1 Project Implementation (To detail system development & testing approach.)
