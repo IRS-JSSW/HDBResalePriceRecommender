@@ -49,7 +49,7 @@
 
 - Results of survey (out of 74 responses)
 <p align="center">
-    ![image](https://user-images.githubusercontent.com/70024666/115525076-58f87d80-a2c1-11eb-96b0-356861c7f4c1.png)
+![image](https://user-images.githubusercontent.com/70024666/115525076-58f87d80-a2c1-11eb-96b0-356861c7f4c1.png)
 </p>
 
 - Insights derived, which were subsequently used in our recommender system
