@@ -50,6 +50,11 @@
 HDB_SURVEY.xlsx
 
 - Results of survey
+
 ![image](https://user-images.githubusercontent.com/70024666/115525076-58f87d80-a2c1-11eb-96b0-356861c7f4c1.png)
+
+| Features | 1st Choice | 2nd Choice | 3rd Choice | 4th Choice | 5th Choice |
+|----------|------------|------------|------------|------------|------------|
+|Age of Flat|26|17|12|7|12|
 
 - Insights derived, which were subsequently used in our system
