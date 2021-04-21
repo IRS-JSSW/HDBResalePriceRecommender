@@ -53,7 +53,7 @@
 
 
 | Features | 1st Choice | 2nd Choice | 3rd Choice | 4th Choice | 5th Choice |
-|----------|------------|------------|------------|------------|------------|
+|----------|:----------:|:----------:|:----------:|:----------:|:----------:|
 |Age of Flat|26|17|12|7|12|
 |Distance to City Centre(Orchard)|2|6|13|14|39|
 |Distance to Hawker Centre|4|14|27|19|10|
