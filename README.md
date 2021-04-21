@@ -1,11 +1,11 @@
 ## SECTION 1 : PROJECT TITLE
 ### HDB Resale Recommender
 
-## SECTION 2 : POSTER
+POSTER IMAGE
 
-## SECTION 3 : EXECUTIVE SUMMARY
+## SECTION 2 : EXECUTIVE SUMMARY
 
-## SECTION 4 : PROJECT CONTRIBUTION
+## SECTION 3 : PROJECT CONTRIBUTION
 
 | Full Name | Student ID | Work Items | Email |
 |-----------|------------|------------|-------|
@@ -14,11 +14,11 @@
 |Jeon Sung Min|------------|------------|-------|
 |Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|E0687386@u.nus.edu|
 
-## SECTION 5 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
+## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
-## SECTION 6 : USER GUIDE
+## SECTION 5 : USER GUIDE
 
-## SECTION 7 : PROJECT REPORT
+## SECTION 6 : PROJECT REPORT
 
 1. Executive Summary (WEILIANG)
 2. Business Problem Background
@@ -45,7 +45,7 @@
     - 6.5   List of Abbreviations (if applicable)
     - 6.6   References (if applicable)
 
-## SECTION 8 : MISCELLANEOUS
+## SECTION 7 : MISCELLANEOUS
 
 - Results of survey (out of 74 responses)
 
