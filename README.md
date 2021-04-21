@@ -61,3 +61,11 @@
 |Ease of Access to LRT/MRT Station|42|24|2|3|3|
 
 - Insights derived, which were subsequently used in our system
+
+|Ranking|Features|
+|:-----:|--------|
+|1|Ease of Access to LRT/MRT Station|
+|2|Age of Flat|
+|3|Distance to Hawker Centre|
+|4|Distance to Mall|
+|5|Distance to City Centre (Orchard)|
