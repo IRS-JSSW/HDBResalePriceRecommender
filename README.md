@@ -49,12 +49,17 @@
 
 HDB_SURVEY.xlsx
 
-- Results of survey
+- Results of survey (out of 74 responses)
 
 ![image](https://user-images.githubusercontent.com/70024666/115525076-58f87d80-a2c1-11eb-96b0-356861c7f4c1.png)
+
 
 | Features | 1st Choice | 2nd Choice | 3rd Choice | 4th Choice | 5th Choice |
 |----------|------------|------------|------------|------------|------------|
 |Age of Flat|26|17|12|7|12|
+|Distance to City Centre(Orchard)|2|6|13|14|39|
+|Distance to Hawker Centre|4|14|27|19|10|
+|Distance to Mall|0|13|20|31|10|
+|Ease of Access to LRT/MRT Station|42|24|2|3|3|
 
 - Insights derived, which were subsequently used in our system
