@@ -60,7 +60,7 @@
 |Distance to Mall|0|13|20|31|10|
 |Ease of Access to LRT/MRT Station|42|24|2|3|3|
 
-- Insights derived, which were subsequently used in our system
+- Insights derived, which were subsequently used in our recommender system
 
 |Ranking|Features|
 |:-----:|--------|
