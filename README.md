@@ -10,7 +10,7 @@
 | Full Name | Student ID | Work Items | Email |
 |-----------|------------|------------|-------|
 |Yee Wei Liang|A0045422R|Web Scraping, Data Cleaning, Feature Engineering |E0258287@u.nus.edu|
-|Toh Kah Khek|A0229968E|Database Setup, Front end development, Back end integration|E0687376@u.nus.edu|
+|Toh Kah Khek|A0229968E|Database Setup, Front-end Development, Back-end Integration|E0687376@u.nus.edu|
 |Jeon Sung Min|------------|------------|-------|
 |Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|E0687386@u.nus.edu|
 
