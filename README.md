@@ -7,7 +7,7 @@
 
 ## SECTION 4 : PROJECT CONTRIBUTION
 
-| Full Name | Student ID | Work Items | Email |
+| Member Name | Student ID | Work Items | Email |
 |-----------|------------|------------|-------|
 |Yee Wei Liang|A0045422R|Web Scraping, Data Cleaning, Feature Engineering |E0258287@u.nus.edu|
 |Toh Kah Khek|A0229968E|Database Setup, Front-end Development, Back-end Integration|E0687376@u.nus.edu|
