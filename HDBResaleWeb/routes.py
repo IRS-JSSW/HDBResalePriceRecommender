@@ -17,11 +17,18 @@ def home():
         # search_url = 'https://www.propertyguru.com.sg/listing/hdb-for-sale-520a-tampines-central-8-23459129'
         search_df = scrapeSearchListing(search_url)
         # Function to predict estimated price (Prediction model)
-        predicted_low, predicted_middle, predicted_high = load_regression_model(search_df)
-        predicted_price = {"low":predicted_low, "middle":predicted_middle, "high":predicted_high}
+        L1, L4, L7, L10, L13 = load_regression_model(search_df)
+        listed_price = search_df.get('Price')
+        price_array = [listed_price,L1,L4,L7,L10,L13]
+        #Get the index of the maximum values and minimum values
+        max_index = [i for i, x in enumerate(price_array) if x == max(price_array)]
+        min_index = [i for i, x in enumerate(price_array) if x == min(price_array)]
+        font_color = ['text-dark','text-dark','text-dark','text-dark','text-dark','text-dark']
+        #Change font colour of maximum price to red and minimum price to green
+        for x in max_index: font_color[x] = 'text-danger'
+        for x in min_index: font_color[x] = 'text-success'
         # Function to get closest match (Recommender)
-        # flash(f'Preparing recommendations for {form.streetname.data}...', 'info')
-        return render_template('result.html', search_df=search_df, search_url=search_url,predicted_price=predicted_price)
+        return render_template('result.html', search_df=search_df, search_url=search_url,price_array=price_array,font_color=font_color)
     return render_template('home.html', form=form)
 
 @app.route('/about')

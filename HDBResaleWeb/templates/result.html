@@ -10,14 +10,15 @@
             <li>Flat type: {{ search_df.get('FlatType') }}</li>
             <li>Floor Area: {{ search_df.get('FloorArea') }} sqm</li>
             <li>Year built: {{ search_df.get('BuiltYear') }}</li>
-            <li>Listed Price: {{ search_df.get('Price') }}</li>
+            <li><p class="{{ font_color[0] }}">Listed Price: {{ '${:,}'.format(price_array[0]) }}</p></li>
             <li>Predicted Price (By Storey Range):
+              <p><small>Note: Accuracy of predicted price differs up to $26,000</small></p>
               <ul>
-                <li><p class="{{ predicted_price_colour.get('L1') }}">Level 1 to 3 - {{ predicted_price.get('L1') }}</p></li>
-                <li><p class="{{ predicted_price_colour.get('L4') }}">Level 4 to 6 - {{ predicted_price.get('L4') }}</p></li>
-                <li><p class="{{ predicted_price_colour.get('L7') }}">Level 7 to 9 - {{ predicted_price.get('L7') }}</p></li>
-                <li><p class="{{ predicted_price_colour.get('L10') }}">Level 10 to 12 - {{ predicted_price.get('L10') }}</p></li>
-                <li><p class="{{ predicted_price_colour.get('L13') }}">Level 13 and above - {{ predicted_price.get('L13') }}</p></li>
+                <li><p class="{{ font_color[1] }}">Level 1 to 3 - {{ '${:,}'.format(price_array[1]) }}</p></li>
+                <li><p class="{{ font_color[2] }}">Level 4 to 6 - {{ '${:,}'.format(price_array[2]) }}</p></li>
+                <li><p class="{{ font_color[3] }}">Level 7 to 9 - {{ '${:,}'.format(price_array[3]) }}</p></li>
+                <li><p class="{{ font_color[4] }}">Level 10 to 12 - {{ '${:,}'.format(price_array[4])  }}</p></li>
+                <li><p class="{{ font_color[5] }}">Level 13 and above - {{ '${:,}'.format(price_array[5]) }}</p></li>
               </ul>
             </li>
             </ul>

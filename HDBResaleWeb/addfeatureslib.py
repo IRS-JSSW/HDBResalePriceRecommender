@@ -91,7 +91,7 @@ def get_orchard_distance(onemap_latitude,onemap_longitude):
     orchard_coordinates = (1.30489770246908, 103.832525108319)
     #Combine latitude and longitude into one variable
     onemap_coordinates = (float(onemap_latitude), float(onemap_longitude))
-    return haversine(onemap_coordinates, orchard_coordinates)
+    return float(haversine(onemap_coordinates, orchard_coordinates))
 
 #Function to get nearest hawker centre
 def get_nearest_hawkercentre(onemap_latitude,onemap_longitude,hawkercentre_data):

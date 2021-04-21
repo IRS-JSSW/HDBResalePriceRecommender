@@ -15,11 +15,6 @@ from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtra
 from sqlalchemy import create_engine, desc
 
 
-from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
-from HDBResaleWeb.models import DataGovTable, PropGuruTable, RailTransitTable, ShoppingMallsTable, HawkerCentreTable, SuperMarketTable
-from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
-from sqlalchemy import create_engine, desc
-
 def StartSeleniumWindows(url):
     options = Options()
     options.headless = True

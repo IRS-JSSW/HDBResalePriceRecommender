@@ -3,9 +3,10 @@ import pandas as pd, numpy as np
 from datetime import datetime
 from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
 from sqlalchemy import create_engine, desc
+from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold,GridSearchCV,train_test_split
 from sklearn.metrics import mean_squared_error
 
 #Mapping postal sector to postal district
@@ -362,9 +363,12 @@ def train_regression_model():
     df_datagov2 = df_datagov[(df_datagov['floor_area_sqm'] <= 215) & (df_datagov['mrt_distance'] <= 2.5)]
     df_datagov2 = df_datagov2.reset_index()
 
-    #Choose target
+    #Drop irrelevant features
     X = df_datagov2.drop(columns=['index','cpi_adjusted_resale_price','flat_type'], axis=1)
-    y = np.log1p(df_datagov2['cpi_adjusted_resale_price'])
+    #Normalise the values of floor area
+    X["floor_area_sqm"] = np.log(X["floor_area_sqm"])
+    #Normalise the values of target
+    y = np.log(df_datagov2['cpi_adjusted_resale_price'])
 
     ####2. Onehot Encoding####
     #Encode month e.g month 1 is 2015-01-01, month 71 is 2020-12-01
@@ -372,89 +376,144 @@ def train_regression_model():
     #Encode storey range
     X['storey_range'] = pd.Categorical(X['storey_range']).codes
 
-    #Encode flat type and postal district
-    categorical_features = ['postal_district']
-    for feature in categorical_features:
-        X = pd.concat([X, pd.get_dummies(X[feature], prefix=feature)], axis=1)
-    X = X.drop(columns=categorical_features, axis=1)
 
+    #Custom encode postal district 1 to 28 and drop the column
+    categorical_features = ['postal_district']
+    postal_districts = pd.DataFrame(0, index=np.arange(len(X)), columns=['postal_district_1','postal_district_2','postal_district_3','postal_district_4','postal_district_5',
+                        'postal_district_6','postal_district_7','postal_district_8','postal_district_9','postal_district_10',
+                        'postal_district_11','postal_district_12','postal_district_13','postal_district_14','postal_district_15',
+                        'postal_district_16','postal_district_17','postal_district_18','postal_district_19','postal_district_20',
+                        'postal_district_21','postal_district_22','postal_district_23','postal_district_24','postal_district_25',
+                        'postal_district_26','postal_district_27','postal_district_28'])
+    X = pd.concat([X, postal_districts], axis=1)
+
+    for i in range(1,29):
+        column_index = i + 11
+        X.iloc[(X['postal_district'] == i), [column_index]] = 1
+
+    X = X.drop(columns=categorical_features, axis=1)
 
     ###Build Regression Model###
 
     #3. Split the dataset into training and test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1 / 5, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    #4. Select Regression Tree model, Best regression tree with parameter max_depth of 18 and min_samples_split of 24
-    model = DecisionTreeRegressor(criterion='mse', max_depth=18, min_samples_split = 24, random_state=0)
-    # model = GradientBoostingRegressor(criterion='mse', max_depth=8, min_samples_split = 24, learning_rate=0.01, random_state=0)
-    model.fit(X_train, y_train)
+    #4. Select Gradient Boosting Regression model, parameter n_estimators of 400
+    scaler = StandardScaler().fit(X_train)
+    rescaled_X_train = scaler.transform(X_train)
+    model = GradientBoostingRegressor(random_state=21, n_estimators=400)
+    model.fit(rescaled_X_train, y_train)
+
+    #Transform the validation dataset
+    rescaled_X_test = scaler.transform(X_test)
+    predictions = model.predict(rescaled_X_test)
 
     #Get top 10 features sorted in descending order
     for importance, name in sorted(zip(model.feature_importances_, X_train.columns),reverse=True)[:10]:
-        print (name, importance)
-
-    X_test.to_csv("test_data.csv", index = False)
+        print(name, importance)
 
     #Get RMSE score for predicting test set
-    y_pred = np.log1p(model.predict(X_test))
-    rmse = np.exp(mean_squared_error(y_test, y_pred, squared=False)).round(4)
+    actual_y_test = np.exp(y_test)
+    actual_predicted = np.exp(predictions)
+    diff = abs(actual_y_test - actual_predicted)
+
+    compare_actual = pd.DataFrame({'Test Data': actual_y_test, 'Predicted Price' : actual_predicted, 'Difference' : diff})
+    compare_actual = compare_actual.astype(int)
+    print(compare_actual.head(5))
+    rmse = round(mean_squared_error(actual_y_test, actual_predicted, squared=False), 4)
 
     print("RMSE: {0}".format(rmse))
 
-    #5. Save Regression Tree model
-    filename = 'hdb_resale_model.joblib'
-    joblib.dump(model, filename)
+    # #5. Save Regression Tree model and scaler
+    model_filename = 'hdb_resale_model.joblib'
+    joblib.dump(model, model_filename)
+    scaler_filename = 'hdb_resale_scaler.joblib'
+    joblib.dump(scaler, scaler_filename)
 
-    #Optimise parameters using grid search
-    # best_para = {'max_depth':0, 'min_samples':0}
-    # best_test_acc = 0
-    # # grid search
-    # for max_depth in range(1, 20):
-    #     for min_samples in range(2,30):
-    #         dt = DecisionTreeRegressor(criterion='mse',max_depth=max_depth, min_samples_split = min_samples, random_state=0)
-    #         dt.fit(X_train, y_train)
-    #         if dt.score(X_test, y_test) > best_test_acc:
-    #             best_test_acc = dt.score(X_test, y_test)
-    #             best_para['max_depth'] = max_depth
-    #             best_para['min_samples'] = min_samples
+    #Optimise parameters using grid search for GradientBoostingRegressor
+    # scaler = StandardScaler().fit(X_train)
+    # rescaledX = scaler.transform(X_train)
+    # param_grid = dict(n_estimators=np.array([50,100,200,300,400]))
+    # model = GradientBoostingRegressor(random_state=21)
+    # kfold = KFold(n_splits=10, random_state=21, shuffle=True)
+    # grid = GridSearchCV(estimator=model, param_grid=param_grid, scoring='neg_mean_squared_error', cv=kfold)
+    # grid_result = grid.fit(rescaledX, y_train)
 
-    # dt = DecisionTreeRegressor(criterion='mse',max_depth=best_para['max_depth'], min_samples_split = best_para['min_samples'], random_state=0)
-    # dt.fit(X_train, y_train)
-    # print("Best score on training set: {:.3f}".format(dt.score(X_train, y_train)))
-    # print("Best score on test set: {:.3f}".format(dt.score(X_test, y_test)))
-    # print("Best regression tree with parameter max_depth of {0} and min_samples_split of {1}".format(best_para['max_depth'], best_para['min_samples']))
+    # means = grid_result.cv_results_['mean_test_score']
+    # stds = grid_result.cv_results_['std_test_score']
+    # params = grid_result.cv_results_['params']
+    # for mean, stdev, param in zip(means, stds, params):
+    #     print("%f (%f) with: %r" % (mean, stdev, param))
+
+    # print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
 
 ######################################################################################################
 ###Loading Regression Model###
 def load_regression_model(search_df):
-    filename = "hdb_resale_model.joblib"
-    loaded_model = joblib.load(filename)
+    model_filename = "hdb_resale_model.joblib"
+    loaded_model = joblib.load(model_filename)
+    scaler_filename = "hdb_resale_scaler.joblib"
+    loaded_scaler = joblib.load(scaler_filename)
 
     #Count number of months since 2015-01-01
     start = pd.to_datetime('2015-01-01')
     current = pd.to_datetime('today')
     months = (current.year - start.year) * 12 + (current.month - start.month)
-    print(months)
+    # print(months)
 
-    #Predict price for low, middle and high floors
-    df_predict_low = [[75,0,67.0,59,1.31207968902337,103.760802118745,0.5955574900450702,0.4623104220664519,8.013058559461447,0.11629349454113441,0.18709338677006054,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
-    df_predict_middle = [[75,1,67.0,59,1.31207968902337,103.760802118745,0.5955574900450702,0.4623104220664519,8.013058559461447,0.11629349454113441,0.18709338677006054,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
-    df_predict_high = [[75,2,67.0,59,1.31207968902337,103.760802118745,0.5955574900450702,0.4623104220664519,8.013058559461447,0.11629349454113441,0.18709338677006054,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
-
-
-    #Return predicted price for low, middle and high floors
-    predict_low = np.exp(loaded_model.predict(df_predict_low))[0]
-    predict_middle = np.exp(loaded_model.predict(df_predict_middle))[0].round()
-    predict_high = np.exp(loaded_model.predict(df_predict_high))[0].round()
-
-    #Adjust predicted price for HDB CPI index based on weighted average of past 3 quarters CPI
+    #Retrieve amenities data and CPI index
+    df_railtransit = railtransit()
+    df_shoppingmalls = shoppingmalls()
+    df_hawkercentre = hawkercentre()
+    df_supermarket = supermarket()
     df_cpi_index = cpi_index()
-    # average_cpi_3months = round(sum(list(map(float, df_cpi_index['cpi_index'][-3:]))) / 3, 2)
-    latest_cpi_3months = (float(df_cpi_index.iloc[-1]['cpi_index'])*0.7) + (float(df_cpi_index.iloc[-2]['cpi_index'])*0.2) + (float(df_cpi_index.iloc[-3]['cpi_index'])*0.1)
-    print(latest_cpi_3months)
 
-    predict_low_cpi = (predict_low * latest_cpi_3months / 100).round(0)
-    predict_middle_cpi = (predict_middle * latest_cpi_3months / 100).round(0)
-    predict_high_cpi = (predict_high * latest_cpi_3months / 100).round(0)
+    #Get coordinates and postal sector using address
+    full_address = search_df.get('StreetAdd') + " Singapore"
+    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+    postal_district = int(map_postal_district(onemap_postal_sector))
+    floor_area_sqm = np.log(float(search_df.get('FloorArea')))
+    remaining_lease = int(search_df.get('RemainingLease'))
+    latitude = float(onemap_latitude)
+    longitude = float(onemap_longitude)
+    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
 
-    return predict_low_cpi, predict_middle_cpi, predict_high_cpi
+    df_postal_district = [0] * 28
+    df_postal_district[postal_district - 1] = 1
+
+    #Predict price for the 5 storey range
+    df_predict_L1 = [[months,0,floor_area_sqm,remaining_lease,latitude,longitude,mrt_distance,mall_distance,orchard_distance,hawker_distance,market_distance]+ df_postal_district]
+    df_predict_L4 = [[months,1,floor_area_sqm,remaining_lease,latitude,longitude,mrt_distance,mall_distance,orchard_distance,hawker_distance,market_distance]+ df_postal_district]
+    df_predict_L7 = [[months,2,floor_area_sqm,remaining_lease,latitude,longitude,mrt_distance,mall_distance,orchard_distance,hawker_distance,market_distance]+ df_postal_district]
+    df_predict_L10 = [[months,3,floor_area_sqm,remaining_lease,latitude,longitude,mrt_distance,mall_distance,orchard_distance,hawker_distance,market_distance]+ df_postal_district]
+    df_predict_L13 = [[months,4,floor_area_sqm,remaining_lease,latitude,longitude,mrt_distance,mall_distance,orchard_distance,hawker_distance,market_distance]+ df_postal_district]
+
+    #Use saved scaler to rescale data
+    rescaled_df_L1 = loaded_scaler.transform(df_predict_L1)
+    rescaled_df_L4 = loaded_scaler.transform(df_predict_L4)
+    rescaled_df_L7 = loaded_scaler.transform(df_predict_L7)
+    rescaled_df_L10 = loaded_scaler.transform(df_predict_L10)
+    rescaled_df_L13 = loaded_scaler.transform(df_predict_L13)
+
+    #Use saved model to do prediction
+    predicted_L1 = np.exp(loaded_model.predict(rescaled_df_L1))[0]
+    predicted_L4 = np.exp(loaded_model.predict(rescaled_df_L4))[0]
+    predicted_L7 = np.exp(loaded_model.predict(rescaled_df_L7))[0]
+    predicted_L10 = np.exp(loaded_model.predict(rescaled_df_L10))[0]
+    predicted_L13 = np.exp(loaded_model.predict(rescaled_df_L13))[0]
+ 
+    # #Adjust predicted price for HDB CPI index based on weighted average of past 3 quarters CPI
+    df_cpi_index = cpi_index()
+    weighted_cpi_3quarters = (float(df_cpi_index.iloc[-1]['cpi_index'])*0.4583) + (float(df_cpi_index.iloc[-2]['cpi_index'])*0.3333) + (float(df_cpi_index.iloc[-3]['cpi_index'])*0.2083)
+
+    predicted_L1_cpi = round((predicted_L1 * weighted_cpi_3quarters / 100))
+    predicted_L4_cpi = round((predicted_L4 * weighted_cpi_3quarters / 100))
+    predicted_L7_cpi = round((predicted_L7 * weighted_cpi_3quarters / 100))
+    predicted_L10_cpi = round((predicted_L10 * weighted_cpi_3quarters / 100))
+    predicted_L13_cpi = round((predicted_L13 * weighted_cpi_3quarters / 100))
+
+    return predicted_L1_cpi, predicted_L4_cpi, predicted_L7_cpi, predicted_L10_cpi, predicted_L13_cpi
