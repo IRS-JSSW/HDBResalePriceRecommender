@@ -61,4 +61,4 @@
 |Age of Flat|26|17|12|7|12|2|
 |Distance to Hawker Centre|4|14|27|19|10|3|
 |Distance to Mall|0|13|20|31|10|4|
-|Distance to City Centre(Orchard)|2|6|13|14|39|5|
+|Distance to City Centre (Orchard)|2|6|13|14|39|5|
