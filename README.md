@@ -44,6 +44,7 @@
 6. Install project dependencies from requirements.txt
    command: pip install -r requirements.txt
    | No | Package | Version |
+   |-|-|-|-|
    | 1 | flask | 1.1.2 |
    | 2 | flask-wtf | 0.14.3 |
    | 3 | haversine | 2.3.0 |
