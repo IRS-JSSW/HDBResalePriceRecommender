@@ -17,6 +17,7 @@ POSTER IMAGE
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
 ## SECTION 5 : USER GUIDE
+<img src="https://github.com/IRS-JSSW/HDBResalePriceRecommender/Miscellaneous/Images/Poster.png" style="float: left; margin-right: 0px;" />
 
 ## SECTION 6 : PROJECT REPORT
 
