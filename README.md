@@ -1,7 +1,6 @@
 ## SECTION 1 : PROJECT TITLE
 ### HDB Resale Recommender
-
-POSTER IMAGE
+<img src="https://github.com/IRS-JSSW/HDBResalePriceRecommender/blob/main/Miscellaneous/Images/Poster.png?raw=true" style="float: left; margin-right: 0px;" />
 
 ## SECTION 2 : EXECUTIVE SUMMARY
 
@@ -17,7 +16,7 @@ POSTER IMAGE
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
 ## SECTION 5 : USER GUIDE
-<img src="https://github.com/IRS-JSSW/HDBResalePriceRecommender/blob/main/Miscellaneous/Images/Poster.png?raw=true" style="float: left; margin-right: 0px;" />
+
 
 ## SECTION 6 : PROJECT REPORT
 
