@@ -359,8 +359,8 @@ def train_regression_model():
                     "rpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_distance",
                     "mall_distance","orchard_distance","hawker_distance","market_distance"]]
 
-    ###1. Remove outliers from dataset###
-    df_datagov2 = df_datagov[(df_datagov['floor_area_sqm'] <= 215) & (df_datagov['mrt_distance'] <= 2.5)]
+    ###1. Remove outliers from dataset and exclude ###
+    df_datagov2 = df_datagov[(df_datagov['floor_area_sqm'] <= 215) & (df_datagov['mrt_distance'] <= 2.5) & (df_datagov['postal_district'] != 0)]
     df_datagov2 = df_datagov2.reset_index()
 
     #Drop irrelevant features
