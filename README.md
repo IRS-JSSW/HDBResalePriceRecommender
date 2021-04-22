@@ -66,7 +66,7 @@
 
    <img src="Miscellaneous/Install Guide/Step6.png" style="float: left; margin-right: 0px;" />
 
-# User guide
+**User guide**
 1. Navigate to HDBResalePriceRecommender and activate virtualenv
    
    command: source venv/bin/activate (Note: Ensure that you are seeing (venv) in the terminal) 
@@ -80,10 +80,17 @@
 
    <img src="Miscellaneous/User Guide/Step2.png" style="float: left; margin-right: 0px;" />
 
-3. Open browser (Firefox or Google Chrome) and nagivate to URL http://127.0.0.1:5000/home
+3. Open browser (Firefox or Google Chrome) and navigate to URL http://127.0.0.1:5000/home
 
    <img src="Miscellaneous/User Guide/Step3.png" style="float: left; margin-right: 0px;" />
 
+4. Input valid Propertyguru Resale HDB listing in textbox and click on the Search button
+
+   <img src="Miscellaneous/User Guide/Step4.png" style="float: left; margin-right: 0px;" />
+
+5. Results of predicted price and other recommended Propertyguru listings will be generated
+
+   <img src="Miscellaneous/User Guide/Step5.png" style="float: left; margin-right: 0px;" />
 
 ## SECTION 6 : PROJECT REPORT
 
