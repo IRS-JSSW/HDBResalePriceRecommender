@@ -16,65 +16,74 @@
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
 ## SECTION 5 : INSTALLATION AND USER GUIDE
-# Installation guide for Ubuntu 20.04
+**Installation guide for Ubuntu 20.04**
+
 1. Navigate to folder of your choice and download the github repository
 
-command: git clone https://github.com/IRS-JSSW/HDBResalePriceRecommender
+   command: git clone https://github.com/IRS-JSSW/HDBResalePriceRecommender
 
-<img src="Miscellaneous/Install Guide/Step1-1.png?raw=true" style="float: left; margin-right: 0px;" />
-<img src="Miscellaneous/Install Guide/Step1-2.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step1-1.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step1-2.png?raw=true" style="float: left; margin-right: 0px;" />
 
 2. Install pip3 package
 
-command: sudo apt-get install python3-pip
+   command: sudo apt-get install python3-pip
 
-<img src="Miscellaneous/Install Guide/Step2.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step2.png?raw=true" style="float: left; margin-right: 0px;" />
 
 3. Install virtualenv package
 
-command: sudo pip3 install virtualenv
+   command: sudo pip3 install virtualenv
 
-<img src="Miscellaneous/Install Guide/Step3.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step3.png?raw=true" style="float: left; margin-right: 0px;" />
 
 4. Navigate to HDBResalePriceRecommender and create virtualenv
 
-command: virtualenv -p python3 venv
+   command: virtualenv -p python3 venv
 
-<img src="Miscellaneous/Install Guide/Step4-1.png?raw=true" style="float: left; margin-right: 0px;" />
-<img src="Miscellaneous/Install Guide/Step4-2.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step4-1.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step4-2.png?raw=true" style="float: left; margin-right: 0px;" />
 
 5. Activate virtualenv
 
-command: source venv/bin/activate (Note: Ensure that you are seeing (venv) in the terminal)
+   command: source venv/bin/activate (Note: Ensure that you are seeing (venv) in the terminal)
 
-<img src="Miscellaneous/Install Guide/Step5.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step5.png?raw=true" style="float: left; margin-right: 0px;" />
 
 6. Install project dependencies from requirements.txt
 
-command: pip install -r requirements.txt
+   command: pip install -r requirements.txt
 
-| No | Package | Version |
-|----|---------|---------|
-| 1 | flask | 1.1.2 |
-| 2 | flask-wtf | 0.14.3 |
-| 3 | haversine | 2.3.0 |
-| 4 | requests | 2.25.1 |
-| 5 | selenium | 3.141.0 |
-| 6 | sklearn |---------|
-| 7 | sqlalchemy | 1.3.23 |
+   | No | Package | Version |
+   |----|---------|---------|
+   | 1 | flask | 1.1.2 |
+   | 2 | flask-wtf | 0.14.3 |
+   | 3 | haversine | 2.3.0 |
+   | 4 | requests | 2.25.1 |
+   | 5 | selenium | 3.141.0 |
+   | 6 | sklearn |---------|
+   | 7 | sqlalchemy | 1.3.23 |
 
-<img src="Miscellaneous/Install Guide/Step6.png" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step6.png" style="float: left; margin-right: 0px;" />
 
 # User guide
 1. Navigate to HDBResalePriceRecommender and activate virtualenv
-<img src="Miscellaneous/User Guide/Step1-1.png" style="float: left; margin-right: 0px;" />
-<img src="Miscellaneous/User Guide/Step1-2.png" style="float: left; margin-right: 0px;" />
+   
+   command: source venv/bin/activate (Note: Ensure that you are seeing (venv) in the terminal) 
+   
+   <img src="Miscellaneous/User Guide/Step1-1.png" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/User Guide/Step1-2.png" style="float: left; margin-right: 0px;" />
 
 2. Start the flask application on local machine
-   command: project run.py
-<img src="Miscellaneous/User Guide/Step2.png" style="float: left; margin-right: 0px;" />
 
-3. 
+   command: project run.py
+
+   <img src="Miscellaneous/User Guide/Step2.png" style="float: left; margin-right: 0px;" />
+
+3. Open browser (Firefox or Google Chrome) and nagivate to URL http://127.0.0.1:5000/home
+
+   <img src="Miscellaneous/User Guide/Step3.png" style="float: left; margin-right: 0px;" />
+
 
 ## SECTION 6 : PROJECT REPORT
 
