@@ -87,31 +87,24 @@ def map_flat_type(flat_type, flat_model):
     else:
         return flat_type
 
-def cpi_index():
-    url_cpi = 'https://data.gov.sg/api/action/datastore_search?resource_id=52e93430-01b7-4de0-80df-bc83d0afed40&limit=50000'
-    data = json.loads(requests.get(url_cpi).content)
+def rpi_index():
+    #URL for HDB Resale Price Index
+    url_rpi = 'https://data.gov.sg/api/action/datastore_search?resource_id=52e93430-01b7-4de0-80df-bc83d0afed40&limit=50000'
+    data = json.loads(requests.get(url_rpi).content)
 
     df = pd.DataFrame(data['result']['records'])
 
-    df_cpi = pd.DataFrame(columns=['cpi_quarter','cpi_index'])
+    df_rpi = pd.DataFrame(columns=['rpi_quarter','rpi_index'])
 
     for i in range(0,len(df)):
         if (df.iloc[i]['quarter'][:4] >= '2000'):
             insert_row = {
-                "cpi_quarter": df.iloc[i]['quarter'],
-                "cpi_index": df.iloc[i]['index']
+                "rpi_quarter": df.iloc[i]['quarter'],
+                "rpi_index": df.iloc[i]['index']
             }
-            df_cpi = df_cpi.append(insert_row, ignore_index=True)
+            df_rpi = df_rpi.append(insert_row, ignore_index=True)
 
-    # #If current quarter not in list, get average CPI of previous 3 months
-    # datagov_latest_quarter = str(datagov_latest_month.year) + "-Q" + str(datagov_latest_month.quarter)
-    # latest_hdb_cpi_quarter = str(df_cpi['cpi_quarter'][-1:])
-    # if (datagov_latest_quarter != latest_hdb_cpi_quarter):
-    #     # average_cpi_3months = round(sum(list(map(float, df_cpi['cpi_index'][-3:]))) / 3, 2)
-    #     cpi_index = df_cpi.iloc[-1]['cpi_index']
-    #     df_cpi = df_cpi.append({"cpi_quarter":datagov_latest_quarter, "cpi_index":cpi_index}, ignore_index=True)
-
-    return df_cpi
+    return df_rpi
 
 ######################################################################################################
 #Retrieve rail transit data from database
@@ -236,113 +229,120 @@ def insert_supermarket_data():
 def update_datagov_table():
     url_2017 = 'https://data.gov.sg/api/action/datastore_search?resource_id=42ff9cfe-abe5-4b54-beda-c88f9bb438ee&limit=500000'
     # url_2015 = 'https://data.gov.sg/api/action/datastore_search?resource_id=1b702208-44bf-4829-b620-4615ee19b57c&limit=500000'
-    data = json.loads(requests.get(url_2017).content)
 
-    df = pd.DataFrame(data['result']['records'])
-    #Get the list of unique year and month of datagov records
-    df_month = list(set(df['month']))
-    df_month = sorted(pd.to_datetime(df_month))
-    df['yearmonth'] = pd.to_datetime(df['month'])
-    # print(df['yearmonths'])
+    #Extract HDB Resale data from Data.gov
+    try:
+        data = json.loads(requests.get(url_2017).content)
+        df = pd.DataFrame(data['result']['records'])
+        #Get the list of unique year and month of datagov records
+        df_month = list(set(df['month']))
+        df_month = sorted(pd.to_datetime(df_month))
+        df['yearmonth'] = pd.to_datetime(df['month'])
 
-    #Retrieve amenities data and CPI index
-    df_railtransit = railtransit()
-    df_shoppingmalls = shoppingmalls()
-    df_hawkercentre = hawkercentre()
-    df_supermarket = supermarket()
-    df_cpi_index = cpi_index()
-    
-    #Check the last HDB resale CPI quarter e.g 2020-Q4
-    # latest_cpi_quarter = str(df_cpi_index.iloc[-1]['cpi_quarter'])
-    latest_cpi_quarter = "2020-Q4"
-    #Replace quarter as the last month in the quarter e.g Q1 to 03, Q2 to 06, Q3 to 09, Q4 to 12
-    latest_cpi_quarter = latest_cpi_quarter.replace('Q1','03').replace('Q2','06').replace('Q3','09').replace('Q4','12')
-    latest_cpi_quarter = pd.to_datetime(latest_cpi_quarter)
-    # print(latest_cpi_quarter)
+        #Retrieve amenities data and HDB RPI
+        df_railtransit = railtransit()
+        df_shoppingmalls = shoppingmalls()
+        df_hawkercentre = hawkercentre()
+        df_supermarket = supermarket()
+        df_rpi_index = rpi_index()
+        
+        #Check the last HDB RPI quarter e.g 2020-Q4
+        latest_rpi_quarter = str(df_rpi_index.iloc[-1]['rpi_quarter'])
+        #Replace quarter as the last month in the quarter e.g Q1 to 03, Q2 to 06, Q3 to 09, Q4 to 12
+        latest_rpi_quarter = latest_rpi_quarter.replace('Q1','03').replace('Q2','06').replace('Q3','09').replace('Q4','12')
+        latest_rpi_quarter = pd.to_datetime(latest_rpi_quarter)
+        # print(latest_rpi_quarter)
 
-    #Connect to database
-    engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+        #Connect to database
+        engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
-    #Get the year and month of the last record in data gov table from database
-    query_lastrecord = "SELECT * FROM data_gov_table ORDER BY id DESC LIMIT 1"
-    df_datagov_query = pd.read_sql_query(query_lastrecord, engine)
-    query_lastrecord_month = pd.to_datetime(df_datagov_query['month'])[0] if len(df_datagov_query) != 0 else pd.to_datetime("2014-12")
-    # print(query_lastrecord_month)
+        #Get the year and month of the last record in data gov table from database
+        query_lastrecord = "SELECT * FROM data_gov_table ORDER BY id DESC LIMIT 1"
+        df_datagov_query = pd.read_sql_query(query_lastrecord, engine)
+        query_lastrecord_month = pd.to_datetime(df_datagov_query['month'])[0] if len(df_datagov_query) != 0 else pd.to_datetime("2014-12")
+        # print(query_lastrecord_month)
 
-    #Get the list of year and month that is not updated in the database
-    update_month = []
-    for month in df_month:
-        if (month > query_lastrecord_month) and (month <= latest_cpi_quarter):
-            update_month.append(month)
-    print(update_month)
+        #Get the list of year and month that is not updated in the database
+        update_month = []
+        for month in df_month:
+            if (month > query_lastrecord_month) and (month <= latest_rpi_quarter):
+                update_month.append(month)
+        print(update_month)
 
-    df2 = df[(df['yearmonth'].isin(update_month))]
-    df2 = df2.reset_index()
-    # print(len(df2))
+        df2 = df[(df['yearmonth'].isin(update_month))]
+        df2 = df2.reset_index()
+        # print(len(df2))
 
-    df_insert = pd.DataFrame(columns=["month","flat_type","storey_range","floor_area_sqm","remaining_lease","resale_price",
-                "cpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_nearest","mrt_distance",
-                "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
+        df_insert = pd.DataFrame(columns=["month","flat_type","storey_range","floor_area_sqm","remaining_lease","resale_price",
+                    "rpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_nearest","mrt_distance",
+                    "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
 
-    #If records to update more than 0
-    if(len(df2) > 0):
-        #Loop through the records to update
-        for i in range(0, len(df2)):
-            #Map the flat type
-            flat_type = map_flat_type(df2.iloc[i]['flat_type'], df2.iloc[i]['flat_model'])
-            #Map the storey range
-            storey_range = map_storey_range(df2.iloc[i]['storey_range'])
-            #Calculate remaining lease
-            remaining_lease = 99 - int(df2.iloc[i]['month'][:4]) + int(df2.iloc[i]['lease_commence_date'])
-            #Calculate resale_price adjusted for HDB resale CPI
-            resale_price = df2.iloc[i]['resale_price']
-            record_date = df2.iloc[i]['month']
-            record_month = pd.to_datetime(record_date)
-            record_quarter = record_date[:4] + "-Q" + str(record_month.quarter)
-            cpi_adjusted_resale_price = float(resale_price) / float(df_cpi_index[df_cpi_index['cpi_quarter']==record_quarter]['cpi_index']) * 100
-            #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
-            full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
-            onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
-            #If latitude and longitude is found
-            if (onemap_latitude != 0):
-                mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
-                mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
-                orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
-                hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
-                market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
-            #If latitude and longitude is not found, fill with null values
-            if (onemap_latitude == 0):
-                mrt_nearest = "null"
-                mrt_distance = 0
-                mall_nearest = "null"
-                mall_distance = 0
-                orchard_distance = 0
-                hawker_distance = 0
-                market_distance = 0
-            df_insert = df_insert.append({
-                "month": record_month.date(),
-                "flat_type": flat_type,
-                "storey_range": storey_range,
-                "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
-                "remaining_lease": int(remaining_lease),
-                "resale_price": float(resale_price),
-                "cpi_adjusted_resale_price": cpi_adjusted_resale_price,
-                "latitude": float(onemap_latitude),
-                "longitude": float(onemap_longitude),
-                "postal_district": int(map_postal_district(onemap_postal_sector)),
-                "mrt_nearest": mrt_nearest,
-                "mrt_distance": mrt_distance,
-                "mall_nearest": mall_nearest,
-                "mall_distance": mall_distance,
-                "orchard_distance": orchard_distance,
-                "hawker_distance": hawker_distance,
-                "market_distance": market_distance
-            }, ignore_index=True)
+        #If records to update more than 0
+        if(len(df2) > 0):
+            #Loop through the records to update
+            for i in range(0, len(df2)):
+                #Map the flat type
+                flat_type = map_flat_type(df2.iloc[i]['flat_type'], df2.iloc[i]['flat_model'])
+                #Map the storey range
+                storey_range = map_storey_range(df2.iloc[i]['storey_range'])
+                #Calculate remaining lease
+                remaining_lease = 99 - int(df2.iloc[i]['month'][:4]) + int(df2.iloc[i]['lease_commence_date'])
+                #Calculate resale_price adjusted for HDB RPI
+                resale_price = df2.iloc[i]['resale_price']
+                record_date = df2.iloc[i]['month']
+                record_month = pd.to_datetime(record_date)
+                record_quarter = record_date[:4] + "-Q" + str(record_month.quarter)
+                rpi_adjusted_resale_price = float(resale_price) / float(df_rpi_index[df_rpi_index['rpi_quarter']==record_quarter]['rpi_index']) * 100
+                #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
+                full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
+                #Get latitude, longitude and postal sector from onemap and populate amenities data
+                try:
+                    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+                    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+                    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+                    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+                    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+                    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
+                #If error getting latitude, longitude and postal sector from onemap, populate amenities data with null values and continue to next record
+                except Exception as e:
+                    print(str(e))
+                    mrt_nearest = "null"
+                    mrt_distance = 0
+                    mall_nearest = "null"
+                    mall_distance = 0
+                    orchard_distance = 0
+                    hawker_distance = 0
+                    market_distance = 0
+                    continue
+                df_insert = df_insert.append({
+                    "month": record_month.date(),
+                    "flat_type": flat_type,
+                    "storey_range": storey_range,
+                    "floor_area_sqm": float(df2.iloc[i]['floor_area_sqm']),
+                    "remaining_lease": int(remaining_lease),
+                    "resale_price": float(resale_price),
+                    "rpi_adjusted_resale_price": rpi_adjusted_resale_price,
+                    "latitude": float(onemap_latitude),
+                    "longitude": float(onemap_longitude),
+                    "postal_district": int(map_postal_district(onemap_postal_sector)),
+                    "mrt_nearest": mrt_nearest,
+                    "mrt_distance": mrt_distance,
+                    "mall_nearest": mall_nearest,
+                    "mall_distance": mall_distance,
+                    "orchard_distance": orchard_distance,
+                    "hawker_distance": hawker_distance,
+                    "market_distance": market_distance
+                }, ignore_index=True)
 
-    # print(df_insert.dtypes)
-    #Insert dataframe into sqlite database
-    df_insert.to_sql('data_gov_table', con=engine, if_exists='append', index=False)
+        # print(df_insert.dtypes)
+        #Insert dataframe into sqlite database
+        df_insert.to_sql('data_gov_table', con=engine, if_exists='append', index=False)
+        return "success"
 
+    #Exception handling in the event Data.gov is inaccessible
+    except Exception as e:
+        print(str(e))
+        return "error"
 
 ######################################################################################################
 def train_regression_model():
@@ -356,7 +356,7 @@ def train_regression_model():
     df = pd.read_sql_query(query, engine)
     
     df_datagov = df[["month","flat_type","storey_range","floor_area_sqm","remaining_lease",
-                    "cpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_distance",
+                    "rpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_distance",
                     "mall_distance","orchard_distance","hawker_distance","market_distance"]]
 
     ###1. Remove outliers from dataset###
@@ -364,11 +364,11 @@ def train_regression_model():
     df_datagov2 = df_datagov2.reset_index()
 
     #Drop irrelevant features
-    X = df_datagov2.drop(columns=['index','cpi_adjusted_resale_price','flat_type'], axis=1)
+    X = df_datagov2.drop(columns=['index','rpi_adjusted_resale_price','flat_type'], axis=1)
     #Normalise the values of floor area
     X["floor_area_sqm"] = np.log(X["floor_area_sqm"])
-    #Normalise the values of target
-    y = np.log(df_datagov2['cpi_adjusted_resale_price'])
+    #Normalise the values of target (Adjusted RPI Resale Price)
+    y = np.log(df_datagov2['rpi_adjusted_resale_price'])
 
     ####2. Onehot Encoding####
     #Encode month e.g month 1 is 2015-01-01, month 71 is 2020-12-01
@@ -466,21 +466,21 @@ def load_regression_model(search_df):
     df_shoppingmalls = shoppingmalls()
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
-    df_cpi_index = cpi_index()
+    df_rpi_index = rpi_index()
 
     #Get coordinates and postal sector using address
     full_address = search_df.get('StreetAdd') + " Singapore"
     onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
-    postal_district = int(map_postal_district(onemap_postal_sector))
-    floor_area_sqm = np.log(float(search_df.get('FloorArea')))
-    remaining_lease = int(search_df.get('RemainingLease'))
+    postal_district = int(map_postal_district(onemap_postal_sector)) ###
+    floor_area_sqm = np.log(float(search_df.get('FloorArea'))) ###
+    remaining_lease = int(search_df.get('RemainingLease')) #### + resale price
     latitude = float(onemap_latitude)
     longitude = float(onemap_longitude)
-    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
-    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
-    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
-    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
-    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
+    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit) ### + mrt_nearest
+    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls) ###
+    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude) ##
+    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre) ##
+    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket) ##
 
     df_postal_district = [0] * 28
     df_postal_district[postal_district - 1] = 1
@@ -506,14 +506,19 @@ def load_regression_model(search_df):
     predicted_L10 = np.exp(loaded_model.predict(rescaled_df_L10))[0]
     predicted_L13 = np.exp(loaded_model.predict(rescaled_df_L13))[0]
  
-    # #Adjust predicted price for HDB CPI index based on weighted average of past 3 quarters CPI
-    df_cpi_index = cpi_index()
-    weighted_cpi_3quarters = (float(df_cpi_index.iloc[-1]['cpi_index'])*0.4583) + (float(df_cpi_index.iloc[-2]['cpi_index'])*0.3333) + (float(df_cpi_index.iloc[-3]['cpi_index'])*0.2083)
+    # #Adjust predicted price for HDB RPI based on weighted average of past 3 quarters RPI
+    df_rpi_index = rpi_index()
+    weighted_rpi_3quarters = (float(df_rpi_index.iloc[-1]['rpi_index'])*0.4583) + (float(df_rpi_index.iloc[-2]['rpi_index'])*0.3333) + (float(df_rpi_index.iloc[-3]['rpi_index'])*0.2083)
 
-    predicted_L1_cpi = round((predicted_L1 * weighted_cpi_3quarters / 100))
-    predicted_L4_cpi = round((predicted_L4 * weighted_cpi_3quarters / 100))
-    predicted_L7_cpi = round((predicted_L7 * weighted_cpi_3quarters / 100))
-    predicted_L10_cpi = round((predicted_L10 * weighted_cpi_3quarters / 100))
-    predicted_L13_cpi = round((predicted_L13 * weighted_cpi_3quarters / 100))
+    predicted_L1_cpi = round((predicted_L1 * weighted_rpi_3quarters / 100))
+    predicted_L4_cpi = round((predicted_L4 * weighted_rpi_3quarters / 100))
+    predicted_L7_cpi = round((predicted_L7 * weighted_rpi_3quarters / 100))
+    predicted_L10_cpi = round((predicted_L10 * weighted_rpi_3quarters / 100))
+    predicted_L13_cpi = round((predicted_L13 * weighted_rpi_3quarters / 100))
 
-    return predicted_L1_cpi, predicted_L4_cpi, predicted_L7_cpi, predicted_L10_cpi, predicted_L13_cpi
+    df_recommendation = {"listing_ID":search_df.get('listingID'), "postal_district":postal_district, "floor_area_sqm":search_df.get('FloorArea'), 
+                        "remaining_lease":remaining_lease, "listing_price":search_df.get('Price'), "mrt_nearest":mrt_nearest, "mrt_distance":mrt_distance, 
+                        "mall_distance":mall_distance, "orchard_distance":orchard_distance, "hawker_distance":hawker_distance, 
+                        "market_distance":market_distance}
+
+    return predicted_L1_cpi, predicted_L4_cpi, predicted_L7_cpi, predicted_L10_cpi, predicted_L13_cpi, df_recommendation
