@@ -44,13 +44,13 @@
 6. Install project dependencies from requirements.txt
    command: pip install -r requirements.txt
    | No | Package | Version |
-   |----|:--------|:--------|
+   |----|---------|---------|
    | 1 | flask | 1.1.2 |
    | 2 | flask-wtf | 0.14.3 |
    | 3 | haversine | 2.3.0 |
    | 4 | requests | 2.25.1 |
    | 5 | selenium | 3.141.0 |
-   | 6 | sklearn | - |
+   | 6 | sklearn |---------|
    | 7 | sqlalchemy | 1.3.23 |
 
 # User guide
