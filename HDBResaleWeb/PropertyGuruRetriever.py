@@ -13,6 +13,7 @@ import pandas as pd
 from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
 from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
 from sqlalchemy import create_engine, desc
+from sklearn.preprocessing import MinMaxScaler
 
 
 def StartSeleniumWindows(url):
@@ -77,7 +78,7 @@ def addfeaturesPG(pgDF):
 
     df_insert = pd.DataFrame(columns=["id","flat_type","listing_url", "img_url", "listing_name","floor_area_sqm","lease_commence_date","remaining_lease","resale_price",
                 "latitude","longitude","postal_district","mrt_nearest","mrt_distance",
-                "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
+                "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance", "recommend_score"])
 
     #Retrieve amenities data and CPI index
     df_railtransit = railtransit()
@@ -86,6 +87,7 @@ def addfeaturesPG(pgDF):
     df_supermarket = supermarket()
 
     print(pgDF.info())
+
     #Loop through the records to update
     for i in range(0, len(pgDF)):
         #Get the full address of the record to retrieve the latitude, longitude and postal sector from Onemap or Google
@@ -114,8 +116,13 @@ def addfeaturesPG(pgDF):
             orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
             hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
             market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
-            postal_district = int(map_postal_district(onemap_postal_sector))
+            postal_district = int(map_postal_district(onemap_postal_sector))         
     
+            # Scoring function for recommender
+            # from survey results, score: 
+            # [Age of flat: 0.351351351, orchard_distance: 0.027027027, hawker_distance: 0.054054054, mall_distance: 0, mrt_distance: 0.567567568]
+            recommend_score = 0.351351351*(99 - pgDF.iloc[i]['RemainingLease']) +  1/(0.027027027*orchard_distance) +  1/(0.054054054*hawker_distance)+ 1/(0.567567568*mrt_distance)
+
         #If latitude is not found, fill with null values
         if (onemap_latitude == 0):
             print("UNABLE TO GET ONEMAP")
@@ -128,6 +135,7 @@ def addfeaturesPG(pgDF):
             hawker_distance = 0
             market_distance = 0
             postal_district = 0
+            recommend_score = 0
 
 
         #pending: need check onemap_postal_sector not null
@@ -150,9 +158,17 @@ def addfeaturesPG(pgDF):
             "mall_distance": mall_distance,
             "orchard_distance": orchard_distance,
             "hawker_distance": hawker_distance,
-            "market_distance": market_distance
-        }, ignore_index=True)
-    
+            "market_distance": market_distance,
+            "recommend_score": recommend_score
+        }, ignore_index=True)    
+
+    # for the purpose of getting Recommendation Score, perform MinMaxScaler
+    scaler = MinMaxScaler()
+    # [Age of flat: 0.351351351, orchard_distance: 0.027027027, hawker_distance: 0.054054054, mall_distance: 0, mrt_distance: 0.567567568]
+    df_insert[['scaled_age', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mrt_distance']] = scaler.fit_transform(df_insert[['lease_commence_date', 'orchard_distance', 'hawker_distance', 'mrt_distance']])
+
+    # PENDING: for distance, need to 1-x
+
     # set listingID as index
     df_insert.set_index('id')
     df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv')
@@ -199,8 +215,8 @@ def scrapeType():
 
     residx = 0
 
-    #listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD"]
-    listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "4A", "4NG", "4S", "4I", "4STD", "5A", "5I", "5S", "6J", "EA", "EM", "MG", "TE"]
+    listFlattype= ["1R", "2A"]
+    #listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "4A", "4NG", "4S", "4I", "4STD", "5A", "5I", "5S", "6J", "EA", "EM", "MG", "TE"]
     
     ticStart = time.perf_counter()
 
@@ -450,6 +466,7 @@ def update_propguru_table():
     onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
 
 def main():
+    # uncomment any of below for testing purpose. need to correct filepath in relative to this file
     #addfeaturesPG()
     #update_propguru_table()
     scrapeType()
