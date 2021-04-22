@@ -1,6 +1,6 @@
 ## SECTION 1 : PROJECT TITLE
 ### HDB Resale Recommender
-<img src="https://github.com/IRS-JSSW/HDBResalePriceRecommender/blob/main/Miscellaneous/Images/Poster.png?raw=true" style="float: left; margin-right: 0px;" />
+<img src="Miscellaneous/Images/Poster.png?raw=true" style="float: left; margin-right: 0px;" />
 
 ## SECTION 2 : EXECUTIVE SUMMARY
 
@@ -15,8 +15,53 @@
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
-## SECTION 5 : USER GUIDE
+## SECTION 5 : INSTALLATION AND USER GUIDE
+# Installation guide for Ubuntu 20.04
+<img src="Miscellaneous/Install_Guide/Step1-1.png?raw=true" style="float: left; margin-right: 0px;" />
+<img src="Miscellaneous/Install_Guide/Step1-2.png?raw=true" style="float: left; margin-right: 0px;" />
+1. Navigate to folder of your choice and download the github repository
+   command: git clone https://github.com/IRS-JSSW/HDBResalePriceRecommender
 
+<img src="Miscellaneous/Install_Guide/Step2.png?raw=true" style="float: left; margin-right: 0px;" />
+2. Install pip3 package
+   command: sudo apt-get install python3-pip
+
+<img src="Miscellaneous/Install_Guide/Step3.png?raw=true" style="float: left; margin-right: 0px;" />
+3. Install virtualenv package
+   command: sudo pip3 install virtualenv
+
+<img src="Miscellaneous/Install_Guide/Step4-1.png?raw=true" style="float: left; margin-right: 0px;" />
+<img src="Miscellaneous/Install_Guide/Step4-2.png?raw=true" style="float: left; margin-right: 0px;" />
+4. Navigate to HDBResalePriceRecommender and create virtualenv
+   command: virtualenv -p python3 venv
+
+<img src="Miscellaneous/Install_Guide/Step5.png?raw=true" style="float: left; margin-right: 0px;" />
+5. Activate virtualenv
+   command: source venv/bin/activate
+   (Note: Ensure that you are seeing (venv) in the terminal)
+
+<img src="Miscellaneous/Install_Guide/Step6.png" style="float: left; margin-right: 0px;" />
+6. Install project dependencies from requirements.txt
+   command: pip install -r requirements.txt
+   | No | Package | Version |
+   | 1 | flask | 1.1.2 |
+   | 2 | flask-wtf | 0.14.3 |
+   | 3 | haversine | 2.3.0 |
+   | 4 | requests | 2.25.1 |
+   | 5 | selenium | 3.141.0 |
+   | 6 | sklearn | - |
+   | 7 | sqlalchemy | 1.3.23 |
+
+# User guide
+<img src="Miscellaneous/User_Guide/Step1-1.png" style="float: left; margin-right: 0px;" />
+<img src="Miscellaneous/User_Guide/Step1-2.png" style="float: left; margin-right: 0px;" />
+1. Navigate to HDBResalePriceRecommender and activate virtualenv
+
+<img src="Miscellaneous/User_Guide/Step2.png" style="float: left; margin-right: 0px;" />
+2. Start the flask application on local machine
+   command: project run.py
+
+3. 
 
 ## SECTION 6 : PROJECT REPORT
 
