@@ -40,10 +40,6 @@ def home():
         font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house)
     return render_template('home.html', form=form)
 
-#Result URL
-@app.route('/result')
-def result():
-    return render_template('result.html', title='Result Page')
 
 ######################################################################################################
 #Update data gov table
