@@ -54,7 +54,7 @@
 
    command: pip install -r requirements.txt
 
-   | No | Package | Version |
+   | **No** | **Package** | **Version** |
    |----|---------|---------|
    | 1 | flask | 1.1.2 |
    | 2 | flask-wtf | 0.14.3 |
@@ -67,6 +67,7 @@
    <img src="Miscellaneous/Install Guide/Step6.png" style="float: left; margin-right: 0px;" />
 
 **User guide**
+**Part 1 - To start the app**
 1. Navigate to HDBResalePriceRecommender and activate virtualenv
    
    command: source venv/bin/activate (Note: Ensure that you are seeing (venv) in the terminal) 
@@ -84,13 +85,44 @@
 
    <img src="Miscellaneous/User Guide/Step3.png" style="float: left; margin-right: 0px;" />
 
-4. Input valid Propertyguru Resale HDB listing in textbox and click on the Search button
+**Part 2 - To get predicted price of HDB Resale Flats**
+1. Input valid Propertyguru Resale HDB listing in textbox and click on the Search button
 
    <img src="Miscellaneous/User Guide/Step4.png" style="float: left; margin-right: 0px;" />
 
-5. Results of predicted price and other recommended Propertyguru listings will be generated
+2. Results of predicted price and other recommended Propertyguru listings will be generated
 
    <img src="Miscellaneous/User Guide/Step5.png" style="float: left; margin-right: 0px;" />
+
+**Part 3 - To update HDB Resale Transactions Records from Data.gov**
+
+1. Click on “Update” on the navigation bar and click on “Update Data Gov Table”
+
+   <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
+
+2. Next, select “Yes” in the dropdown menu and click on “Update”. Selecting “No” will not update the database and redirects back to the homepage
+
+   <img src="Miscellaneous/User Guide/Step7.png" style="float: left; margin-right: 0px;" />
+
+**Part 4 - To update Propertyguru listings**
+
+1. Click on “Update” on the navigation bar and click on “Update Data Gov Table”
+
+   <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
+
+2. Next, select “Yes” in the dropdown menu and click on “Update”. Selecting “No” will not update the database and redirects back to the homepage
+
+   <img src="Miscellaneous/User Guide/Step8.png" style="float: left; margin-right: 0px;" />
+
+**Part 4 - To train Regression Model**
+
+1. Click on “Update” on the navigation bar and click on “Update Training Model”
+
+   <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
+
+2. Next, select “Yes” in the dropdown menu and click on “Train”. Selecting “No” will not update the regression model and redirects back to the homepage
+
+   <img src="Miscellaneous/User Guide/Step9.png" style="float: left; margin-right: 0px;" />
 
 ## SECTION 6 : PROJECT REPORT
 
