@@ -164,15 +164,19 @@ def addfeaturesPG(pgDF):
 
     # for the purpose of getting Recommendation Score, perform MinMaxScaler
     scaler = MinMaxScaler()
-    # [Age of flat: 0.351351351, orchard_distance: 0.027027027, hawker_distance: 0.054054054, mall_distance: 0, mrt_distance: 0.567567568]
-    df_insert[['scaled_age', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mrt_distance']] = scaler.fit_transform(df_insert[['lease_commence_date', 'orchard_distance', 'hawker_distance', 'mrt_distance']])
-
-    # PENDING: for distance, need to 1-x
-
+    # [Age of flat: 0.2342342342, orchard_distance: 0.1261261261, hawker_distance: 0.1846846847, mall_distance: 0.1657657658, mrt_distance: 0.2891891892]
+    df_insert[['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = scaler.fit_transform(df_insert[['remaining_lease', 'orchard_distance', 'hawker_distance', 'mall_distance', 'mrt_distance']])
+    df_insert[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = 1.0 -  df_insert[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']]
+    df_insert = df_insert.assign(recommend_score = 0.2342342342*df_insert.scaled_rem_lease + 0.1261261261*df_insert.scaled_orchard_distance + 0.1846846847*df_insert.scaled_hawker_distance + 0.1657657658*df_insert.scaled_mall_distance + 0.2891891892*df_insert.scaled_mrt_distance)
+    
     # set listingID as index
     df_insert.set_index('id')
+    # for csv keep the scaled data for inspection
     df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv')
-    
+
+    # drop the scaled data for SQL storage
+    df_insert = df_insert.drop(['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance'], axis=1)
+
     # Connect to database
     engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
     
@@ -215,8 +219,7 @@ def scrapeType():
 
     residx = 0
 
-    listFlattype= ["1R", "2A"]
-    #listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "4A", "4NG", "4S", "4I", "4STD", "5A", "5I", "5S", "6J", "EA", "EM", "MG", "TE"]
+    listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "4A", "4NG", "4S", "4I", "4STD", "5A", "5I", "5S", "6J", "EA", "EM", "MG", "TE"]
     
     ticStart = time.perf_counter()
 
