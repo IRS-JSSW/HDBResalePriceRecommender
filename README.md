@@ -100,7 +100,7 @@
 
    <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
 
-2. Next, select “Yes” in the dropdown menu and click on “Update”. Selecting “No” will not update the database and redirects back to the homepage
+2. Next, select “Yes” in the dropdown menu and click on “Update” button. Selecting “No” will not update the database and redirects back to the homepage
 
    <img src="Miscellaneous/User Guide/Step7.png" style="float: left; margin-right: 0px;" />
 
@@ -110,7 +110,7 @@
 
    <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
 
-2. Next, select “Yes” in the dropdown menu and click on “Update”. Selecting “No” will not update the database and redirects back to the homepage
+2. Next, select “Yes” in the dropdown menu and click on “Update” button. Selecting “No” will not update the database and redirects back to the homepage
 
    <img src="Miscellaneous/User Guide/Step8.png" style="float: left; margin-right: 0px;" />
 
@@ -120,7 +120,7 @@
 
    <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
 
-2. Next, select “Yes” in the dropdown menu and click on “Train”. Selecting “No” will not update the regression model and redirects back to the homepage
+2. Next, select “Yes” in the dropdown menu and click on “Train” button. Selecting “No” will not update the regression model and redirects back to the homepage
 
    <img src="Miscellaneous/User Guide/Step9.png" style="float: left; margin-right: 0px;" />
 
