@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
-from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm
+from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm, UpdateModelForm
 from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model, load_regression_model
 from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing, addfeaturesPG
 from HDBResaleWeb.recommendation import recommender_system
@@ -40,10 +40,6 @@ def home():
         font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house)
     return render_template('home.html', form=form)
 
-#Result URL
-@app.route('/result')
-def result():
-    return render_template('result.html', title='Result Page')
 
 ######################################################################################################
 #Update data gov table
@@ -73,6 +69,19 @@ def update_propguru():
         return redirect(url_for('home'))
     return render_template('update_propguru_table.html', title='Update HDB Resale Propertyguru Table', form=form)
 
+#Update property guru table
+@app.route('/update/trainmodel', methods=['GET', 'POST'])
+def train_model():
+    form = UpdateModelForm()
+    if (request.method == 'POST') and (form.confirm_update3.data == 'Yes'):
+        #Train regression model
+        train_regression_model()
+        flash(f'Trained regression model.', 'success')
+        return redirect(url_for('home'))
+    if (request.method == 'POST') and (form.confirm_update3.data == 'No'):
+        return redirect(url_for('home'))
+    return render_template('update_model.html', title='Train Regression Model', form=form)
+
 #Update amenities tables
 @app.route('/update/amenities')
 def update_amenities():
@@ -80,10 +89,4 @@ def update_amenities():
     insert_shoppingmalls_data()
     insert_hawkercentre_data()
     insert_supermarket_data()
-    return redirect(url_for('home'))
-
-#Train regression model
-@app.route('/update/trainmodel')
-def train_model():
-    train_regression_model()
     return redirect(url_for('home'))

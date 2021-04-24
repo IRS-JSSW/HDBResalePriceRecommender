@@ -23,3 +23,7 @@ class UpdateDataGovForm(FlaskForm):
 class UpdatePropGuruForm(FlaskForm):
     confirm_update2 = SelectField('Update Propertyguru Table?', choices=['Yes', 'No'], default=1)
     update2 = SubmitField('Update')
+
+class UpdateModelForm(FlaskForm):
+    confirm_update3 = SelectField('Update Training Model?', choices=['Yes', 'No'], default=1)
+    update3 = SubmitField('Train')
