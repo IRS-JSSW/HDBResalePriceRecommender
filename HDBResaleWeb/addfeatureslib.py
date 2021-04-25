@@ -21,20 +21,27 @@ def geographic_position(full_address):
         result = requests.get(search)
         data = pd.json_normalize(json.loads(result.content)['results'])
         
+        #If location found in Google Geocoding API, get values from json output
         if (not data.empty):
-            postal_code = str(data['formatted_address'][0])
-            postal_sector_start = postal_code.find('Singapore') + 10
-            postal_sector_end = postal_code.find('Singapore') + 12
-            postal_sector = postal_code[postal_sector_start:postal_sector_end]
+            formatted_address = str(data['formatted_address'][0])
+            postal_code_start = formatted_address.find('Singapore') + 10
+            postal_sector_end = formatted_address.find('Singapore') + 12
+            postal_code_end = formatted_address.find('Singapore') + 16
+            postal_sector = formatted_address[postal_code_start:postal_sector_end]
+            postal_code = formatted_address[postal_code_start:postal_code_end]
             latitude = float(data['geometry.location.lat'][0])
             longitude = float(data['geometry.location.lng'][0])
+        
+        #If location not found in Google Geocoding API, return null values
         if (data.empty):
+            postal_code = 0
             postal_sector = 0
             latitude = 0
             longitude = 0
 
     #If location found in OneMap, get values from json output
     if (num_results >= 1):
+        postal_code = data.iloc[0]['POSTAL']
         postal_sector = data.iloc[0]['POSTAL'][:2]
         latitude = data.iloc[0]['LATITUDE']
         longitude = data.iloc[0]['LONGITUDE']
@@ -45,13 +52,26 @@ def geographic_position(full_address):
 
         result = requests.get(search)
         data = pd.json_normalize(json.loads(result.content)['results'])
-        postal_code = str(data['formatted_address'][0])
-        postal_sector_start = postal_code.find('Singapore') + 10
-        postal_sector_end = postal_code.find('Singapore') + 12
-        postal_sector = postal_code[postal_sector_start:postal_sector_end]
+
+        #If location found in Google Geocoding API, get values from json output
+        if (not data.empty):
+            formatted_address = str(data['formatted_address'][0])
+            postal_code_start = formatted_address.find('Singapore') + 10
+            postal_sector_end = formatted_address.find('Singapore') + 12
+            postal_code_end = formatted_address.find('Singapore') + 16
+            postal_sector = formatted_address[postal_code_start:postal_sector_end]
+            postal_code = formatted_address[postal_code_start:postal_code_end]
         
-    return postal_sector, latitude, longitude
+        #If location not found in Google Geocoding API, return null values
+        if (data.empty):
+            postal_code = 0
+            postal_sector = 0
+            latitude = 0
+            longitude = 0
+        
+    return postal_code, postal_sector, latitude, longitude
     
+
 ######################################################################################################
 #Function to get nearest transit rail
 def get_nearest_railtransit(onemap_latitude,onemap_longitude,railtransit_data):

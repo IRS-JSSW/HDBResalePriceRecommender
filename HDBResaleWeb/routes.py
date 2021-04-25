@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
-from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm, UpdateModelForm
-from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model, load_regression_model
+from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm, UpdateModelForm, UpdateAmenitiesForm
+from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model, load_regression_model, get_history_transactions
 from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing, addfeaturesPG
 from HDBResaleWeb.recommendation import recommender_system
 
@@ -15,9 +15,8 @@ def home():
     if form.validate_on_submit():
         #Function to scrape search
         search_url = form.streetname.data
-        # search_url = 'https://www.propertyguru.com.sg/listing/hdb-for-sale-520a-tampines-central-8-23459129'
         search_df = scrapeSearchListing(search_url)
-        # Function to predict estimated price (Prediction model)
+        #Function to predict estimated price (Prediction model)
         L1, L4, L7, L10, L13, df_recommendation = load_regression_model(search_df)
         listed_price = search_df.get('Price')
         price_array = [listed_price,L1,L4,L7,L10,L13]
@@ -28,16 +27,17 @@ def home():
         #Change font colour of maximum price to red and minimum price to green
         for x in max_index: font_color[x] = 'text-danger'
         for x in min_index: font_color[x] = 'text-success'
-        # Customer recommender system to provide other recommended listings to user
+        #Historical transactions for same HDB
+        postal_code = df_recommendation.get('postal_code')
+        df_history = get_history_transactions(postal_code)
+        #Customer recommender system to provide other recommended listings to user
         df_best_match_test, df_cheaper_price_test, df_bigger_house_test = recommender_system(df_recommendation)
-        print(df_best_match_test)
-        print(df_cheaper_price_test)
-        print(df_bigger_house_test)
         df_best_match = ['Item 1','Item 2','Item 3']
         df_cheaper_price = ['Item 1','Item 2','Item 3']
         df_bigger_house = ['Item 1','Item 2','Item 3']
         return render_template('result.html', search_df=search_df, search_url=search_url,price_array=price_array,
-        font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house)
+        font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house,
+        df_history=df_history)
     return render_template('home.html', form=form)
 
 
@@ -83,10 +83,17 @@ def train_model():
     return render_template('update_model.html', title='Train Regression Model', form=form)
 
 #Update amenities tables
-@app.route('/update/amenities')
+@app.route('/update/amenities', methods=['GET', 'POST'])
 def update_amenities():
-    insert_railtransit_data()
-    insert_shoppingmalls_data()
-    insert_hawkercentre_data()
-    insert_supermarket_data()
-    return redirect(url_for('home'))
+    form = UpdateAmenitiesForm()
+    if (request.method == 'POST') and (form.confirm_update4.data == 'Yes'):
+        #Update database with amenities data
+        insert_railtransit_data()
+        insert_shoppingmalls_data()
+        insert_hawkercentre_data()
+        insert_supermarket_data()
+        flash(f'Updated amenities tables in database.', 'success')
+        return redirect(url_for('home'))
+    if (request.method == 'POST') and (form.confirm_update4.data == 'No'):
+        return redirect(url_for('home'))
+    return render_template('update_amenities_table.html', title='Update Amenities Tables', form=form)

@@ -1,12 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="content-section">
+  <!-- Predictions -->
+  <div class="container-fluid">
     <div class="card-deck">
-        <div class="card mb-3">
-          <img class="card-img-top" src="{{ search_df.get('imgURL') }}">
-          <div class="card-body">
-            <h5><a href="{{ search_url }}" class="card-title font-weight-bold"  target="_blank">{{ search_df.get('StreetAdd') }}</a></h5>
-            <ul class="list-unstyled">
+      <img class="card-img-top" style="padding-left: 20px; padding-right: 20px;" src="{{ search_df.get('imgURL') }}">
+        <div class="card-body">
+          <h5><a href="{{ search_url }}" class="card-title font-weight-bold"  target="_blank">{{ search_df.get('StreetAdd') }}</a></h5>
+          <ul class="list-unstyled">
             <li>Flat type: {{ search_df.get('FlatType') }}</li>
             <li>Floor Area: {{ search_df.get('FloorArea') }} sqm</li>
             <li>Year built: {{ search_df.get('BuiltYear') }}</li>
@@ -21,31 +22,58 @@
                 <li><p class="{{ font_color[5] }}">Level 13 and above - {{ '${:,}'.format(price_array[5]) }}</p></li>
               </ul>
             </li>
-            </ul>
-          </div>
-        </div>
+        </ul>
       </div>
-      <div class="card mb-3">
-        <div class="row">
-          <div class="col-4" style="padding: 10px;">
-            <div class="col-12"><h5>Best match!</h5></div>
-            {% for content in df_best_match %}
-              <div class="col-12">{{ content }}</div>
-            {% endfor %}
-          </div>
-          <div class="col-4" style="padding: 10px;">
-            <div class="col-12"><h5>Similar size, cheaper price!</h5></div>
-            {% for content in df_cheaper_price %}
-              <div class="col-12">{{ content }}</div>
-            {% endfor %}
-          </div>
-          <div class="col-4" style="padding: 10px;">
-            <div class="col-12"><h5>Similar price, bigger house!</h5></div>
-            {% for content in df_bigger_house %}
-              <div class="col-12">{{ content }}</div>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
+    </div>
+    {% if df_history|length > 0 %}
+    <h4 style="margin-bottom: 10px;">Latest 5 transactions</h4>
+    <table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Transaction month</th>
+          <th scope="col">Flat type</th>
+          <th scope="col">Storey range</th>
+          <th scope="col">Floor area (sqm)</th>
+          <th scope="col">Resale Price</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for key, value in df_history.iterrows() %}
+      <tr>
+        <td>{{ value['month'][:-3] }}</td>
+        <td>{{ value['flat_type'] }}</td>
+        <td>{{ value['storey_range'] }}</td>
+        <td>{{ value['floor_area_sqm'] }}</td>
+        <td>{{ '${:,}'.format(value['resale_price']) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+
+<!-- Recommendations -->
+<div class="container-fluid">
+  <div class="row" style="padding: 5px;">
+    <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
+      <div class="d-flex"><h5>Best match!</h5></div>
+      {% for content in df_best_match %}
+        <div class="d-flex">{{ content }}</div>
+      {% endfor %}
+    </div>
+    <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
+      <div class="d-flex"><h5>Similar size, cheaper price!</h5></div>
+      {% for content in df_cheaper_price %}
+        <div class="d-flex">{{ content }}</div>
+      {% endfor %}
+    </div>
+    <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
+      <div class="d-flex"><h5>Similar price, bigger house!</h5></div>
+      {% for content in df_bigger_house %}
+        <div class="d-flex">{{ content }}</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 </div>
 {% endblock content %}

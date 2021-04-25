@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group d-flex justify-content-start">
+                {{ form.confirm_update4.label(class="form-control-label mr-2") }}
+                {{ form.confirm_update4(class="form-control-md form-control-md mr-2") }}
+            </div>
+            <p class="text-info">Note: Updating the Amenities database will take up to 3 mins.</p>
+        </fieldset>
+        <div class="form-group">
+            {{ form.update4(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}

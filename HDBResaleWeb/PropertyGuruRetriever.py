@@ -94,12 +94,12 @@ def addfeaturesPG(pgDF):
         full_address = pgDF.iloc[i]['ListingName']
         #print("{0}: {1}".format(pgDF.iloc[i]['listingID'],pgDF.iloc[i]['ListingName']))
         try:
-            onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+            onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
             print("{0}: {1}".format(onemap_postal_sector,pgDF.iloc[i]['ListingName']))
             #If postal sector is not found, it could be listing name is wrong. try to infer from listingURL
             if (onemap_postal_sector == ""):
                 full_address = getListingName(pgDF.loc[i,'listingURL'])
-                onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+                onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
                 if(onemap_postal_sector != ""):
                     pgDF.loc[i, 'ListingName'] = full_address
                 else:
@@ -457,16 +457,6 @@ def scrapeSearchListing(searchurl):
 
 
     return listingDetails
-
-# To be copied to functions.py
-def update_propguru_table():
-    print("update_propguru_table: Building this function...")
-    print(os.getcwd())
-    pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
-    print(pgDF.head())
-
-    
-    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
 
 def main():
     # uncomment any of below for testing purpose. need to correct filepath in relative to this file

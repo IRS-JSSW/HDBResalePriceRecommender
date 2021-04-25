@@ -187,6 +187,9 @@ def insert_railtransit_data():
     #Connect to database
     engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
+    #Delete all records in table before inserting data from csv
+    engine.execute("DELETE FROM rail_transit_table")
+
     #Insert dataframe into sqlite database
     df.to_sql('rail_transit_table', con=engine, if_exists='append', index=False)
 
@@ -195,8 +198,14 @@ def insert_shoppingmalls_data():
     filepath = 'HDBResaleWeb/dataset/malls_final.csv'
     df = pd.read_csv(filepath)
 
+    #Remove additional whitespace from malls name
+    df["Shopping_Malls"] = df["Shopping_Malls"].replace({' +':' '},regex=True)
+
     #Connect to database
     engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+
+    #Delete all records in table before inserting data from csv
+    engine.execute("DELETE FROM shopping_malls_table")
 
     #Insert dataframe into sqlite database
     df.to_sql('shopping_malls_table', con=engine, if_exists='append', index=False)
@@ -209,6 +218,9 @@ def insert_hawkercentre_data():
     #Connect to database
     engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
+    #Delete all records in table before inserting data from csv
+    engine.execute("DELETE FROM hawker_centre_table")
+
     #Insert dataframe into sqlite database
     df.to_sql('hawker_centre_table', con=engine, if_exists='append', index=False)
 
@@ -219,6 +231,9 @@ def insert_supermarket_data():
 
     #Connect to database
     engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+
+    #Delete all records in table before inserting data from csv
+    engine.execute("DELETE FROM super_market_table")
 
     #Insert dataframe into sqlite database
     df.to_sql('super_market_table', con=engine, if_exists='append', index=False)
@@ -274,7 +289,7 @@ def update_datagov_table():
         # print(len(df2))
 
         df_insert = pd.DataFrame(columns=["month","flat_type","storey_range","floor_area_sqm","remaining_lease","resale_price",
-                    "rpi_adjusted_resale_price","latitude","longitude","postal_district","mrt_nearest","mrt_distance",
+                    "rpi_adjusted_resale_price","latitude","longitude","postal_code","postal_district","mrt_nearest","mrt_distance",
                     "mall_nearest","mall_distance","orchard_distance","hawker_distance","market_distance"])
 
         #If records to update more than 0
@@ -297,7 +312,7 @@ def update_datagov_table():
                 full_address = df2.iloc[i]['block'] + ' ' + df2.iloc[i]['street_name']
                 #Get latitude, longitude and postal sector from onemap and populate amenities data
                 try:
-                    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+                    onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
                     mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
                     mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
                     orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
@@ -306,6 +321,7 @@ def update_datagov_table():
                 #If error getting latitude, longitude and postal sector from onemap, populate amenities data with null values and continue to next record
                 except Exception as e:
                     print(str(e))
+                    print(full_address)
                     mrt_nearest = "null"
                     mrt_distance = 0
                     mall_nearest = "null"
@@ -324,6 +340,7 @@ def update_datagov_table():
                     "rpi_adjusted_resale_price": rpi_adjusted_resale_price,
                     "latitude": float(onemap_latitude),
                     "longitude": float(onemap_longitude),
+                    "postal_code": int(onemap_postal_code),
                     "postal_district": int(map_postal_district(onemap_postal_sector)),
                     "mrt_nearest": mrt_nearest,
                     "mrt_distance": mrt_distance,
@@ -425,9 +442,9 @@ def train_regression_model():
     print("RMSE: {0}".format(rmse))
 
     # #5. Save Regression Tree model and scaler
-    model_filename = 'hdb_resale_model.joblib'
+    model_filename = 'HDBResaleWeb/hdb_resale_model.joblib'
     joblib.dump(model, model_filename)
-    scaler_filename = 'hdb_resale_scaler.joblib'
+    scaler_filename = 'HDBResaleWeb/hdb_resale_scaler.joblib'
     joblib.dump(scaler, scaler_filename)
 
     #Optimise parameters using grid search for GradientBoostingRegressor
@@ -450,9 +467,9 @@ def train_regression_model():
 ######################################################################################################
 ###Loading Regression Model###
 def load_regression_model(search_df):
-    model_filename = "hdb_resale_model.joblib"
+    model_filename = "HDBResaleWeb/hdb_resale_model.joblib"
     loaded_model = joblib.load(model_filename)
-    scaler_filename = "hdb_resale_scaler.joblib"
+    scaler_filename = "HDBResaleWeb/hdb_resale_scaler.joblib"
     loaded_scaler = joblib.load(scaler_filename)
 
     #Count number of months since 2015-01-01
@@ -470,7 +487,7 @@ def load_regression_model(search_df):
 
     #Get coordinates and postal sector using address
     full_address = search_df.get('StreetAdd') + " Singapore"
-    onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
+    onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
     postal_district = int(map_postal_district(onemap_postal_sector)) ###
     floor_area_sqm = np.log(float(search_df.get('FloorArea'))) ###
     remaining_lease = int(search_df.get('RemainingLease')) #### + resale price
@@ -519,6 +536,25 @@ def load_regression_model(search_df):
     df_recommendation = {"listing_ID":search_df.get('listingID'), "postal_district":postal_district, "floor_area_sqm":search_df.get('FloorArea'), 
                         "remaining_lease":remaining_lease, "listing_price":search_df.get('Price'), "mrt_nearest":mrt_nearest, "mrt_distance":mrt_distance, 
                         "mall_distance":mall_distance, "orchard_distance":orchard_distance, "hawker_distance":hawker_distance, 
-                        "market_distance":market_distance}
+                        "market_distance":market_distance, "postal_code":onemap_postal_code}
 
     return predicted_L1_cpi, predicted_L4_cpi, predicted_L7_cpi, predicted_L10_cpi, predicted_L13_cpi, df_recommendation
+
+def get_history_transactions(postal_code):
+    #Connect to database
+    engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
+
+    #Query database for latest 5 transactions
+    query = "SELECT * FROM data_gov_table where postal_code = " + postal_code + " ORDER BY month DESC LIMIT 5"
+
+    try:
+        #SQL to pandas df
+        df = pd.read_sql_query(query, engine)
+    except Exception as e:
+        print(str(e))
+        df_history = []
+
+    tables = ["month","flat_type","storey_range","floor_area_sqm","resale_price"]
+    df_history = df[tables]
+
+    return df_history

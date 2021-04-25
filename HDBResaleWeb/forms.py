@@ -10,10 +10,6 @@ class CustomValidators(Form):
 
 class SearchResaleHDBForm(FlaskForm):
     streetname = StringField('Propertyguru URL (Paste Propertyguru URL in the box below)', validators=[DataRequired(), URL(require_tld=True), CustomValidators()])
-    # dropdown_list_bedrooms = ['1', '2', '3', '4', '5']
-    # bedrooms = SelectField('Bedrooms', choices=dropdown_list_bedrooms, default=1)
-    # dropdown_list_completion = list(range(1960, datetime.datetime.today().year))
-    # completion = SelectField('Year of completion', choices=dropdown_list_completion, default=dropdown_list_completion[-1])
     submit = SubmitField('Search')
 
 class UpdateDataGovForm(FlaskForm):
@@ -27,3 +23,7 @@ class UpdatePropGuruForm(FlaskForm):
 class UpdateModelForm(FlaskForm):
     confirm_update3 = SelectField('Update Training Model?', choices=['Yes', 'No'], default=1)
     update3 = SubmitField('Train')
+
+class UpdateAmenitiesForm(FlaskForm):
+    confirm_update4 = SelectField('Update Amenities Table?', choices=['Yes', 'No'], default=1)
+    update4 = SubmitField('Update')

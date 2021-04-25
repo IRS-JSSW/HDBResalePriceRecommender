@@ -38,6 +38,7 @@
                 <div class="dropdown-menu bg-steel" aria-labelledby="dropdownMenuLink">
                   <a class="dropdown-item nav-item nav-link bg-steel" href="{{ url_for('update_datagov') }}">Update Data Gov Table</a>
                   <a class="dropdown-item nav-item nav-link " href="{{ url_for('update_propguru') }}">Update Propertyguru Table</a>
+                  <a class="dropdown-item nav-item nav-link " href="{{ url_for('update_amenities') }}">Update Amenities Tables</a>
                   <a class="dropdown-item nav-item nav-link " href="{{ url_for('train_model') }}">Update Training Model</a>
                 </div>
               </div>
@@ -61,8 +62,8 @@
           {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">
-          <div class="content-section">
-            <div class="container-fluid" style="margin-bottom: 15px;">
+          <div class="d-flex flex-column border border-info rounded" style="padding: 5px;">
+            <div class="p-2" style="margin-bottom: 15px;">
               <h3>Resale HDB Articles</h3>
                   <ul class="list-group">
                     <li class="list-group-item list-group-item-light"><a href="https://www.channelnewsasia.com/news/singapore/hdb-resale-prices-rise-sales-q1-2021-fourth-straight-quarter-14677352" target="_blank">HDB resale prices climb for 4th consecutive quarter in Q1</a></li>
@@ -76,10 +77,10 @@
                   </ul>
                 </p>
             </div>
-            <div class="container-fluid" style="margin-bottom: 15px;">
+            <div class="p-2" style="margin-bottom: 15px;">
               <a href="https://services2.hdb.gov.sg/webapp/BB33RTIS/BB33PReslTrans.jsp" target="_blank"><h5>HDB Resale Flat Prices Portal</h5></a>
             </div>
-            <div class="container-fluid" style="margin-bottom: 15px;">
+            <div class="p-2" style="margin-bottom: 15px;">
               <a href="https://www.hdb.gov.sg/business/estate-agents-and-salespersons/selling-a-flat/procedures" target="_blank">
                 <img class ="img-fluid" src="{{ url_for('static', filename='images/resale-procedures.jpg') }}">
               </a>
