@@ -426,8 +426,8 @@ def train_regression_model():
     predictions = model.predict(rescaled_X_test)
 
     #Get top 10 features sorted in descending order
-    for importance, name in sorted(zip(model.feature_importances_, X_train.columns),reverse=True)[:10]:
-        print(name, importance)
+    # for importance, name in sorted(zip(model.feature_importances_, X_train.columns),reverse=True)[:10]:
+    #     print(name, importance)
 
     #Get RMSE score for predicting test set
     actual_y_test = np.exp(y_test)
@@ -436,7 +436,7 @@ def train_regression_model():
 
     compare_actual = pd.DataFrame({'Test Data': actual_y_test, 'Predicted Price' : actual_predicted, 'Difference' : diff})
     compare_actual = compare_actual.astype(int)
-    print(compare_actual.head(5))
+    # print(compare_actual.head(5))
     rmse = round(mean_squared_error(actual_y_test, actual_predicted, squared=False), 4)
 
     print("RMSE: {0}".format(rmse))
@@ -488,16 +488,16 @@ def load_regression_model(search_df):
     #Get coordinates and postal sector using address
     full_address = search_df.get('StreetAdd') + " Singapore"
     onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
-    postal_district = int(map_postal_district(onemap_postal_sector)) ###
-    floor_area_sqm = np.log(float(search_df.get('FloorArea'))) ###
-    remaining_lease = int(search_df.get('RemainingLease')) #### + resale price
+    postal_district = int(map_postal_district(onemap_postal_sector))
+    floor_area_sqm = np.log(float(search_df.get('FloorArea')))
+    remaining_lease = int(search_df.get('RemainingLease'))
     latitude = float(onemap_latitude)
     longitude = float(onemap_longitude)
-    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit) ### + mrt_nearest
-    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls) ###
-    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude) ##
-    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre) ##
-    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket) ##
+    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
 
     df_postal_district = [0] * 28
     df_postal_district[postal_district - 1] = 1
@@ -536,7 +536,7 @@ def load_regression_model(search_df):
     df_recommendation = {"listing_ID":search_df.get('listingID'), "postal_district":postal_district, "floor_area_sqm":search_df.get('FloorArea'), 
                         "remaining_lease":remaining_lease, "listing_price":search_df.get('Price'), "mrt_nearest":mrt_nearest, "mrt_distance":mrt_distance, 
                         "mall_distance":mall_distance, "orchard_distance":orchard_distance, "hawker_distance":hawker_distance, 
-                        "market_distance":market_distance, "postal_code":onemap_postal_code}
+                        "market_distance":market_distance, "postal_code":onemap_postal_code, "flat_type":search_df.get('FlatType')}
 
     return predicted_L1_cpi, predicted_L4_cpi, predicted_L7_cpi, predicted_L10_cpi, predicted_L13_cpi, df_recommendation
 
