@@ -124,6 +124,10 @@
 
    <img src="Miscellaneous/User Guide/Step9.png" style="float: left; margin-right: 0px;" />
 
+**Part 5 - To train Regression Model**
+
+
+
 ## SECTION 6 : PROJECT REPORT
 
 1. Executive Summary (WEILIANG)
@@ -132,16 +136,16 @@
     - 2.2   Market Research (WEILIANG)
     - 2.3   Success Measurements (OPTIONAL)
 3. Knowledge Modelling (http://ksi.cpsc.ucalgary.ca/KAW/KAW98/schreiber/) (SYALABI)
-    - 3.1   Knowledge Identification 
+    - 3.1   Knowledge Identification
     - 3.2   Knowledge Specification
-    - 3.3   Knowledge Refinement
+    - 3.3   Data analysis
 4. Project Solution (To detail domain modelling & system design.)
-    - 4.1   Project Implementation (To detail system development & testing approach.) (JOVIN)
-    - 4.2   Project Performance & Validation (To prove project objectives are met.) (SYALABI)
+    - 4.1   System Implementation (To detail system development & testing approach.) (JOVIN)
+    - 4.2   System Performance & Validation (To prove project objectives are met.) (SUNGMIN)
 5. Project Conclusions
     - Findings & Recommendation (WEILIANG)
 6. Appendix 
-    - 6.1   Project Proposal (OPTIONAL)
+    - 6.1   Project Proposal (WEILIANG)
     - 6.2   Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS (WEILIANG)
     - 6.3   Installation and User Guide (JOVIN)
     - 6.4   1-2 pages individual project report per project member, including: Individual reflection of project journey:
