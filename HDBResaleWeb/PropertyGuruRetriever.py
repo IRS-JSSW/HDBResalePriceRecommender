@@ -3,6 +3,7 @@
 from selenium import webdriver 
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.common.exceptions import NoSuchElementException
 import os
 import platform
 import time
@@ -10,9 +11,9 @@ import re
 import datetime
 import random
 import pandas as pd
-from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
-from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
-from sqlalchemy import create_engine, desc
+#from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
+#from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+#from sqlalchemy import create_engine, desc
 from sklearn.preprocessing import MinMaxScaler
 
 
@@ -401,7 +402,10 @@ def scrapeSearchListing(searchurl):
     Returns:
         listingDetails (dict): ListingID, ImageURL, Street Address, Postal Code, Built Year, Remaining Lease, FlatType, Floor Area, Price
     """
-    ticStart = time.perf_counter()
+    # initialize an empty dictionary
+    listingDetails = {}
+
+    ticStart = time.perf_counter()    
 
     try:
         if (platform.system() == "Windows"):
@@ -411,20 +415,32 @@ def scrapeSearchListing(searchurl):
     except Exception as e:
         print("Error {0}".format(e))    
         driver.quit()
+        
+        # return empty dict
+        return listingDetails
     time.sleep(1)
 
     # Items Required: ListingID, ImageURL, Street Address, Postal Code, Built Year, Remaining Lease, FlatType, Floor Area, Price
-    listingT = driver.find_element_by_class_name("listing-title")
-    staddrT = driver.find_element_by_xpath("//span[contains(@itemprop, 'streetAddress')]")
-    postalcodeT = driver.find_element_by_xpath("//span[contains(@itemprop, 'postalCode')]")
-    priceT = driver.find_element_by_xpath("//span[contains(@itemprop, 'price') and contains(@class, 'price')]")    
-    flrareaT = driver.find_element_by_xpath("//div[contains(@itemprop, 'floorSize')]/span[1]")
-    builtyearT = driver.find_element_by_xpath("//div[contains(@class, 'completion-year')]/div[2]")
-    flatTypeT = driver.find_element_by_xpath("//div[contains(@class, 'property-attr') and contains(@class, 'property-type')]/div[2]")
-    imgT = driver.find_element_by_xpath("//div[contains(@class, 'carousel-inner') and contains(@class, 'infinite')]/div[1]/span[1]/img[1]")
+    try:
+        listingT = driver.find_element_by_class_name("listing-title")
+        staddrT = driver.find_element_by_xpath("//span[contains(@itemprop, 'streetAddress')]")
+        postalcodeT = driver.find_element_by_xpath("//span[contains(@itemprop, 'postalCode')]")
+        priceT = driver.find_element_by_xpath("//span[contains(@itemprop, 'price') and contains(@class, 'price')]")    
+        flrareaT = driver.find_element_by_xpath("//div[contains(@itemprop, 'floorSize')]/span[1]")
+        builtyearT = driver.find_element_by_xpath("//div[contains(@class, 'completion-year')]/div[2]")
+        flatTypeT = driver.find_element_by_xpath("//div[contains(@class, 'property-attr') and contains(@class, 'property-type')]/div[2]")
+    except NoSuchElementException:
+        print("Invalid Listing")    
+        # return empty dict
+        return listingDetails
 
-    imgURL = imgT.get_attribute("data-original")
-    print(imgURL)
+    # it is okay not to have image URL, set it to None
+    try:        
+        imgT = driver.find_element_by_xpath("//div[contains(@class, 'carousel-inner') and contains(@class, 'infinite')]/div[1]/span[1]/img[1]")
+        imgURL = imgT.get_attribute("data-original")
+    except:
+        imgURL = None
+    
     
     # Various cleanup functions
     # get listingID from searchURL
@@ -462,9 +478,13 @@ def main():
     # uncomment any of below for testing purpose. need to correct filepath in relative to this file
     #addfeaturesPG()
     #update_propguru_table()
-    scrapeType()
+    #scrapeType()
     #summarizeFlatType("2A")
-    #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314")
+    scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314") #valid search
+    #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-71-marine-drive-21859287") #without img
+    #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-71-marine-drive-2185") #try invalid listing
+    #scrapeSearchListing("https://www.google.com.sg") #try invalid url
+
 
 if __name__ == "__main__":
     main()
