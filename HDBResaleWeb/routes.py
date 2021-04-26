@@ -16,25 +16,31 @@ def home():
         #Function to scrape search
         search_url = form.streetname.data
         search_df = scrapeSearchListing(search_url)
-        #Function to predict estimated price (Prediction model)
-        L1, L4, L7, L10, L13, df_user_input = load_regression_model(search_df)
-        listed_price = search_df.get('Price')
-        price_array = [listed_price,L1,L4,L7,L10,L13]
-        #Get the index of the maximum values and minimum values
-        max_index = [i for i, x in enumerate(price_array) if x == max(price_array)]
-        min_index = [i for i, x in enumerate(price_array) if x == min(price_array)]
-        font_color = ['text-dark','text-dark','text-dark','text-dark','text-dark','text-dark']
-        #Change font colour of maximum price to red and minimum price to green
-        for x in max_index: font_color[x] = 'text-danger'
-        for x in min_index: font_color[x] = 'text-success'
-        #Historical transactions for same HDB
-        postal_code = df_user_input['postal_code'][0]
-        df_history = get_history_transactions(postal_code)
-        #Customer recommender system to provide other recommended listings to user
-        df_best_match, df_cheaper_price, df_bigger_house = recommender_system(df_user_input)
-        return render_template('result.html', search_df=search_df, search_url=search_url,price_array=price_array,
-        font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house,
-        df_history=df_history)
+        #If search_df is empty
+        if (len(search_df)==0):
+            flash(f'There is an error with the Propertyguru URL provided, please provide a valid Propertyguru URL.', 'danger')
+            return redirect(url_for('home'))
+        #If search_df contains valid user input
+        if (len(search_df)>0):
+            #Function to predict estimated price (Prediction model)
+            L1, L4, L7, L10, L13, df_user_input = load_regression_model(search_df)
+            listed_price = search_df.get('Price')
+            price_array = [listed_price,L1,L4,L7,L10,L13]
+            #Get the index of the maximum values and minimum values
+            max_index = [i for i, x in enumerate(price_array) if x == max(price_array)]
+            min_index = [i for i, x in enumerate(price_array) if x == min(price_array)]
+            font_color = ['text-dark','text-dark','text-dark','text-dark','text-dark','text-dark']
+            #Change font colour of maximum price to red and minimum price to green
+            for x in max_index: font_color[x] = 'text-danger'
+            for x in min_index: font_color[x] = 'text-success'
+            #Historical transactions for same HDB
+            postal_code = df_user_input['postal_code'][0]
+            df_history = get_history_transactions(postal_code)
+            #Customer recommender system to provide other recommended listings to user
+            df_best_match, df_cheaper_price, df_bigger_house = recommender_system(df_user_input)
+            return render_template('result.html', search_df=search_df, search_url=search_url,price_array=price_array,
+            font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house,
+            df_history=df_history)
     return render_template('home.html', form=form)
 
 

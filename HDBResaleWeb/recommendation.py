@@ -36,8 +36,9 @@ def recommender_system(df_user_input):
     filter_flat_type = (df["flat_type"] == df_user_input['flat_type'][0])
     filter_score = (df["recommend_score"] > df_user_input['recommend_score'][0])
     filter_maxprice = (df["resale_price"] < df_user_input['listing_price'][0] + 26000)
+    filter_remaininglease = (df["remaining_lease"] > df_user_input['remaining_lease'][0] - 5)
 
-    df_best_match = df[filter_postal_district & filter_flat_type & filter_score & filter_maxprice]
+    df_best_match = df[filter_postal_district & filter_flat_type & filter_score & filter_maxprice & filter_remaininglease]
 
     #Select top 3 listing
     df_best_match = df_best_match.sort_values('recommend_score', ascending=False).head(3)
@@ -46,13 +47,13 @@ def recommender_system(df_user_input):
     ###Within the same zone - Size +-10###
     #Filter based on user Input (hard filter)
     filter_postal_district = (df["postal_district"] == df_user_input['postal_district'][0])
-    filter_floor_area_sqm = (df["floor_area_sqm"].between(df_user_input['floor_area_sqm'][0] - 10, df_user_input['floor_area_sqm'][0] + 10))
+    filter_floor_area_sqm = (df["floor_area_sqm"].between(df_user_input['floor_area_sqm'][0], df_user_input['floor_area_sqm'][0] + 10))
     filter_maxprice = (df["resale_price"] < df_user_input['listing_price'][0])
 
     df_cheaper_price = df[filter_postal_district & filter_floor_area_sqm & filter_score & filter_maxprice]
 
     #Select top 3 listing
-    df_cheaper_price = df_cheaper_price.sort_values('recommend_score', ascending=True).head(3)
+    df_cheaper_price = df_cheaper_price.sort_values('resale_price', ascending=True).head(3)
 
     #Same Price bigger house (Similar)
     ###Within the same zone - Size >= user input###
@@ -63,6 +64,6 @@ def recommender_system(df_user_input):
     
     df_bigger_house = df[filter_postal_district & filter_floor_area_sqm & filter_score & filter_maxprice]
     #Select top 3 listing
-    df_bigger_house = df_bigger_house.sort_values('recommend_score', ascending=False).head(3)
+    df_bigger_house = df_bigger_house.sort_values('floor_area_sqm', ascending=False).head(3)
 
     return df_best_match, df_cheaper_price, df_bigger_house
