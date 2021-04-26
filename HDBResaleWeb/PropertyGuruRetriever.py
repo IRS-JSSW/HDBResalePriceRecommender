@@ -11,10 +11,11 @@ import re
 import datetime
 import random
 import pandas as pd
-#from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
-#from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
-#from sqlalchemy import create_engine, desc
+from HDBResaleWeb.functions import map_postal_district, railtransit, shoppingmalls, hawkercentre, supermarket
+from HDBResaleWeb.addfeatureslib import geographic_position, get_nearest_railtransit, get_nearest_shoppingmall, get_orchard_distance, get_nearest_hawkercentre, get_nearest_supermarket
+from sqlalchemy import create_engine, desc
 from sklearn.preprocessing import MinMaxScaler
+import joblib
 
 
 def StartSeleniumWindows(url):
@@ -166,7 +167,7 @@ def addfeaturesPG(pgDF):
     # for the purpose of getting Recommendation Score, perform MinMaxScaler
     scaler = MinMaxScaler()
     # [Age of flat: 0.2342342342, orchard_distance: 0.1261261261, hawker_distance: 0.1846846847, mall_distance: 0.1657657658, mrt_distance: 0.2891891892]
-    df_insert[['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = scaler.transform(df_insert[['remaining_lease', 'orchard_distance', 'hawker_distance', 'mall_distance', 'mrt_distance']])
+    df_insert[['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = scaler.fit_transform(df_insert[['remaining_lease', 'orchard_distance', 'hawker_distance', 'mall_distance', 'mrt_distance']])
     df_insert[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = 1.0 -  df_insert[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']]
     df_insert = df_insert.assign(recommend_score = 0.2342342342*df_insert.scaled_rem_lease + 0.1261261261*df_insert.scaled_orchard_distance + 0.1846846847*df_insert.scaled_hawker_distance + 0.1657657658*df_insert.scaled_mall_distance + 0.2891891892*df_insert.scaled_mrt_distance)
     
@@ -174,6 +175,10 @@ def addfeaturesPG(pgDF):
     df_insert.set_index('id')
     # for csv keep the scaled data for inspection
     df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv')
+
+    # save the scaler joblib
+    scaler_filename = '.\HDBResaleWeb\propguru_scoring_scaler.joblib'
+    joblib.dump(scaler, scaler_filename)
 
     # drop the scaled data for SQL storage
     df_insert = df_insert.drop(['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance'], axis=1)
@@ -464,13 +469,12 @@ def scrapeSearchListing(searchurl):
     # e.g. "3NG (Modified) HDB For Sale" => 3
     flatType = summarizeFlatType(flatTypeT.text.split(" HDB")[0].strip())
     #flatType =  re.findall("^[\w]+ ",flatTypeT.text)[0].strip()
-
+    
     # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
     listingDetails = {"listingID": listingID, "imgURL": imgURL, "StreetAdd": staddrT.text, "PostCode": int(postalcodeT.text), "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": flatType, "FloorArea": floorareaSqm, "Price": price}
     
     driver.quit()
     print(f"time {(time.perf_counter() - ticStart)} seconds")
-
 
     return listingDetails
 
