@@ -37,12 +37,14 @@ h6 {
 	margin-bottom: 20px;
 }
 
-.card-img-top {
-	width: 100%;
-	object-fit: cover;
-}
-
 p {
 	margin-top: 0;
 	margin-bottom: 0;
+}
+
+#rec-card {
+	max-width: 300px;
+	max-height: 150px;
+	object-fit: contain;
+	object-position: left;
 }

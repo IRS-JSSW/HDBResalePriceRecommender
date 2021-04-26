@@ -59,7 +59,7 @@
         <div class="d-flex justify-content-center"><h4>Best match!</h4></div>
         {% for key, value in df_best_match.iterrows() %}
           <div class="card" style="margin-bottom:10px;">
-            <img src="{{ value['img_url'] }}" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
+            <img src="{{ value['img_url'] }}" id="rec-card" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
             <div class="card-body">
               <h5 class="card-title"><a href="{{ value['listing_url'] }}" class="card-title font-weight-bold"  target="_blank">{{ value['listing_name'] }}</a></h5>
               <p class="card-text">Flat type: {{ value['flat_type'] }}</p>
@@ -75,7 +75,7 @@
         <div class="d-flex justify-content-center"><h4>Similar size, better price!</h4></div>
         {% for key, value in df_cheaper_price.iterrows() %}
           <div class="card" style="margin-bottom:10px;">
-            <img src="{{ value['img_url'] }}" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
+            <img src="{{ value['img_url'] }}" id="rec-card" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
             <div class="card-body">
               <h5 class="card-title"><a href="{{ value['listing_url'] }}" class="card-title font-weight-bold"  target="_blank">{{ value['listing_name'] }}</a></h5>
               <p class="card-text">Flat type: {{ value['flat_type'] }}</p>
@@ -91,7 +91,7 @@
         <div class="d-flex justify-content-center"><h4>Similar price, bigger house!</h4></div>
         {% for key, value in df_bigger_house.iterrows() %}
           <div class="card" style="margin-bottom:10px;">
-            <img src="{{ value['img_url'] }}" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
+            <img src="{{ value['img_url'] }}" id="rec-card" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
             <div class="card-body">
               <h5 class="card-title"><a href="{{ value['listing_url'] }}" class="card-title font-weight-bold"  target="_blank">{{ value['listing_name'] }}</a></h5>
               <p class="card-text">Flat type: {{ value['flat_type'] }}</p>
