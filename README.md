@@ -10,7 +10,7 @@
 |-----------|------------|------------|-------|
 |Yee Wei Liang|A0045422R|Web Scraping, Data Cleaning, Feature Engineering |E0258287@u.nus.edu|
 |Toh Kah Khek|A0229968E|Database Setup, Front-end Development, Back-end Integration|E0687376@u.nus.edu|
-|Jeon Sung Min|------------|------------|-------|
+|Jeon Sungmin|A0133374J|Property Recommender|E0689806@u.nus.edu|
 |Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|E0687386@u.nus.edu|
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
