@@ -17,7 +17,7 @@ def home():
         search_url = form.streetname.data
         search_df = scrapeSearchListing(search_url)
         #Function to predict estimated price (Prediction model)
-        L1, L4, L7, L10, L13, df_recommendation = load_regression_model(search_df)
+        L1, L4, L7, L10, L13, df_user_input = load_regression_model(search_df)
         listed_price = search_df.get('Price')
         price_array = [listed_price,L1,L4,L7,L10,L13]
         #Get the index of the maximum values and minimum values
@@ -28,13 +28,10 @@ def home():
         for x in max_index: font_color[x] = 'text-danger'
         for x in min_index: font_color[x] = 'text-success'
         #Historical transactions for same HDB
-        postal_code = df_recommendation.get('postal_code')
+        postal_code = df_user_input['postal_code'][0]
         df_history = get_history_transactions(postal_code)
         #Customer recommender system to provide other recommended listings to user
-        df_best_match_test, df_cheaper_price_test, df_bigger_house_test = recommender_system(df_recommendation)
-        df_best_match = ['Item 1','Item 2','Item 3']
-        df_cheaper_price = ['Item 1','Item 2','Item 3']
-        df_bigger_house = ['Item 1','Item 2','Item 3']
+        df_best_match, df_cheaper_price, df_bigger_house = recommender_system(df_user_input)
         return render_template('result.html', search_df=search_df, search_url=search_url,price_array=price_array,
         font_color=font_color,df_best_match=df_best_match,df_cheaper_price=df_cheaper_price,df_bigger_house=df_bigger_house,
         df_history=df_history)

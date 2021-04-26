@@ -48,32 +48,62 @@
       </tr>
       {% endfor %}
     </tbody>
-  </table>
-  {% endif %}
-</div>
+    </table>
+    {% endif %}
+  </div>
 
-<!-- Recommendations -->
-<div class="container-fluid">
-  <div class="row" style="padding: 5px;">
-    <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
-      <div class="d-flex"><h5>Best match!</h5></div>
-      {% for content in df_best_match %}
-        <div class="d-flex">{{ content }}</div>
-      {% endfor %}
-    </div>
-    <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
-      <div class="d-flex"><h5>Similar size, cheaper price!</h5></div>
-      {% for content in df_cheaper_price %}
-        <div class="d-flex">{{ content }}</div>
-      {% endfor %}
-    </div>
-    <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
-      <div class="d-flex"><h5>Similar price, bigger house!</h5></div>
-      {% for content in df_bigger_house %}
-        <div class="d-flex">{{ content }}</div>
-      {% endfor %}
+  <!-- Recommendations -->
+  <div class="container-fluid">
+    <div class="row" style="padding: 5px;">
+      <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
+        <div class="d-flex justify-content-center"><h4>Best match!</h4></div>
+        {% for key, value in df_best_match.iterrows() %}
+          <div class="card" style="margin-bottom:10px;">
+            <img src="{{ value['img_url'] }}" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
+            <div class="card-body">
+              <h5 class="card-title"><a href="{{ value['listing_url'] }}" class="card-title font-weight-bold"  target="_blank">{{ value['listing_name'] }}</a></h5>
+              <p class="card-text">Flat type: {{ value['flat_type'] }}</p>
+              <p class="card-text">Floor Area: {{ value['floor_area_sqm']|round|int }}</p>
+              <p class="card-text">Year built: {{ value['lease_commence_date'] }}</p>
+              <p class="card-text">Listed Price: {{ '${:,}'.format(value['resale_price']) }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
+        <div class="d-flex justify-content-center"><h4>Similar size, better price!</h4></div>
+        {% for key, value in df_cheaper_price.iterrows() %}
+          <div class="card" style="margin-bottom:10px;">
+            <img src="{{ value['img_url'] }}" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
+            <div class="card-body">
+              <h5 class="card-title"><a href="{{ value['listing_url'] }}" class="card-title font-weight-bold"  target="_blank">{{ value['listing_name'] }}</a></h5>
+              <p class="card-text">Flat type: {{ value['flat_type'] }}</p>
+              <p class="card-text">Floor Area: {{ value['floor_area_sqm']|round|int }}</p>
+              <p class="card-text">Year built: {{ value['lease_commence_date'] }}</p>
+              <p class="card-text">Listed Price: {{ '${:,}'.format(value['resale_price']) }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
+        <div class="d-flex justify-content-center"><h4>Similar price, bigger house!</h4></div>
+        {% for key, value in df_bigger_house.iterrows() %}
+          <div class="card" style="margin-bottom:10px;">
+            <img src="{{ value['img_url'] }}" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
+            <div class="card-body">
+              <h5 class="card-title"><a href="{{ value['listing_url'] }}" class="card-title font-weight-bold"  target="_blank">{{ value['listing_name'] }}</a></h5>
+              <p class="card-text">Flat type: {{ value['flat_type'] }}</p>
+              <p class="card-text">Floor Area: {{ value['floor_area_sqm']|round|int }}</p>
+              <p class="card-text">Year built: {{ value['lease_commence_date'] }}</p>
+              <p class="card-text">Listed Price: {{ '${:,}'.format(value['resale_price']) }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
     </div>
   </div>
-</div>
 </div>
 {% endblock content %}

@@ -442,9 +442,9 @@ def train_regression_model():
     print("RMSE: {0}".format(rmse))
 
     # #5. Save Regression Tree model and scaler
-    model_filename = 'HDBResaleWeb/hdb_resale_model.joblib'
+    model_filename = 'HDBResaleWeb/hdb_prediction_model.joblib'
     joblib.dump(model, model_filename)
-    scaler_filename = 'HDBResaleWeb/hdb_resale_scaler.joblib'
+    scaler_filename = 'HDBResaleWeb/hdb_prediction_scaler.joblib'
     joblib.dump(scaler, scaler_filename)
 
     #Optimise parameters using grid search for GradientBoostingRegressor
@@ -467,9 +467,9 @@ def train_regression_model():
 ######################################################################################################
 ###Loading Regression Model###
 def load_regression_model(search_df):
-    model_filename = "HDBResaleWeb/hdb_resale_model.joblib"
+    model_filename = "HDBResaleWeb/hdb_prediction_model.joblib"
     loaded_model = joblib.load(model_filename)
-    scaler_filename = "HDBResaleWeb/hdb_resale_scaler.joblib"
+    scaler_filename = "HDBResaleWeb/hdb_prediction_scaler.joblib"
     loaded_scaler = joblib.load(scaler_filename)
 
     #Count number of months since 2015-01-01
@@ -490,7 +490,7 @@ def load_regression_model(search_df):
     onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
     postal_district = int(map_postal_district(onemap_postal_sector))
     floor_area_sqm = np.log(float(search_df.get('FloorArea')))
-    remaining_lease = int(search_df.get('RemainingLease'))
+    remaining_lease = float(search_df.get('RemainingLease'))
     latitude = float(onemap_latitude)
     longitude = float(onemap_longitude)
     mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
@@ -533,12 +533,25 @@ def load_regression_model(search_df):
     predicted_L10_cpi = round((predicted_L10 * weighted_rpi_3quarters / 100))
     predicted_L13_cpi = round((predicted_L13 * weighted_rpi_3quarters / 100))
 
-    df_recommendation = {"listing_ID":search_df.get('listingID'), "postal_district":postal_district, "floor_area_sqm":search_df.get('FloorArea'), 
-                        "remaining_lease":remaining_lease, "listing_price":search_df.get('Price'), "mrt_nearest":mrt_nearest, "mrt_distance":mrt_distance, 
-                        "mall_distance":mall_distance, "orchard_distance":orchard_distance, "hawker_distance":hawker_distance, 
-                        "market_distance":market_distance, "postal_code":onemap_postal_code, "flat_type":search_df.get('FlatType')}
+    df_user_input = pd.DataFrame(columns=["listing_ID","postal_district","floor_area_sqm","remaining_lease","listing_price",
+                                          "mrt_nearest","mrt_distance","mall_distance","orchard_distance","hawker_distance",
+                                          "market_distance","postal_code","flat_type"])
 
-    return predicted_L1_cpi, predicted_L4_cpi, predicted_L7_cpi, predicted_L10_cpi, predicted_L13_cpi, df_recommendation
+    df_user_input = df_user_input.append({"listing_ID":search_df.get('listingID'), 
+                                          "postal_district":postal_district, 
+                                          "floor_area_sqm":search_df.get('FloorArea'), 
+                                          "remaining_lease":remaining_lease, 
+                                          "listing_price":search_df.get('Price'), 
+                                          "mrt_nearest":mrt_nearest, 
+                                          "mrt_distance":mrt_distance, 
+                                          "mall_distance":mall_distance, 
+                                          "orchard_distance":orchard_distance, 
+                                          "hawker_distance":hawker_distance, 
+                                          "market_distance":market_distance, 
+                                          "postal_code":onemap_postal_code, 
+                                          "flat_type":search_df.get('FlatType')},ignore_index=True)
+
+    return predicted_L1_cpi, predicted_L4_cpi, predicted_L7_cpi, predicted_L10_cpi, predicted_L13_cpi, df_user_input
 
 def get_history_transactions(postal_code):
     #Connect to database

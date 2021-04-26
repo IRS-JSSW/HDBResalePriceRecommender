@@ -165,7 +165,7 @@ def addfeaturesPG(pgDF):
     # for the purpose of getting Recommendation Score, perform MinMaxScaler
     scaler = MinMaxScaler()
     # [Age of flat: 0.2342342342, orchard_distance: 0.1261261261, hawker_distance: 0.1846846847, mall_distance: 0.1657657658, mrt_distance: 0.2891891892]
-    df_insert[['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = scaler.fit_transform(df_insert[['remaining_lease', 'orchard_distance', 'hawker_distance', 'mall_distance', 'mrt_distance']])
+    df_insert[['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = scaler.transform(df_insert[['remaining_lease', 'orchard_distance', 'hawker_distance', 'mall_distance', 'mrt_distance']])
     df_insert[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = 1.0 -  df_insert[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']]
     df_insert = df_insert.assign(recommend_score = 0.2342342342*df_insert.scaled_rem_lease + 0.1261261261*df_insert.scaled_orchard_distance + 0.1846846847*df_insert.scaled_hawker_distance + 0.1657657658*df_insert.scaled_mall_distance + 0.2891891892*df_insert.scaled_mrt_distance)
     

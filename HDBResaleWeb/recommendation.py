@@ -1,17 +1,15 @@
+import joblib
 import pandas as pd, numpy as np
 from sqlalchemy import create_engine, desc
 from sklearn import preprocessing
+from sklearn.preprocessing import MinMaxScaler
 
-def get_score(df):
-    #Coefficient based on user survey
-    Coeff = {'Ease of Access to LRT/MRT Station': 0.2891891892, 
-            'Distance to Mall': 0.1657657658, 
-            'Distance to Hawker Centre': 0.1846846847, 
-            'Distance to City Centre (Orchard)': 0.1261261261, 
-            'Age of Flat': 0.2342342342
-            }
+# def get_score(user_input):
+#     #Coefficient based on user survey
+#     #[Age of flat: 0.351351351, orchard_distance: 0.027027027, hawker_distance: 0.054054054, mall_distance: 0, mrt_distance: 0.567567568]
+#     recommend_score = 0.351351351*(99 - pgDF.iloc[i]['RemainingLease']) +  1/(0.027027027*orchard_distance) +  1/(0.054054054*hawker_distance)+ 1/(0.567567568*mrt_distance)
 
-def recommender_system(df_recommendation):
+def recommender_system(df_user_input):
     #Connect to database
     engine = create_engine("sqlite:///HDBResaleWeb/resaleproject.db")
 
@@ -21,19 +19,50 @@ def recommender_system(df_recommendation):
     #SQL to pandas df
     df = pd.read_sql_query(query, engine)
 
+    #Load MinMaxScaler used during scoring of all propguru listings
+    scaler_filename = 'HDBResaleWeb/hdb_recommender_scaler.joblib'
+    scaler = joblib.load(scaler_filename)
+
+    df_user_input[['scaled_rem_lease', 'scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = scaler.transform(df_user_input[['remaining_lease', 'orchard_distance', 'hawker_distance', 'mall_distance', 'mrt_distance']])
+    df_user_input[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']] = 1.0 - df_user_input[['scaled_orchard_distance', 'scaled_hawker_distance', 'scaled_mall_distance', 'scaled_mrt_distance']]
+
+    df_user_input = df_user_input.assign(recommend_score = 0.2342342342*df_user_input.scaled_rem_lease + 0.1261261261*df_user_input.scaled_orchard_distance + 0.1846846847*df_user_input.scaled_hawker_distance + 0.1657657658*df_user_input.scaled_mall_distance + 0.2891891892*df_user_input.scaled_mrt_distance)
+
+
     #Best match - Most similar to user search (Similar / Better scoring than user search)
     ###Outside the zone - surprise factor ###
     #Filter based on user Input (hard filter)
-    filter_flat_type = (df["flat_type"] == df_recommendation['flat_type'])
-    filter_floor_area_sqm = ((df["floor_area_sqm"] <= df_recommendation['floor_area_sqm'] + 10) & (df["floor_area_sqm"] >= df_recommendation['floor_area_sqm'] - 10))
+    filter_postal_district = (df["postal_district"] != df_user_input['postal_district'][0])
+    filter_flat_type = (df["flat_type"] == df_user_input['flat_type'][0])
+    filter_score = (df["recommend_score"] > df_user_input['recommend_score'][0])
+    filter_maxprice = (df["resale_price"] < df_user_input['listing_price'][0] + 26000)
 
-    df_best_match = df[filter_flat_type & filter_floor_area_sqm]
+    df_best_match = df[filter_postal_district & filter_flat_type & filter_score & filter_maxprice]
+
+    #Select top 3 listing
+    df_best_match = df_best_match.sort_values('recommend_score', ascending=False).head(3)
+
+    #Better Price same size (Similar)
+    ###Within the same zone - Size +-10###
+    #Filter based on user Input (hard filter)
+    filter_postal_district = (df["postal_district"] == df_user_input['postal_district'][0])
+    filter_floor_area_sqm = (df["floor_area_sqm"].between(df_user_input['floor_area_sqm'][0] - 10, df_user_input['floor_area_sqm'][0] + 10))
+    filter_maxprice = (df["resale_price"] < df_user_input['listing_price'][0])
+
+    df_cheaper_price = df[filter_postal_district & filter_floor_area_sqm & filter_score & filter_maxprice]
+
+    #Select top 3 listing
+    df_cheaper_price = df_cheaper_price.sort_values('recommend_score', ascending=True).head(3)
+
+    #Same Price bigger house (Similar)
+    ###Within the same zone - Size >= user input###
+    #Filter based on user Input (hard filter)
+    filter_postal_district = (df["postal_district"] == df_user_input['postal_district'][0])
+    filter_floor_area_sqm = (df["floor_area_sqm"] > df_user_input['floor_area_sqm'][0])
+    filter_maxprice = (df["resale_price"].between(df_user_input['listing_price'][0] - 26000, df_user_input['listing_price'][0] + 26000))
     
-
-    print(df_best_match.head(3))
-
-    df_best_match = {'Best Match 1':'Item 1','Best Match 2':'Item 2','Best Match 3':'Item 3'}
-    df_cheaper_price = {'Cheaper Price 1':'Item 1','Cheaper Price 2':'Item 2','Cheaper Price 3':'Item 3'}
-    df_bigger_house = {'Bigger House 1':'Item 1','Bigger House 2':'Item 2','Bigger House 3':'Item 3'}
+    df_bigger_house = df[filter_postal_district & filter_floor_area_sqm & filter_score & filter_maxprice]
+    #Select top 3 listing
+    df_bigger_house = df_bigger_house.sort_values('recommend_score', ascending=False).head(3)
 
     return df_best_match, df_cheaper_price, df_bigger_house
