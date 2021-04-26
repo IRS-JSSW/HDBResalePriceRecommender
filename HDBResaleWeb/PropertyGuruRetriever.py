@@ -97,7 +97,7 @@ def addfeaturesPG(pgDF):
         #print("{0}: {1}".format(pgDF.iloc[i]['listingID'],pgDF.iloc[i]['ListingName']))
         try:
             onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
-            print("{0}: {1}".format(onemap_postal_sector,pgDF.iloc[i]['ListingName']))
+            #print("{0}: {1}".format(onemap_postal_sector,pgDF.iloc[i]['ListingName']))
             #If postal sector is not found, it could be listing name is wrong. try to infer from listingURL
             if (onemap_postal_sector == ""):
                 full_address = getListingName(pgDF.loc[i,'listingURL'])
@@ -108,8 +108,8 @@ def addfeaturesPG(pgDF):
                     continue
             #print(onemap_postal_sector, onemap_latitude, onemap_longitude)
         except Exception as e:
-            print(str(e))
-            print("ERROR: {0}".format(pgDF.iloc[i]['listingID']))
+            #print(str(e))
+            #print("ERROR: {0}".format(pgDF.iloc[i]['listingID']))
             continue
         #If latitude and longitude is found
         if (onemap_latitude != 0):
@@ -127,8 +127,8 @@ def addfeaturesPG(pgDF):
 
         #If latitude is not found, fill with null values
         if (onemap_latitude == 0):
-            print("UNABLE TO GET ONEMAP")
-            print(pgDF.iloc[i]['listingID'])
+            #print("UNABLE TO GET ONEMAP")
+            #print(pgDF.iloc[i]['listingID'])
             mrt_nearest = "null"
             mrt_distance = 0
             mall_nearest = "null"
@@ -242,7 +242,7 @@ def scrapeType():
             addquery = ["&maxprice=500000", "&minprice=500001"]
             for addqueryIdx in range(0, 2):           
                 lastpage = initialQuery(listFlattype[listIdx], addquery[addqueryIdx])                
-                print("Last Page: {0}".format(str(lastpage)))
+                #print("Last Page: {0}".format(str(lastpage)))
 
                 pageNum = 0
                 while pageNum < lastpage:
@@ -251,7 +251,7 @@ def scrapeType():
                     print(pageURL)
                     print("Page {0}".format(pageNum))
                     timesleep = random.randrange(1, 3)
-                    print("Sleep time: {0}".format(timesleep))
+                    #print("Sleep time: {0}".format(timesleep))
                     time.sleep(timesleep)
                     try:
                         if (platform.system() == "Windows"):
@@ -288,7 +288,7 @@ def scrapeType():
                         else:
                             floorareaSqm = _floorarea / 10.7639
 
-                        print("Listing {0}: {1}, {2}, {3} at {4}".format(str(residx), l.text, y.text, floorareaSqm, p.text))
+                        #print("Listing {0}: {1}, {2}, {3} at {4}".format(str(residx), l.text, y.text, floorareaSqm, p.text))
 
                         # calculate remaining lease = 99 - (current year - builtyear)
                         byear = int(re.findall('[0-9]+',y.text)[0])
@@ -298,11 +298,11 @@ def scrapeType():
                         price = int(p.text.replace(",",""))
 
                         listingID = s.get_attribute("data-listing-id")
-                        print(listingID)
+                        #print(listingID)
                         listingURL = s.get_attribute("href").replace("#contact-agent", "")
-                        print(listingURL)                
+                        #print(listingURL)                
                         imgURL = img.get_attribute("data-original")
-                        print(imgURL)
+                        #print(imgURL)
 
                         # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
                         newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": summarizeFlatType(listFlattype[listIdx]), "FloorArea": floorareaSqm, "Price": price}
@@ -319,7 +319,7 @@ def scrapeType():
             print("Page {0}".format(pageNum))
             print(pageURL)
             timesleep = random.randrange(1, 3)
-            print("Sleep time: {0}".format(timesleep))
+            #print("Sleep time: {0}".format(timesleep))
             time.sleep(timesleep)
             try:
                 if (platform.system() == "Windows"):
@@ -356,7 +356,7 @@ def scrapeType():
                 else:
                     floorareaSqm = _floorarea / 10.7639
 
-                print("Listing {0}: {1}, {2}, {3} at {4}".format(str(residx), l.text, y.text, floorareaSqm, p.text))
+                #print("Listing {0}: {1}, {2}, {3} at {4}".format(str(residx), l.text, y.text, floorareaSqm, p.text))
 
                 # calculate remaining lease = 99 - (current year - builtyear)
                 byear = int(re.findall('[0-9]+',y.text)[0])
@@ -366,11 +366,11 @@ def scrapeType():
                 price = int(p.text.replace(",",""))
 
                 listingID = s.get_attribute("data-listing-id")
-                print(listingID)
+                #print(listingID)
                 listingURL = s.get_attribute("href").replace("#contact-agent", "")
-                print(listingURL)                
+                #print(listingURL)                
                 imgURL = img.get_attribute("data-original")
-                print(imgURL)
+                #print(imgURL)
 
                 # OUTPUT: newrow contains new listing details. can be used to output to SQL/CSV
                 newrow = {"listingID": listingID, "listingURL": listingURL, "imgURL": imgURL, "ListingName": l.text, "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": summarizeFlatType(listFlattype[listIdx]), "FloorArea": floorareaSqm, "Price": price}
@@ -474,7 +474,7 @@ def scrapeSearchListing(searchurl):
     listingDetails = {"listingID": listingID, "imgURL": imgURL, "StreetAdd": staddrT.text, "PostCode": int(postalcodeT.text), "BuiltYear": byear, "RemainingLease": remainlease, "FlatType": flatType, "FloorArea": floorareaSqm, "Price": price}
     
     driver.quit()
-    print(f"time {(time.perf_counter() - ticStart)} seconds")
+    #print(f"time {(time.perf_counter() - ticStart)} seconds")
 
     return listingDetails
 
