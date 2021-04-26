@@ -177,7 +177,7 @@ def addfeaturesPG(pgDF):
     df_insert.to_csv('.\HDBResaleWeb\dataset\propguru_complete.csv')
 
     # save the scaler joblib
-    scaler_filename = '.\HDBResaleWeb\propguru_scoring_scaler.joblib'
+    scaler_filename = '.\HDBResaleWeb\hdb_recommender_scaler.joblib'
     joblib.dump(scaler, scaler_filename)
 
     # drop the scaled data for SQL storage
@@ -444,7 +444,7 @@ def scrapeSearchListing(searchurl):
         imgT = driver.find_element_by_xpath("//div[contains(@class, 'carousel-inner') and contains(@class, 'infinite')]/div[1]/span[1]/img[1]")
         imgURL = imgT.get_attribute("data-original")
     except:
-        imgURL = None
+        imgURL = "/static/images/no-image.jpg"
     
     
     # Various cleanup functions
@@ -487,8 +487,6 @@ def main():
     scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-812a-choa-chu-kang-avenue-7-23456314") #valid search
     #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-71-marine-drive-21859287") #without img
     #scrapeSearchListing("https://www.propertyguru.com.sg/listing/hdb-for-sale-71-marine-drive-2185") #try invalid listing
-    #scrapeSearchListing("https://www.google.com.sg") #try invalid url
-
 
 if __name__ == "__main__":
     main()
