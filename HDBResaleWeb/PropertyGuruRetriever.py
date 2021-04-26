@@ -67,13 +67,10 @@ def initialQuery(flattype, addquery=""):
 
 def addfeaturesPG(pgDF):
     """Add Columns to PG Data
-    all rows listing names must not be empty
+    Get additional features of PG listing, including distance and recommendation score. Also output scoring model joblib.
 
     Args:
-        
-
-    Returns:
-        
+        pgDF ([DataFrame]): data frame from scrapeType containing all property guru listings
 
     """
     #pgDF = pd.read_csv(r".\HDBResaleWeb\dataset\propguru.csv")
