@@ -1,6 +1,6 @@
 ## SECTION 1 : PROJECT TITLE
 ### HDB Resale Recommender
-<img src="Miscellaneous/Images/Poster.png?raw=true" style="float: left; margin-right: 0px;" />
+<img src="Miscellaneous/Images/Poster.png" style="float: left; margin-right: 0px;" />
 
 ## SECTION 2 : EXECUTIVE SUMMARY
 
@@ -22,33 +22,33 @@
 
    command: git clone https://github.com/IRS-JSSW/HDBResalePriceRecommender
 
-   <img src="Miscellaneous/Install Guide/Step1-1.png?raw=true" style="float: left; margin-right: 0px;" />
-   <img src="Miscellaneous/Install Guide/Step1-2.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step1-1.png" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step1-2.png" style="float: left; margin-right: 0px;" />
 
 2. Install pip3 package
 
    command: sudo apt-get install python3-pip
 
-   <img src="Miscellaneous/Install Guide/Step2.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step2.png" style="float: left; margin-right: 0px;" />
 
 3. Install virtualenv package
 
    command: sudo pip3 install virtualenv
 
-   <img src="Miscellaneous/Install Guide/Step3.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step3.png" style="float: left; margin-right: 0px;" />
 
 4. Navigate to HDBResalePriceRecommender and create virtualenv
 
    command: virtualenv -p python3 venv
 
-   <img src="Miscellaneous/Install Guide/Step4-1.png?raw=true" style="float: left; margin-right: 0px;" />
-   <img src="Miscellaneous/Install Guide/Step4-2.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step4-1.png" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step4-2.png" style="float: left; margin-right: 0px;" />
 
 5. Activate virtualenv
 
    command: source venv/bin/activate (Note: Ensure that you are seeing (venv) in the terminal)
 
-   <img src="Miscellaneous/Install Guide/Step5.png?raw=true" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step5.png" style="float: left; margin-right: 0px;" />
 
 6. Install project dependencies from requirements.txt
 
