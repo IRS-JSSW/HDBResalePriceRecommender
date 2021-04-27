@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request
 from HDBResaleWeb import app
 from HDBResaleWeb.forms import SearchResaleHDBForm, UpdateDataGovForm, UpdatePropGuruForm, UpdateModelForm, UpdateAmenitiesForm
 from HDBResaleWeb.functions import update_datagov_table, insert_railtransit_data, insert_shoppingmalls_data, insert_hawkercentre_data, insert_supermarket_data, train_regression_model, load_regression_model, get_history_transactions
-from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing, addfeaturesPG
+from HDBResaleWeb.PropertyGuruRetriever import scrapeType, scrapeSearchListing
 from HDBResaleWeb.recommendation import recommender_system
 
 
@@ -52,6 +52,7 @@ def update_datagov():
     if (request.method == 'POST') and (form.confirm_update1.data == 'Yes'):
         #Update database with latest data from datagov
         message = update_datagov_table()
+        if (message == "empty"): flash(f'There are no new records to be updated into the database.', 'info')
         if (message == "success"): flash(f'Updated latest HDB Resale data from data.gov into database.', 'success')
         if (message == "error"): flash(f'Database is not updated. There is a problem accessing HDB Resale data api. Please try again later.', 'danger')
         return redirect(url_for('home'))

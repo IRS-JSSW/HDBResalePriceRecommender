@@ -313,11 +313,6 @@ def update_datagov_table():
                 #Get latitude, longitude and postal sector from onemap and populate amenities data
                 try:
                     onemap_postal_code, onemap_postal_sector, onemap_latitude, onemap_longitude = geographic_position(full_address)
-                    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
-                    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
-                    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
-                    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
-                    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
                 #If error getting latitude, longitude and postal sector from onemap, populate amenities data with null values and continue to next record
                 except Exception as e:
                     print(str(e))
@@ -330,6 +325,12 @@ def update_datagov_table():
                     hawker_distance = 0
                     market_distance = 0
                     continue
+                if onemap_postal_sector != 0:
+                    mrt_nearest, mrt_distance = get_nearest_railtransit(onemap_latitude, onemap_longitude, df_railtransit)
+                    mall_nearest, mall_distance = get_nearest_shoppingmall(onemap_latitude, onemap_longitude, df_shoppingmalls)
+                    orchard_distance = get_orchard_distance(onemap_latitude, onemap_longitude)
+                    hawker_distance = get_nearest_hawkercentre(onemap_latitude, onemap_longitude, df_hawkercentre)
+                    market_distance = get_nearest_supermarket(onemap_latitude, onemap_longitude, df_supermarket)
                 df_insert = df_insert.append({
                     "month": record_month.date(),
                     "flat_type": flat_type,
@@ -354,7 +355,12 @@ def update_datagov_table():
         # print(df_insert.dtypes)
         #Insert dataframe into sqlite database
         df_insert.to_sql('data_gov_table', con=engine, if_exists='append', index=False)
-        return "success"
+        
+        if len(df_insert) == 0:
+            return "empty"
+
+        if len(df_insert) > 0:
+            return "success"
 
     #Exception handling in the event Data.gov is inaccessible
     except Exception as e:
