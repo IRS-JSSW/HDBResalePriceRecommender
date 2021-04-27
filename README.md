@@ -92,7 +92,7 @@
 
 2. Results of predicted price and other recommended Propertyguru listings will be generated
 
-   <img src="Miscellaneous/User Guide/Step5.png" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Images/Poster.png" style="float: left; margin-right: 0px;" />
 
 **Part 3 - To update HDB Resale Transactions Records from Data.gov**
 
