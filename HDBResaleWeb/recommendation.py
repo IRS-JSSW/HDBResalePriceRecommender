@@ -44,7 +44,7 @@ def recommender_system(df_user_input):
     df_best_match = df_best_match.sort_values('recommend_score', ascending=False).head(3)
 
     #Better Price same size (Similar)
-    ###Within the same zone - Size +-10###
+    ###Within the same zone - Size +10, Price < user input###
     #Filter based on user Input (hard filter)
     filter_postal_district = (df["postal_district"] == df_user_input['postal_district'][0])
     filter_floor_area_sqm = (df["floor_area_sqm"].between(df_user_input['floor_area_sqm'][0], df_user_input['floor_area_sqm'][0] + 10))
@@ -56,7 +56,7 @@ def recommender_system(df_user_input):
     df_cheaper_price = df_cheaper_price.sort_values('resale_price', ascending=True).head(3)
 
     #Same Price bigger house (Similar)
-    ###Within the same zone - Size >= user input###
+    ###Within the same zone - Size > user input, Price +- 26000###
     #Filter based on user Input (hard filter)
     filter_postal_district = (df["postal_district"] == df_user_input['postal_district'][0])
     filter_floor_area_sqm = (df["floor_area_sqm"] > df_user_input['floor_area_sqm'][0])
