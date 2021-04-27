@@ -106,7 +106,7 @@
 
 **Part 4 - To update Propertyguru listings**
 
-1. Click on “Update” on the navigation bar and click on “Update Data Gov Table”
+1. Click on “Update” on the navigation bar and click on “Update Propertyguru Table”
 
    <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
 
@@ -114,7 +114,17 @@
 
    <img src="Miscellaneous/User Guide/Step8.png" style="float: left; margin-right: 0px;" />
 
-**Part 4 - To train Regression Model**
+**Part 5 - To update Amenities Table**
+
+1. Click on “Update” on the navigation bar and click on “Update Amenities Tables”
+
+   <img src="Miscellaneous/User Guide/Step6.png" style="float: left; margin-right: 0px;" />
+
+2. Next, select “Yes” in the dropdown menu and click on “Update” button. Selecting “No” will not update the database and redirects back to the homepage
+
+   <img src="Miscellaneous/User Guide/Step9.png" style="float: left; margin-right: 0px;" />
+
+**Part 6 - To train Regression Model**
 
 1. Click on “Update” on the navigation bar and click on “Update Training Model”
 
@@ -122,10 +132,7 @@
 
 2. Next, select “Yes” in the dropdown menu and click on “Train” button. Selecting “No” will not update the regression model and redirects back to the homepage
 
-   <img src="Miscellaneous/User Guide/Step9.png" style="float: left; margin-right: 0px;" />
-
-**Part 5 - To train Regression Model**
-
+   <img src="Miscellaneous/User Guide/Step10.png" style="float: left; margin-right: 0px;" />
 
 
 ## SECTION 6 : PROJECT REPORT
