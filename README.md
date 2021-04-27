@@ -135,10 +135,10 @@
     - 2.1   Project Objective (WEILIANG)
     - 2.2   Market Research (WEILIANG)
     - 2.3   Success Measurements (OPTIONAL)
-3. Knowledge Modelling (http://ksi.cpsc.ucalgary.ca/KAW/KAW98/schreiber/) (SYALABI)
+3. Knowledge Modelling(SYALABI)
     - 3.1   Knowledge Identification
     - 3.2   Knowledge Specification
-    - 3.3   Data analysis
+    - 3.3   Knowledge Refinement
 4. Project Solution (To detail domain modelling & system design.)
     - 4.1   System Implementation (To detail system development & testing approach.) (JOVIN)
     - 4.2   System Performance & Validation (To prove project objectives are met.) (SUNGMIN)
