@@ -56,8 +56,10 @@ def initialQuery(flattype, addquery=""):
     #print(pageURL)
     if (platform.system() == "Windows"):
         driver = StartSeleniumWindows(pageURL)
-    else:
+    elif (platform.system() == "Linux"):
         driver = StartSeleniumUbuntu(pageURL)
+    else:
+        return 0
     elem = driver.find_elements_by_class_name("pagination")
     #print(elem[0].text)
     lastpage = int(elem[0].text.splitlines()[-2]) # usually «\n1\n2\n...\n441\n», hence get 2nd last element
@@ -205,11 +207,15 @@ def summarizeFlatType(flattypePG):
     # Key does not exist
     return ""
 
-def scrapeType():
+def scrapeType():    
+    if (platform.system() != "Windows" and platform.system() != "Linux"):
+        return "OS not supported"
+
     column_names = ["listingID", "listingURL", "imgURL", "ListingName", "BuiltYear", "RemainingLease", "FlatType", "FloorArea", "Price"]
     results = pd.DataFrame(columns = column_names)
 
     residx = 0
+    driver = None
 
     listFlattype= ["1R", "2A", "2I", "2S", "3A", "3NG", "3Am", "3NGm", "3I", "3Im", "3S", "3STD", "4A", "4NG", "4S", "4I", "4STD", "5A", "5I", "5S", "6J", "EA", "EM", "MG", "TE"]
     
@@ -242,8 +248,10 @@ def scrapeType():
                     try:
                         if (platform.system() == "Windows"):
                             driver = StartSeleniumWindows(pageURL)
-                        else:
+                        elif (platform.system() == "Linux"):
                             driver = StartSeleniumUbuntu(pageURL)
+                        else:
+                            break
                     except Exception as e:
                         pageNum = pageNum-1
                         print("Error {0}".format(e))    
@@ -310,8 +318,10 @@ def scrapeType():
             try:
                 if (platform.system() == "Windows"):
                     driver = StartSeleniumWindows(pageURL)
-                else:
+                elif (platform.system() == "Linux"):
                     driver = StartSeleniumUbuntu(pageURL)
+                else:
+                    break
             except Exception as e:
                 pageNum = pageNum-1
                 print("Error {0}".format(e))    
@@ -396,13 +406,18 @@ def scrapeSearchListing(searchurl):
     # initialize an empty dictionary
     listingDetails = {}
 
-    ticStart = time.perf_counter()    
+    ticStart = time.perf_counter()
+    driver = None
 
     try:
         if (platform.system() == "Windows"):
             driver = StartSeleniumWindows(searchurl)
-        else:
+        elif (platform.system() == "Linux"):
             driver = StartSeleniumUbuntu(searchurl)
+        else:
+            # return empty dictionary if it is not Windows or Linux
+            return listingDetails
+
     except Exception as e:
         print("Error {0}".format(e))    
         driver.quit()
