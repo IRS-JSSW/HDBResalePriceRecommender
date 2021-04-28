@@ -122,20 +122,9 @@ def addfeaturesPG(pgDF):
             # [Age of flat: 0.351351351, orchard_distance: 0.027027027, hawker_distance: 0.054054054, mall_distance: 0, mrt_distance: 0.567567568]
             recommend_score = 0.351351351*(99 - pgDF.iloc[i]['RemainingLease']) +  1/(0.027027027*orchard_distance) +  1/(0.054054054*hawker_distance)+ 1/(0.567567568*mrt_distance)
 
-        #If latitude is not found, fill with null values
-        if (onemap_latitude == 0):
-            #print("UNABLE TO GET ONEMAP")
-            #print(pgDF.iloc[i]['listingID'])
-            mrt_nearest = "null"
-            mrt_distance = 0
-            mall_nearest = "null"
-            mall_distance = 0
-            orchard_distance = 0
-            hawker_distance = 0
-            market_distance = 0
-            postal_district = 0
-            recommend_score = 0
-
+        #If latitude or postal district is not found, discard the listing
+        if (onemap_latitude == 0 or postal_district == 0):
+            continue
 
         #pending: need check onemap_postal_sector not null
         df_insert = df_insert.append({
