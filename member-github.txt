@@ -1,0 +1,10 @@
+Group name: JSSW
+
+Members:
+1. (A0045422R) YEE WEI LIANG
+2. (A0229968E) TOH KAH KHEK
+3. (A0133374J) JEON SUNG MIN
+4. (A0229978A) AHMED SYALABI SEET
+
+Weblink to your online github project repository:
+https://github.com/IRS-JSSW/HDBResalePriceRecommender
