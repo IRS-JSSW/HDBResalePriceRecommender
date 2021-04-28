@@ -163,6 +163,9 @@
     - 6.6   References (if applicable)
 
 ## SECTION 7 : MISCELLANEOUS
+`<Survey Results>` : \Miscellaneous\Survey Results\Importance when purchasing resale flat.csv
+
+`<Summary of Results>` : \Miscellaneous\Survey Results\Feature Ranking.csv
 
 - Results of survey (out of 74 responses)
 
