@@ -87,7 +87,7 @@ def addfeaturesPG(pgDF):
     df_hawkercentre = hawkercentre()
     df_supermarket = supermarket()
 
-    print(pgDF.info())
+    #print(pgDF.info())
 
     #Loop through the records to update
     for i in range(0, len(pgDF)):
@@ -224,7 +224,7 @@ def scrapeType():
     for listIdx in range(len(listFlattype)):
         tic = time.perf_counter()
         lastpage = initialQuery(listFlattype[listIdx])
-        print("Last Page: {0}".format(str(lastpage)))
+        #print("Last Page: {0}".format(str(lastpage)))
 
         pageNum = 0
 
@@ -240,8 +240,8 @@ def scrapeType():
                 while pageNum < lastpage:
                     pageNum = pageNum+1
                     pageURL = "https://www.propertyguru.com.sg/property-for-sale/{0}?property_type_code%5B0%5D={1}&property_type=H&{2}".format(str(pageNum), listFlattype[listIdx], addquery[addqueryIdx])
-                    print(pageURL)
-                    print("Page {0}".format(pageNum))
+                    #print(pageURL)
+                    #print("Page {0}".format(pageNum))
                     timesleep = random.randrange(1, 3)
                     #print("Sleep time: {0}".format(timesleep))
                     time.sleep(timesleep)
@@ -254,7 +254,7 @@ def scrapeType():
                             break
                     except Exception as e:
                         pageNum = pageNum-1
-                        print("Error {0}".format(e))    
+                        #print("Error {0}".format(e))    
                         driver.quit()
                         continue
                     time.sleep(1)
@@ -303,15 +303,15 @@ def scrapeType():
                         results = results.append(newrow, ignore_index = True)
 
                     driver.quit()
-                    print(f"time {(time.perf_counter() - tic)} seconds")
-                print("***************************************")
+                    #print(f"time {(time.perf_counter() - tic)} seconds")
+                #print("***************************************")
             continue
 
         while pageNum < lastpage:
             pageNum = pageNum+1
             pageURL = "https://www.propertyguru.com.sg/property-for-sale/{0}?property_type_code%5B0%5D={1}&property_type=H".format(str(pageNum), listFlattype[listIdx])
-            print("Page {0}".format(pageNum))
-            print(pageURL)
+            #print("Page {0}".format(pageNum))
+            #print(pageURL)
             timesleep = random.randrange(1, 3)
             #print("Sleep time: {0}".format(timesleep))
             time.sleep(timesleep)
@@ -324,7 +324,7 @@ def scrapeType():
                     break
             except Exception as e:
                 pageNum = pageNum-1
-                print("Error {0}".format(e))    
+                #print("Error {0}".format(e))    
                 driver.quit()
                 continue
             time.sleep(1)
@@ -373,8 +373,8 @@ def scrapeType():
                 results = results.append(newrow, ignore_index = True)
                 
             driver.quit()
-            print(f"time {(time.perf_counter() - tic)} seconds")
-        print("***************************************")
+            #print(f"time {(time.perf_counter() - tic)} seconds")
+        #print("***************************************")
         
         # Clean up the dataset
         # remove duplicate listing
@@ -419,7 +419,7 @@ def scrapeSearchListing(searchurl):
             return listingDetails
 
     except Exception as e:
-        print("Error {0}".format(e))    
+        #print("Error {0}".format(e))    
         driver.quit()
         
         # return empty dict
@@ -436,7 +436,7 @@ def scrapeSearchListing(searchurl):
         builtyearT = driver.find_element_by_xpath("//div[contains(@class, 'completion-year')]/div[2]")
         flatTypeT = driver.find_element_by_xpath("//div[contains(@class, 'property-attr') and contains(@class, 'property-type')]/div[2]")
     except NoSuchElementException:
-        print("Invalid Listing")    
+        #print("Invalid Listing")    
         # return empty dict
         return listingDetails
 
