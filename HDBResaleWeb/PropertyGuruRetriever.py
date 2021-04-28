@@ -392,7 +392,7 @@ def scrapeType():
     # add additional features to data and commit to SQL
     addfeaturesPG(results)
     
-    print(f"Total time taken: {(time.perf_counter() - ticStart)/3600} hours")
+    return (f"Update Sucessful. Time taken: {(time.perf_counter() - ticStart)/3600} hours")
 
 def scrapeSearchListing(searchurl):
     """This function scrape the information required for user's search
