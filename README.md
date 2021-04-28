@@ -142,7 +142,7 @@
     - 2.1   Project Objective (WEILIANG)
     - 2.2   Market Research (WEILIANG)
     - 2.3   Success Measurements (OPTIONAL)
-3. Knowledge Modelling(SYALABI)
+3. Knowledge Modelling
     - 3.1   Knowledge Identification
     - 3.2   Knowledge Specification
     - 3.3   Knowledge Refinement
