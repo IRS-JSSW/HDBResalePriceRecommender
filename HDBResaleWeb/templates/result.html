@@ -57,6 +57,9 @@
     <div class="row" style="padding: 5px;">
       <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
         <div class="d-flex justify-content-center"><h4>You Might Also Consider?</h4></div>
+        {% if df_best_match|length < 1 %}
+        <h6>We do not have a recommendation for this section as the listing is too unique. You may wish to look at some other property listings for more recommendations.</h6>
+        {% endif %}
         {% for key, value in df_best_match.iterrows() %}
           <div class="card" style="margin-bottom:10px;">
             <img src="{{ value['img_url'] }}" id="rec-card" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
@@ -73,6 +76,9 @@
 
       <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
         <div class="d-flex justify-content-center"><h4>Similar size, better price!</h4></div>
+        {% if df_best_match|length < 1 %}
+        <h6>We do not have a recommendation for this section as the listing is too unique. You may wish to look at some other property listings for more recommendations.</h6>
+        {% endif %}
         {% for key, value in df_cheaper_price.iterrows() %}
           <div class="card" style="margin-bottom:10px;">
             <img src="{{ value['img_url'] }}" id="rec-card" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
@@ -89,6 +95,9 @@
       
       <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
         <div class="d-flex justify-content-center"><h4>Similar price, bigger house!</h4></div>
+        {% if df_best_match|length < 1 %}
+        <h6>We do not have a recommendation for this section as the listing is too unique. You may wish to look at some other property listings for more recommendations.</h6>
+        {% endif %}
         {% for key, value in df_bigger_house.iterrows() %}
           <div class="card" style="margin-bottom:10px;">
             <img src="{{ value['img_url'] }}" id="rec-card" class="card-img-top" alt="{{ url_for('static', filename='images/no-image.jpg') }}">
