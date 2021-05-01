@@ -76,7 +76,7 @@
 
       <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
         <div class="d-flex justify-content-center"><h4>Similar size, better price!</h4></div>
-        {% if df_best_match|length < 1 %}
+        {% if df_cheaper_price|length < 1 %}
         <h6>We do not have a recommendation for this section as the listing is too unique. You may wish to look at some other property listings for more recommendations.</h6>
         {% endif %}
         {% for key, value in df_cheaper_price.iterrows() %}
@@ -95,7 +95,7 @@
       
       <div class="d-flex flex-column col border border-secondary rounded" style="padding: 5px; margin: 10px;">
         <div class="d-flex justify-content-center"><h4>Similar price, bigger house!</h4></div>
-        {% if df_best_match|length < 1 %}
+        {% if df_bigger_house|length < 1 %}
         <h6>We do not have a recommendation for this section as the listing is too unique. You may wish to look at some other property listings for more recommendations.</h6>
         {% endif %}
         {% for key, value in df_bigger_house.iterrows() %}

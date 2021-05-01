@@ -61,13 +61,13 @@ def recommender_system(df_user_input):
     filter_floor_area_sqm = (df["floor_area_sqm"].between(df_user_input['floor_area_sqm'][0] * 0.9, df_user_input['floor_area_sqm'][0] * 1.1))
     filter_maxprice = (df["resale_price"] < df_user_input['listing_price'][0])
     
-    df_cheaper_price_1 = df[filter_postal_district & filter_floor_area_sqm & filter_maxprice]
+    df_cheaper_price_1 = df[filter_postal_district & filter_floor_area_sqm & filter_score & filter_maxprice]
     #Drop listing with same listing name and resale price
     df_cheaper_price_1.drop_duplicates(subset=['listing_name','resale_price'], inplace=True, keep='last')
     df_cheaper_price_1 = df_cheaper_price_1.sort_values('resale_price', ascending=False).head(3)
     #If listing than than 3
     if len(df_cheaper_price_1) < 3:  
-        df_cheaper_price_2 = df[filter_floor_area_sqm & filter_maxprice]
+        df_cheaper_price_2 = df[filter_floor_area_sqm & filter_score & filter_maxprice]
         #Drop listing with same listing name and resale price
         df_cheaper_price_2.drop_duplicates(subset=['listing_name','resale_price'], inplace=True, keep='last')
         df_cheaper_price_2 = df_cheaper_price_2.sort_values('resale_price', ascending=False).head(3 - len(df_cheaper_price_1))
