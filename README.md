@@ -136,31 +136,29 @@
 
 
 ## SECTION 6 : PROJECT REPORT
+`<Project Report>` : \Project Report\[Project Report] IRS-PM-2021-01-16-IS03PT-JSSW-HDBResalePredictionAndRecommender.pdf
 
-1. Executive Summary (WEILIANG)
+1. Executive Summary
 2. Business Problem Background
-    - 2.1   Project Objective (WEILIANG)
-    - 2.2   Market Research (WEILIANG)
-    - 2.3   Success Measurements (OPTIONAL)
-3. Knowledge Modelling **(COMPLETED)**
+    - 2.1   Project Objective
+    - 2.2   Market Research
+3. Knowledge Modelling
     - 3.1   Knowledge Identification
     - 3.2   Knowledge Specification
     - 3.3   Knowledge Refinement
-4. Project Solution (To detail domain modelling & system design.)
-    - 4.1   System Implementation (To detail system development & testing approach.) (JOVIN)
-    - 4.2   System Performance & Validation (To prove project objectives are met.) (SUNGMIN)
+4. Project Solution
+    - 4.1   System Implementation
+    - 4.2   System Performance & Validation
 5. Project Conclusions
-    - Findings & Recommendation (WEILIANG)
+    - Project Conclusion
+    - Improvements
 6. Appendix 
-    - 6.1   Project Proposal (WEILIANG)
-    - 6.2   Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS (WEILIANG)
-    - 6.3   Installation and User Guide (JOVIN)
-    - 6.4   1-2 pages individual project report per project member, including: Individual reflection of project journey:
-      - (1) personal contribution to group project 
-      - (2) what have you learnt that is most useful for you 
-      - (3) how you can apply the knowledge and skills in other situations or your workplaces
-    - 6.5   List of Abbreviations (if applicable)
-    - 6.6   References (if applicable)
+    - 6.1   Project Proposal
+    - 6.2   Mapping of Domain/Technique Group
+    - 6.3   Installation and User Guide
+    - 6.4   Individual Project Reports
+    - 6.5   List of Abbreviations
+    - 6.6   References
 
 ## SECTION 7 : MISCELLANEOUS
 `<Survey Results>` : \Miscellaneous\Survey Results\Importance when purchasing resale flat.csv
