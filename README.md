@@ -1,5 +1,5 @@
 ## SECTION 1 : PROJECT TITLE
-### HDB Resale Recommender
+### HDB Resale Prediction and Recommender (HRPR)
 <img src="Miscellaneous/Images/Poster.png" style="float: left; margin-right: 0px;" />
 
 ## SECTION 2 : EXECUTIVE SUMMARY
