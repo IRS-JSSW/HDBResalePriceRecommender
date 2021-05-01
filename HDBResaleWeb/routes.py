@@ -68,7 +68,7 @@ def update_propguru():
         #Update database with latest data from propguru
         message = scrapeType()
         if (message == "OS not supported"): flash(f'OS is not supported by application for web scraping.', 'danger')
-        if (message != "OS not supported"): flash(message, 'success')
+        if (message != "OS not supported"): flash(f'Updated listings from Propertyguru into database.', 'success')
         return redirect(url_for('home'))
     if (request.method == 'POST') and (form.confirm_update2.data == 'No'):
         return redirect(url_for('home'))
