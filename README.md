@@ -3,6 +3,16 @@
 <img src="Miscellaneous/Images/Poster.png" style="float: left; margin-right: 0px;" />
 
 ## SECTION 2 : EXECUTIVE SUMMARY
+“HDB resale prices climb for 4th consecutive quarter in Q1”, “HDB resale prices rise for 9th straight month in March with cash over valuation back in play”, “HDB resale transactions spike 127.3% in Q3 after end of COVID-19 circuit breaker”. These are headlines that are getting more common in recent days regarding resale HDB flats in Singapore.
+
+Despite a circuit breaker introduced by government on Apr 7 to curb COVID-19, resale flat prices seemingly were spared the adverse gloom that impacted the economic environment in Singapore. This “stunning rebound” could be attributed to various stimulus packages that were introduced by the government prior to the start of the pandemic.
+However, the incessant increase of resale HDB prices certainly make it challenging for prospective homebuyers. While BTO flats are an alternative, the long wait for getting the keys, coupled with construction delays, often are out of consideration for some buyers.
+
+Hence, using the valuable knowledge we have learnt during our lectures in Intelligent Reasoning Systems, our group would like to implement a HDB Resale Prediction and Recommender (HRPR) tool to assist prospective buyers in their resale flat search.
+
+For price prediction, we have used past resale flat transactions since 2015 (corrected with Resale Price Index). On the other hand, we also collected survey results from friends, families, and coursemates from various walks of life to get a general sentiment of important features to a flat buyer. The survey results were then used to implement a scoring system for our recommender system.
+
+In summary, we hope that with HRPR, prospective buyers can estimate the suitable pricing to negotiate with sellers. Besides that, the recommender system of the tool can suggest potential listings that the users might overlook, especially swarmed by pages of listings that were refreshed daily.
 
 ## SECTION 3 : PROJECT CONTRIBUTION
 
@@ -14,6 +24,9 @@
 |Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|E0687386@u.nus.edu|
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
+**Video 1**
+
+[![](http://img.youtube.com/vi/OBeyQfCPETg/0.jpg)](http://www.youtube.com/watch?v=OBeyQfCPETg "Video 1")
 
 ## SECTION 5 : INSTALLATION AND USER GUIDE
 **Installation guide for Ubuntu 20.04**
