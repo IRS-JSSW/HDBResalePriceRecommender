@@ -24,9 +24,13 @@ In summary, we hope that with HRPR, prospective buyers can estimate the suitable
 |Ahmed Syalabi Seet|A0229978A|Data Analysis, Data Cleaning, Prediction Tree Modelling|E0687386@u.nus.edu|
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
-**Video 1**
+**Video 1: IRS-PM-2021-01-16-IS03PT-GRP-JSSW-HDBResalePredictionAndRecommender-promotion**
 
-[![](http://img.youtube.com/vi/OBeyQfCPETg/0.jpg)](http://www.youtube.com/watch?v=OBeyQfCPETg "Video 1")
+[![](http://img.youtube.com/vi/OBeyQfCPETg/0.jpg)](http://www.youtube.com/watch?v=OBeyQfCPETg "Video 1: Promotion")
+
+**Video 2: IRS-PM-2021-01-16-IS03PT-GRP-JSSW-HDBResalePredictionAndRecommender-system**
+
+[![](http://img.youtube.com/vi/dOF66BYlgZU/0.jpg)](http://www.youtube.com/watch?v=dOF66BYlgZU "Video 2: System")
 
 ## SECTION 5 : INSTALLATION AND USER GUIDE
 **Installation guide for Ubuntu 20.04**
@@ -152,7 +156,7 @@ In summary, we hope that with HRPR, prospective buyers can estimate the suitable
 
 
 ## SECTION 6 : PROJECT REPORT
-`<Project Report>` : \Project Report\[Project Report] IRS-PM-2021-01-16-IS03PT-JSSW-HDBResalePredictionAndRecommender.pdf
+`<Project Report>` : \Project Report\[ Project Report ] IRS-PM-2021-01-16-IS03PT-GRP-JSSW-HDBResalePredictionAndRecommender.pdf
 
 1. Executive Summary
 2. Business Problem Background
