@@ -156,7 +156,7 @@ In summary, we hope that with HRPR, prospective buyers can estimate the suitable
 
 
 ## SECTION 6 : PROJECT REPORT
-`<Project Report>` : \Project Report\[ Project Report ] IRS-PM-2021-01-16-IS03PT-GRP-JSSW-HDBResalePredictionAndRecommender.pdf
+`<Project Report>` : \Project Report\Project Report_IRS-PM-2021-01-16-IS03PT-GRP-JSSW-HDBResalePredictionAndRecommender.pdf
 
 1. Executive Summary
 2. Business Problem Background
