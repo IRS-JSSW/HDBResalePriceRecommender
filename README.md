@@ -40,9 +40,11 @@ In summary, we hope that with HRPR, prospective buyers can estimate the suitable
 
 2. Install pip3 package
 
-   command: sudo apt-get install python3-pip
+   command 1: sudo apt-get update
+   command 2: sudo apt-get install python3-pip
 
-   <img src="Miscellaneous/Install Guide/Step2.png" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step2-1.png" style="float: left; margin-right: 0px;" />
+   <img src="Miscellaneous/Install Guide/Step2-2.png" style="float: left; margin-right: 0px;" />
 
 3. Install virtualenv package
 
